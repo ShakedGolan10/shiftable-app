@@ -3,15 +3,12 @@
 
 import { ChangeEvent, useState } from "react"
 
-interface Fields {
-    [key: string]: string | number
-}
 
 type EventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 
-export const useForm = (initialState: Fields): [Fields, EventHandler, (fields: Fields) => void] => {
+export const useForm = <T>(initialState: T): [T, EventHandler, (fields: T) => void] => {
 
-    const [fields, setFields] = useState(initialState)
+    const [fields, setFields] = useState<T>(initialState)
 
     const handleInputChange: EventHandler = ({ target }: any) => {
         let { value, name: field, type, checked } = target

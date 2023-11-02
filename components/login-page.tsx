@@ -1,20 +1,19 @@
 'use client'
 
-import { useLogin } from '@/hooks/useAuth';
 import { useForm } from '@/hooks/useForm'
 import { queryClient } from './TanstackProvider';
 import { useQueryClient } from 'react-query';
-// import { useAuthActions } from '@/store/actions/auth.actions'
+import { useAuth } from './UserContextProvider';
 
 
-export default function LoginPage() {
+export function LoginPage() {
 
-    const [credentials, handleInputChange] = useForm({ email: '', password: '' })
-    const loginHook = useLogin();
+    const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
+    const { login } = useAuth();
     const onLogin = async (ev: React.FormEvent) => {
         ev.preventDefault()
         try {
-            await loginHook.mutateAsync(credentials as unknown as Credentials)
+            await login(credentials)
         } catch (error) {
 
         }

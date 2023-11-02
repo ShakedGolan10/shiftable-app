@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 import { QueryClient, QueryClientProvider } from "react-query";
+import { UserProvider } from '@/components/UserContextProvider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -26,9 +27,11 @@ export default function RootLayout({
     <html lang="en" className='h-full bg-white'>
       <body className={inter.className + ` h-full`}>
         <TanstackProvider>
-          {/* <ReduxProvider> */}
-          {children}
-          {/* </ReduxProvider> */}
+          <UserProvider>
+            {/* <ReduxProvider> */}
+            {children}
+            {/* </ReduxProvider> */}
+          </UserProvider>
         </TanstackProvider>
       </body>
     </html>

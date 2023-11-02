@@ -1,5 +1,8 @@
-import firebase from "firebase/app";
+import { initializeApp } from "firebase/app";
 import "firebase/auth";
+import fetch from 'node-fetch'
+
+globalThis.fetch = fetch
 
 const firebaseConfig = {
     apiKey: "AIzaSyBIqjuVmwZLLK75wJdbaXMDkIix_vhSsJw",
@@ -11,7 +14,4 @@ const firebaseConfig = {
 };
 
 
-firebase.initializeApp(firebaseConfig);
-
-
-export default firebase;
+export const app = initializeApp(firebaseConfig)
