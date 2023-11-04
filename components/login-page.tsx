@@ -4,16 +4,19 @@ import { useForm } from '@/hooks/useForm'
 import { queryClient } from './TanstackProvider';
 import { useQueryClient } from 'react-query';
 import { useAuth } from './UserContextProvider';
+import { useRouter } from 'next/navigation';
 
 
 export function LoginPage() {
 
     const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
     const { login } = useAuth();
+    const router = useRouter()
     const onLogin = async (ev: React.FormEvent) => {
         ev.preventDefault()
         try {
             await login(credentials)
+            router.push('/main')
         } catch (error) {
 
         }
@@ -47,7 +50,7 @@ export function LoginPage() {
                     </div>
 
                     <div>
-                        <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+                        <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Log in</button>
                     </div>
                 </form>
 

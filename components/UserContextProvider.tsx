@@ -3,23 +3,36 @@ import { userService } from '@/services/user.service';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from './TanstackProvider';
+import { useRouter } from 'next/navigation';
 
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isLoadingAuth, setLoadingAuth] = useState(true)
+    const router = useRouter()
 
-    useEffect(() => {
-        const authUser = async () => {
-            console.log('effect')
-            if (!user) {
-                let loggedInUser = await userService.getLoggedInUser()
-                setUser(loggedInUser)
-            } // in first run V // in second run 
-            setLoadingAuth(false) // in first run X
+    useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage and 
+        if (user) {
+            setLoadingAuth(false)
+            return
         }
-        authUser()
+        const authUser = async () => {
+            if (!user) {
+                const loggedInUser = await userService.getLoggedInUser()
+                setUser(loggedInUser)
+                setLoadingAuth(false)
+                if (!loggedInUser) router.push('/')
+
+            }
+        }
+        const loggedInUser = queryClient.getQueryData('loggedInUser')
+        if (loggedInUser) {
+            setUser(loggedInUser)
+            setLoadingAuth(false)
+
+        }
+        else authUser()
     }, [user])
 
 
