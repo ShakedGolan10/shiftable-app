@@ -5,15 +5,22 @@ interface Credentials {
     password: string
 }
 
-
-type InitialState = {
-    loggedInUser: LoggedInUser
+interface EmployerSummery {
+    name: String
+    applicationDay?: Number
+    employerMsg?: Array<String>
 }
+// Done: Change everywhere there is a LoggedInUser type and replace it with Class Employee
 
-type LoggedInUser = {
-    name: string,
-    isAdmin: boolean
-}
+
+// type InitialState = {
+//     loggedInUser: LoggedInUser
+// }
+
+// type LoggedInUser = {
+//     name: string,
+//     isAdmin: boolean
+// }
 
 
 

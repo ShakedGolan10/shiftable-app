@@ -4,10 +4,15 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from './TanstackProvider';
 import { useRouter } from 'next/navigation';
+import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
+
+    // Done: change LoggedInUser to Employee
+    // Done: create New Employee
+
     const [user, setUser] = useState(null)
     const [isLoadingAuth, setLoadingAuth] = useState(true)
     const router = useRouter()
@@ -18,21 +23,24 @@ export const UserProvider = ({ children }) => {
             return
         }
         const authUser = async () => {
-            if (!user) {
-                const loggedInUser = await userService.getLoggedInUser()
+            let loggedInUser = await userService.getLoggedInUser()
+            if (loggedInUser) {
+                queryClient.setQueryData('loggedInUser', loggedInUser)
                 setUser(loggedInUser)
-                setLoadingAuth(false)
-                if (!loggedInUser) router.push('/')
-
             }
+            setLoadingAuth(false)
+            if (!loggedInUser) router.push('/')
         }
-        const loggedInUser = queryClient.getQueryData('loggedInUser')
+
+        let loggedInUser: any = queryClient.getQueryData('loggedInUser')
+
         if (loggedInUser) {
+            // Done: if got from query - new Employer/Employee() : make a function or InstanceOf
+            loggedInUser = CreateUserInstance(loggedInUser)
             setUser(loggedInUser)
             setLoadingAuth(false)
 
-        }
-        else authUser()
+        } else authUser()
     }, [user])
 
 
@@ -60,7 +68,7 @@ export const UserProvider = ({ children }) => {
         setUser(null);
     };
 
-    const getLoggedInUser = async (): Promise<LoggedInUser | boolean> => {
+    const getLoggedInUser = async (): Promise<Employee | Employer | boolean> => {
         if (user) return user
         else return false
     }

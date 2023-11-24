@@ -1,5 +1,6 @@
 'use client'
 
+import { Employee } from "@/types/class.service"
 import Axios from "axios"
 import { KeyObjectType } from "crypto"
 import Error from "next/error"
@@ -13,19 +14,18 @@ let axios = Axios.create({
     withCredentials: true
 })
 
-// TODO: Bulid a fucntion that determines the return value type 
 
 export const fetchService = {
-    GET(endpoint: string, data: string | object) {
+    GET<T>(endpoint: string, data: string | object): Promise<T> {
         return api(endpoint, 'GET', data)
     },
     POST<T>(endpoint: string, data: string | object): Promise<T> {
         return api(endpoint, 'POST', data)
     },
-    PUT(endpoint: string, data: string | object) {
+    PUT<T>(endpoint: string, data: string | object): Promise<T> {
         return api(endpoint, 'PUT', data)
     },
-    DELETE(endpoint: string, data: string | object) {
+    DELETE<T>(endpoint: string, data: string | object): Promise<T> {
         return api(endpoint, 'DELETE', data)
     }
 }
@@ -39,8 +39,6 @@ const api = async (endpoint: string, method: string = 'GET', data: string | obje
             params: (method === 'GET') ? data : null
         })
         return res.data
-        // return DetermineReturnType(endpoint, method, res)
-        // אני רוצה באמצעות הפונקציה הזו לבדוק ולוודא האם הערך החוזר מהסרבר הוא הנכון לפונקציה שקוראת לו
     } catch (error: any) {
         console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(error)
@@ -53,20 +51,3 @@ const api = async (endpoint: string, method: string = 'GET', data: string | obje
 }
 
 
-const DetermineReturnType = (endpoint: string, method: string, res: any) => {
-    // הבעיה פה היא שהיוזר סרוויס (שקורא לפונקציה) אומר שהוא לא יכול לוודא שבאמת יחזור פרומיס של לוגגד אין יוזר
-    if (endpoint === 'user' && method === 'GET') {
-        return res as Promise<LoggedInUser>
-    }
-    if (endpoint === 'auth' && method === 'aa') {
-        return res as Promise<string>
-    }
-
-    return Promise.reject('At Fetch service - invalid response type. The server doesnt returning the right value/value type')
-}
-
-// const CheckReturnType = (className: , res: any) => {
-//     return className
-// }
-
-// CheckReturnType(new ReturnTypeDeterminer<T>, { name: 'ds', isAdming: 'sds' }) 

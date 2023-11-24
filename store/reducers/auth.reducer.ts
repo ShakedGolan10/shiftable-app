@@ -21,7 +21,7 @@
 //         },
 //         login: (state, action: PayloadAction<LoggedInUser>) => {
 //             return {
-//                 loggedInUser: {
+//                 InUser: {
 //                     name: action.payload.name,
 //                     isAdmin: action.payload.isAdmin
 //                 }

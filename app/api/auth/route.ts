@@ -6,6 +6,7 @@ import { app } from '@/firebaseConfig'
 
 
 export async function POST(request: NextRequest) {
+    // Todo: Provide the response with the following classes: Employee Or Employer 
     const { email, password } = await request.json()
     let user: any
     const auth = getAuth(app)
