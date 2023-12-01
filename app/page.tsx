@@ -10,8 +10,8 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoadingAuth && user) router.push('/main')
-  }, [isLoadingAuth])
+    if (user) router.push('/main')
+  }, [isLoadingAuth, user])
 
   return isLoadingAuth ? (<main className="flex min-h-screen flex-col items-center justify-between p-24"><h1>Loading...</h1></main>) :
     (

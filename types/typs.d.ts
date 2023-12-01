@@ -7,7 +7,7 @@ interface Credentials {
 
 interface EmployerSummery {
     name: String
-    applicationDay?: Number
+    applicationDay?: number
     employerMsg?: Array<String>
 }
 // Done: Change everywhere there is a LoggedInUser type and replace it with Class Employee

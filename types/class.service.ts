@@ -53,13 +53,17 @@ export class EmailGenerator {
 
 }
 
+export class Shift {
+
+}
+
 
 export class Employee {
 
     public name: String
     public email: String
     public employer?: EmployerSummery
-
+    public shifts?: Array<Shift>
     constructor(email: String, name: String, employer?: EmployerSummery) {
         // super(name, email)
         this.name = name

@@ -3,7 +3,7 @@ import { userService } from '@/services/user.service';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from './TanstackProvider';
-import { useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 
 const UserContext = createContext(null);
@@ -16,9 +16,12 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isLoadingAuth, setLoadingAuth] = useState(true)
     const router = useRouter()
+    const pathname = usePathname()
 
     useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage and 
+        console.log('run')
         if (user) {
+            console.log('1 if', user)
             setLoadingAuth(false)
             return
         }
@@ -27,6 +30,7 @@ export const UserProvider = ({ children }) => {
             if (loggedInUser) {
                 queryClient.setQueryData('loggedInUser', loggedInUser)
                 setUser(loggedInUser)
+
             }
             setLoadingAuth(false)
             if (!loggedInUser) router.push('/')
@@ -39,7 +43,6 @@ export const UserProvider = ({ children }) => {
             loggedInUser = CreateUserInstance(loggedInUser)
             setUser(loggedInUser)
             setLoadingAuth(false)
-
         } else authUser()
     }, [user])
 
