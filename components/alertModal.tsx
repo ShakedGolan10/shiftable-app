@@ -1,20 +1,30 @@
+'use client'
+
+import { useSystemActions } from '@/store/actions/system.actions'
+import { toggleModal } from '@/store/reducers/system.reducer'
+import { AppDispatch, useAppSelector } from '@/store/store'
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
-export default function ShiftAlertModal({ isModalOpen, setIsModalOpen, userShiftToday = null }) {
-
-    const toggleModal = (ev: Event, state: boolean) => {
+export function AlertModal() {
+    // Todo: Change it to Store - It has been decided with chatgpt and thoughts on pereformance
+    const { toggleModalAction } = useSystemActions()
+    const { isModalOpen, modalMsg } = useAppSelector(state => state.systemReducer.modal)
+    const toggleAlertModal = (ev: Event) => {
         ev.stopPropagation()
-        setIsModalOpen(state)
+        toggleModalAction()
     }
 
+    // Todo: make this use Effect work
     useEffect(() => {
-        if (userShiftToday) setIsModalOpen(true)
+        console.log(isModalOpen, modalMsg)
+        // if (userShiftToday) setIsModalOpen(true)
     }, [])
 
-    return (
-        <>
+    return isModalOpen && (
+        <section className='alert-modal'>
 
-            <div onClick={() => { if (isModalOpen) toggleModal(event, false) }} className={`${isModalOpen ? 'fixed opacity-100 z-5' : 'opacity-0'} inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
+            <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`${isModalOpen ? 'fixed opacity-100 z-5' : 'opacity-0'} inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
 
             <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
                 <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ${isModalOpen
@@ -30,17 +40,17 @@ export default function ShiftAlertModal({ isModalOpen, setIsModalOpen, userShift
                                 </svg>
                             </div>
                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">You have a shift today!</h3>
+                                <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">Attention Please!</h3>
                                 <div className="mt-2">
-                                    <p className="text-sm text-gray-500">A shift between { }.</p>
+                                    <p className="text-sm text-gray-500">{modalMsg}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                        <button onClick={() => toggleModal(event, false)} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-light-green px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green sm:mt-0 sm:w-auto">Great! Tnx</button>
+                        <button onClick={() => toggleAlertModal(event)} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-light-green px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green sm:mt-0 sm:w-auto">Great! Tnx</button>
                     </div>
                 </div>
-            </div></>
+            </div></section>
     )
 }

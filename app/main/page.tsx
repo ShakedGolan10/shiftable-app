@@ -11,6 +11,6 @@ export default function MainPage() {
     const { user, isLoadingAuth } = useAuth()
     if (isLoadingAuth) return (<div><p>Loading........</p></div>)
     return user instanceof Employee ? (<EmployeeHomePage employeeUser={user} />) : (
-        (<EmployerHomePage />)
+        (<EmployerHomePage employerUser={user} />)
     )
 }

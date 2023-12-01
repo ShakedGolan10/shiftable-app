@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 
 export default function Carousel({ slides }) {
@@ -18,7 +19,7 @@ export default function Carousel({ slides }) {
                 transform: `translateX(-${current * 100}%)`,
             }}>
                 {slides.map((s, idx) => {
-                    return <article key={idx} className="flex flex-shrink-0 justify-center w-full p-2 border mb-2" style={{
+                    return <article key={idx} className="flex flex-shrink-0 justify-center w-full p-2 mb-2" style={{
                         // display: (idx !== current) ? 'none' : 'block'
                     }}>
                         <span>{s}</span>
