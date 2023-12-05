@@ -2,10 +2,11 @@
 
 import { userService } from "@/services/user.service"
 
+
 export class EmailGenerator {
     public emailList: Array<String>
 
-    constructor(firstname: String, lastname: String, middleName: String = null, companyName: String) {
+    constructor(firstname: String, lastname: String, middleName: String = null, companyName: String, webDomain: String = 'com') {
         let firstNameFirstWord = firstname[0]
         let lastNameFirstWord = lastname[0]
         let middleNameFirstWord = (middleName) ? middleName[0] : ''
@@ -19,8 +20,8 @@ export class EmailGenerator {
         this.emailList = symbolsArray.reduce((acc: Array<String>, seperator, idx): Array<String> => {
             nameCombinationOptions.forEach((option): any => {
                 companyPossibleDomains.forEach(domain => {
-                    if (option.length < 3) acc.push(`${option[0]}${seperator}${option[1]}@${domain}.com`)
-                    else acc.push(`${option[0]}${seperator}${option[1]}${seperator}${option[2]}@${domain}.com`)
+                    if (option.length < 3) acc.push(`${option[0]}${seperator}${option[1]}@${domain}.${webDomain}`)
+                    else acc.push(`${option[0]}${seperator}${option[1]}${seperator}${option[2]}@${domain}.${webDomain}`)
                 });
 
 
@@ -59,35 +60,43 @@ export class Shift {
 
 
 export class Employee {
-
+    public id: String
     public name: String
     public email: String
     public employer?: EmployerSummery
     public shifts?: Array<Shift>
-    constructor(email: String, name: String, employer?: EmployerSummery) {
+    constructor(id: String, email: String, name: String, employer?: EmployerSummery) {
         // super(name, email)
         this.name = name
         this.email = email
         this.employer = employer
     }
 
-    // Todo: methods for shifts 
+    // Todo: methods for shifts
+    public async setEmployeeShifts() {
+        // const employeeShifts = await userService
+    }
+
+
+
     // Todo: Shift Class
 
 }
 
 
 export class Employer {
+    public id: String
     public name: String
-    public applicationDay: Number
+    public applicationTime: ApplicationTime
     public email: String
-    public employerMsg: Array<String>
+    public employerMsg?: Array<String>
     public employees: Array<String> = []
 
-    constructor(name: String, applicationDay: Number, employees: Array<String>, email: String, employerMsg: Array<String>) {
+    constructor(id: String, name: String, applicationTime: ApplicationTime, employees: Array<String>, email: String, employerMsg: Array<String>) {
         // super(name, email)
+        this.id = id
         this.name = name
-        this.applicationDay = applicationDay
+        this.applicationTime = applicationTime
         this.email = email
         this.employees = [...employees],
             this.employerMsg = employerMsg
@@ -97,12 +106,12 @@ export class Employer {
 
 export const CreateUserInstance = (userObject: Employee | Employer) => {
     if (userObject.hasOwnProperty('employees')) {
-        const { name, applicationDay, email, employees, employerMsg } = userObject as Employer
-        return new Employer(name, applicationDay, employees, email, employerMsg)
+        const { id, name, applicationTime, email, employees, employerMsg = null } = userObject as Employer
+        return new Employer(id, name, applicationTime, employees, email, employerMsg)
     }
     if (userObject.hasOwnProperty('employer')) {
-        const { name, email, employer } = userObject as Employee
-        return new Employee(email, name, employer)
+        const { id, name, email, employer } = userObject as Employee
+        return new Employee(id, email, name, employer)
     }
 }
 

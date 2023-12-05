@@ -5,13 +5,13 @@ import React, { useEffect, useState } from 'react'
 import EmployerMsg from './employerMsg'
 import { useSystemActions } from '@/store/actions/system.actions'
 
-export default function EmployeeHomePage({ employeeUser }) {
+export default function EmployeeHomePage({ employeeUser }: { employeeUser: Employee }) {
     // Todo: Modal opens if the user has a shift today
     const { toggleModalAction } = useSystemActions()
     const toggleAlertModal = () => {
         toggleModalAction('You have a shift today!')
     }
-    let emails = new EmailGenerator('kevin', 'botero', null, 'swap')
+    let emails = new EmailGenerator('haitam', 'khalilieh', null, 'guesty', 'com')
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let userShiftToday: Object = null
 
@@ -26,7 +26,7 @@ export default function EmployeeHomePage({ employeeUser }) {
                 <h4 className='text-3xl text-center'>Your next shift:</h4>
                 <p className='text-xl my-3 font-semibold text-center'>Sunday - Noon: 15:00-23:00{/* Todo: Design the sift today */}</p>
             </div>
-            <h4 className='font-bold text-orange-700'>Remmeber to apply shifts before {daysOfWeek[employeeUser.employer.applicationDay]}!</h4>
+            <h4 className='font-bold text-orange-700'>Remmeber to apply shifts before {`${daysOfWeek[employeeUser.employer.applicationTime.day]} at ${employeeUser.employer.applicationTime.time}`}!</h4>
             {/* Todo: Design the apply shifts alert */}
             {/* Design a button for checking whos working with you this week ! (nice feacture) */}
             <section className='my-10 h-fit'>
@@ -38,9 +38,9 @@ export default function EmployeeHomePage({ employeeUser }) {
                 <button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</button>
                 <button onClick={() => toggleAlertModal()} className='open-modal-button flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Toggle Modal</button>
             </div>
-            {/* <div className='flex flex-col'>
+            <div className='flex flex-col'>
                 {emails.emailList.map((email, idx) => <span key={idx}>{email}</span>)}
-            </div> */}
+            </div>
             {/* <div className='modal-container'>
                 {isModalOpen && <AlertModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} userShiftToday={userShiftToday} />}
             </div> */}

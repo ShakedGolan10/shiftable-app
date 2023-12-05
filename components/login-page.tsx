@@ -1,8 +1,6 @@
 'use client'
 
 import { useForm } from '@/hooks/useForm'
-import { queryClient } from './TanstackProvider';
-import { useQueryClient } from 'react-query';
 import { useAuth } from './UserContextProvider';
 import { useRouter } from 'next/navigation';
 

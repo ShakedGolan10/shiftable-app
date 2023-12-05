@@ -24,7 +24,7 @@ export function AlertModal() {
     return isModalOpen && (
         <section className='alert-modal'>
 
-            <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`${isModalOpen ? 'fixed opacity-100 z-5' : 'opacity-0'} inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
+            <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`back-screen ${isModalOpen ? 'fixed opacity-100 z-5' : 'opacity-0'} inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
 
             <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
                 <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ${isModalOpen
@@ -51,6 +51,7 @@ export function AlertModal() {
                         <button onClick={() => toggleAlertModal(event)} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-light-green px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green sm:mt-0 sm:w-auto">Great! Tnx</button>
                     </div>
                 </div>
-            </div></section>
+            </div>
+        </section>
     )
 }

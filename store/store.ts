@@ -1,7 +1,6 @@
 'use client'
 
 import { configureStore } from '@reduxjs/toolkit'
-// import authReducer from './reducers/auth.reducer'
 import systemReducer from './reducers/system.reducer'
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 
@@ -12,7 +11,6 @@ import { TypedUseSelectorHook, useSelector } from 'react-redux'
 
 export const store = configureStore({
     reducer: {
-        // authReducer,
         systemReducer
     }
 })

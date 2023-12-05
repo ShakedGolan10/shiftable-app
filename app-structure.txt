@@ -1,0 +1,71 @@
+Data-base - firebase 
+css - Tailwind
+
+libraries: 
+lodash
+socket.io
+redux 
+
+DataStructure :
+
+	user: {
+		id: 123
+		email: aa@aa.com,
+		fullName: Shak Gil,
+		employerId: id	
+	
+}	
+	employer: {
+		id: 1223,
+		name: wolt,
+		email: he@wolt.com
+		applicationTime: {
+                day: number,
+                time: "mmhh"
+            },
+		employees: [123,456],
+		
+    }
+    shiftsRequests { 
+    	employeeName: Shak,
+	employerId: 1223
+	[
+        sunday: [{08-14: true, 14-21: false}, {09-16: false, 16-22: true}, {11-16: true, 16-20: true} ] 
+        monday: []
+        tuesday: []
+        wednesday: []
+        thursday: []
+        firday: []
+        saturday: []
+    ]
+}
+            // the key name should be a num for example: 8-14 that means a shift between 08:00 - 14:00
+            // if we want semi hour so for example 1630 - 2030 well write it like this 16.5-20.5
+            // every object in the array represnt a day of the week (indexes 0-6: 7 days)
+
+    shifts - 
+    shiftsPosted: [
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]} 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]} 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]} 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]} 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]} 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]} 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]} 
+    ]
+            // every object in the array represents a day, the keys name is the shift and the key value is an array of employees's name
+    
+    oldShifts: [
+        [
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]},
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]}, 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]}, 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]}, 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]}, 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]}, 
+        {08-15: [name, name2, name3], 15-22: [name, name2, name3]},
+        ],
+        []
+    ]
+            // every item in the oldShifts array represnts a week - the shifts well be saved 1.5 months back
+

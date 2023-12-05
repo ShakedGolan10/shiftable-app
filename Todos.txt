@@ -1,0 +1,14 @@
+Design the MainNavBar and the main layout
+Build dynamic route for every employee 
+Build the UIUX for the welcome page (employee, and employer): 
+        * Create a fully mock data to return from api call
+        * Decide on a design, Draw it, Design it
+        * Find a way to do automate scroll with Tailwind css
+        * Next step - Configure firestore
+Build the data structe in firestore (congifuration mainly)
+Connect and display the welcome page anymation 
+Bulid CRUDL for : 
+                    * Shifts application
+                    * Shifts building (not acutal algorithem, but more of a hazard handler and definer)
+                    * Employer massages 
+Build a weekly view to Employer and Employee users
