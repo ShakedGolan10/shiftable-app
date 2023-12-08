@@ -5,16 +5,7 @@ export async function GET() {
     // const secret = request.nextUrl.searchParams.get('secret')
     // const tag = request.nextUrl.searchParams.get('tag')
     await new Promise(resolve => setTimeout(resolve, 3000))
-    return NextResponse.json({
-        id: '4646', name: 'Shaked', email: 'Shaked.f@gmail.com', employer: {
-            name: 'Wolt', applicationTime: { day: 3, time: "1630" }, employerMsg: ['Check your Shifts', 'Party Tommrow'
-                , 'See whos working with you today',
-                'Memorial day weekend is coming',
-                'Morning shift - Check the kitchen',
-                'Closers - Dont forget to put up the alarm'
-                , 'Remmeber the happening is on friday', 'Remmber to order taxi']
-        }
-    })
+    return NextResponse.json(null)
 }
 
 

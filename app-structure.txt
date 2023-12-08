@@ -8,14 +8,14 @@ redux
 
 DataStructure :
 
-	user: {
+	userEmployee: {
 		id: 123
 		email: aa@aa.com,
 		fullName: Shak Gil,
 		employerId: id	
 	
 }	
-	employer: {
+	userEmployer: {
 		id: 1223,
 		name: wolt,
 		email: he@wolt.com

@@ -15,9 +15,13 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig)
-const firestore = getFirestore()
+export const firestore = getFirestore()
 try {
     const collection1 = doc(firestore, 'shiftsRequests/Shaked')
     const c = await getDoc(collection1)
-    console.log(collection1, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', c.data()) // Yes!!!!!!!!!!!!!!!!!!!!!
+    // console.log(collection1, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', c.data()) // Yes!!!!!!!!!!!!!!!!!!!!!
 } catch (error) { console.log('aaaaaaaaa -------- aaaaaa', error) }
+
+
+
+// Todo: build db.service 
