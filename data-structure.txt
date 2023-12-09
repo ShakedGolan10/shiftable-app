@@ -1,15 +1,7 @@
-Data-base - firebase 
-css - Tailwind
+DataStructure: {
 
-libraries: 
-lodash
-socket.io
-redux 
-
-DataStructure :
-
-	userEmployee: {
-		id: 123
+userEmployee: {
+		id: 123,
 		email: aa@aa.com,
 		fullName: Shak Gil,
 		employerId: id	
@@ -21,14 +13,14 @@ DataStructure :
 		email: he@wolt.com
 		applicationTime: {
                 day: number,
-                time: "mmhh"
+                time: "hhmm"
             },
 		employees: [123,456],
 		
     }
     shiftsRequests { 
     	employeeName: Shak,
-	employerId: 1223
+	    employerId: 1223
 	[
         sunday: [{08-14: true, 14-21: false}, {09-16: false, 16-22: true}, {11-16: true, 16-20: true} ] 
         monday: []
@@ -69,3 +61,47 @@ DataStructure :
     ]
             // every item in the oldShifts array represnts a week - the shifts well be saved 1.5 months back
 
+}
+
+
+Firebase structure { 
+
+    Users collection {
+        documantId - employeeUID / employerUID {
+            name/fullName = string,
+            email = string,
+            if (employee) employerUID = string  
+            /* employee structure ends here */ 
+            else {
+                applicationTime = map {
+                day = number,
+                time = string
+            },
+            employees = array}
+        }
+    }
+    
+    Shifts collection {
+        documantId - employerUID {
+            subCollection - employeeUID {
+                documantId - `${year}/${week number}` {
+                    employeeName = string,
+                    shifts = map {
+                        sunday = array [
+                            0 = string (shift hours in hhmm) \
+                            1 = string (shift hours in hhmm)  ---> if no shift -> no value in the map (no sunday key)
+                            2 = string (shift hours in hhmm) /
+                        ], 
+                        Tuesday = array... and so on.
+                    }
+                }
+            }
+        }
+
+    }
+
+    ShiftsReq {
+        // Todo: Build the Requests modal
+    }
+
+}

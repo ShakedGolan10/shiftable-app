@@ -1,6 +1,6 @@
 import "firebase/auth";
 import fetch from 'node-fetch'
-import { doc, getDoc, getFirestore } from 'firebase/firestore'
+import { collection, doc, getDoc, getFirestore } from 'firebase/firestore'
 import { initializeApp, } from "firebase/app";
 
 globalThis.fetch = fetch
@@ -18,7 +18,11 @@ export const app = initializeApp(firebaseConfig)
 export const firestore = getFirestore()
 try {
     const collection1 = doc(firestore, 'shiftsRequests/Shaked')
+    collection1
+    // collection(firestore,) // Todo: Understand this usage!
     const c = await getDoc(collection1)
+
+
     // console.log(collection1, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', c.data()) // Yes!!!!!!!!!!!!!!!!!!!!!
 } catch (error) { console.log('aaaaaaaaa -------- aaaaaa', error) }
 
