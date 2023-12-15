@@ -4,6 +4,7 @@ import { collection, doc, getDoc, getFirestore } from 'firebase/firestore'
 import { initializeApp, } from "firebase/app";
 
 globalThis.fetch = fetch
+
 // const serviceAccount = 'shiftable-app@shiftable-407203.iam.gserviceaccount.com'
 const firebaseConfig = {
     apiKey: "AIzaSyBIqjuVmwZLLK75wJdbaXMDkIix_vhSsJw",
@@ -13,18 +14,19 @@ const firebaseConfig = {
     messagingSenderId: "129673392024",
     appId: "1:129673392024:web:e3aa56b3199f27143ec5ed",
 };
-
 export const app = initializeApp(firebaseConfig)
 export const firestore = getFirestore()
 try {
-    const collection1 = doc(firestore, 'shiftsRequests/Shaked')
-    collection1
-    // collection(firestore,) // Todo: Understand this usage!
-    const c = await getDoc(collection1)
-
+    // const collection1 = doc(firestore, 'shiftsRequests/Shaked')
+    // collection1
+    // // collection(firestore,) // Todo: Understand this usage!
+    // const c = await getDoc(collection1)
 
     // console.log(collection1, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', c.data()) // Yes!!!!!!!!!!!!!!!!!!!!!
-} catch (error) { console.log('aaaaaaaaa -------- aaaaaa', error) }
+} catch (error) {
+    console.log('aaaaaaaaa -------- aaaaaa', error)
+
+}
 
 
 

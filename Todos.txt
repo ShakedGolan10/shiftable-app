@@ -16,10 +16,6 @@ Build a weekly view to Employer and Employee users
 
 Make a db.service
 Fetch the UID of the user when log in
-Make a idToken for loggedinusers - save the uid at the cookies or cache.
 
-למשמרת 
-לקבוע תור לרופא אף אוזן גרון
-לסיים את הסרטון ולהכין את המבנה הבסיסי כדוגמה
-לתקן את האירטייבל של יואב
-להתחיל עם האירטייבל של אלי
+
+Now! - Make Coockie managment for handle loggedIn User (No firebase token)

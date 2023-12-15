@@ -24,13 +24,10 @@ export function AlertModal() {
     return isModalOpen && (
         <section className='alert-modal'>
 
-            <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`back-screen ${isModalOpen ? 'fixed opacity-100 z-5' : 'opacity-0'} inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
+            <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`back-screen fixed opacity-100 z-5 inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
 
             <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ${isModalOpen
-                    ? 'opacity-100 translate-y-0 sm:scale-100'
-                    : 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
-                    } ease-out duration-300`}
+                <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-100 translate-y-0 sm:scale-100 ease-out duration-300`}
                 >
                     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                         <div className="sm:flex sm:items-start">
@@ -55,3 +52,13 @@ export function AlertModal() {
         </section>
     )
 }
+
+
+{/* <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`back-screen ${isModalOpen ? 'fixed opacity-100 z-5' : 'opacity-0'} inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
+
+            <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ${isModalOpen
+                    ? 'opacity-100 translate-y-0 sm:scale-100'
+                    : 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
+                    } ease-out duration-300`}
+                ></div> */}

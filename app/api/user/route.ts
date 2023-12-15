@@ -1,7 +1,15 @@
+'use server'
+import { app } from "@/firebaseConfig.mjs";
+import { getCookie } from "@/services/server-services/cookie.service";
 import { NextResponse } from "next/server";
-
 export async function GET() {
-
+    // Todo: Apply it in middleware instead of checking everytime for loggedInUser - wait a sec not yet..... need to check the user context and its durbillity across refreshes
+    try {
+        const cookieCheck = await getCookie('loggedInUser')
+        console.log('==================>', cookieCheck)
+    } catch (error) {
+        console.log('couldnt verify id token', error)
+    }
     // const secret = request.nextUrl.searchParams.get('secret')
     // const tag = request.nextUrl.searchParams.get('tag')
     await new Promise(resolve => setTimeout(resolve, 3000))

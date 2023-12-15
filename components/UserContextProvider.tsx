@@ -44,7 +44,7 @@ export const UserProvider = ({ children }) => {
     }, [user])
 
 
-    const mutation = useMutation({
+    const loginMutation = useMutation({
         mutationFn: async (credentials: Credentials) => await userService.login(credentials),
         onSuccess(data) {
             const loggedInUser = CreateUserInstance(data)
@@ -57,7 +57,7 @@ export const UserProvider = ({ children }) => {
 
     const login = async (credentials: Credentials) => {
         try {
-            await mutation.mutateAsync(credentials)
+            await loginMutation.mutateAsync(credentials)
         } catch (error) {
             console.error('Login error:', error);
         }

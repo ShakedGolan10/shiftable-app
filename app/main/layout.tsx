@@ -1,5 +1,5 @@
 'use client'
-import MainNavBar from "@/components/mainNavBar";
+import MainNavBar from "@/components/main-nav-bar";
 import React, { useState } from "react";
 
 
