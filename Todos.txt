@@ -18,4 +18,8 @@ Make a db.service
 Fetch the UID of the user when log in
 
 
-Now! - Make Coockie managment for handle loggedIn User (No firebase token)
+Now! - Make Coockie managment for handle loggedIn User (No firebase token) Done :)
+
+
+Another VIP mission :
+        * Make try catch pattern across the app, Decide on a great way to do so...

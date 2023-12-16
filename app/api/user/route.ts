@@ -6,7 +6,7 @@ export async function GET() {
     // Todo: Apply it in middleware instead of checking everytime for loggedInUser - wait a sec not yet..... need to check the user context and its durbillity across refreshes
     try {
         const cookieCheck = await getCookie('loggedInUser')
-        console.log('==================>', cookieCheck)
+        // console.log('==================>', cookieCheck)
     } catch (error) {
         console.log('couldnt verify id token', error)
     }

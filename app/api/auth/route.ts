@@ -5,7 +5,7 @@ import { revalidateTag } from 'next/cache'
 import { UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { app } from '@/firebaseConfig.mjs'
 import { setCookie } from '@/services/server-services/cookie.service'
-import { generateIdToken } from '@/services/server-services/token.service'
+import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 
 export async function POST(request: NextRequest) {
     // Todo: Provide the response with the following classes: Employee Or Employer 
@@ -14,9 +14,10 @@ export async function POST(request: NextRequest) {
         const auth = getAuth(app)
         const { user }: UserCredential = await signInWithEmailAndPassword(auth, email, password)
         // Todo: Return the user from firestore based on the uid of the loggedin user
-        const jwtToken = await generateIdToken(user)
-        console.log('.........>', jwtToken)
-        await setCookie('loggedInUser', jwtToken)
+        const jwtIdToken = await generateJwtToken(user.uid)
+        const userId = await validateJwtToken(jwtIdToken)
+        // console.log('.........>', jwtToken)
+        // await setCookie('loggedInUser', jwtToken)
         // const secret = request.nextUrl.searchParams.get('secret')
         // const tag = request.nextUrl.searchParams.get('tag')
         return NextResponse.json({
