@@ -2,8 +2,7 @@
 import { User } from "firebase/auth";
 import * as jose from "jose";
 
-
-const secret = jose.base64url.decode('zH4NRP1HMALxxCFnRZABFA7GOJtzU_gIj02alfL1lvI')
+const secret = (process.env.NODE_ENV === 'production') ? jose.base64url.decode('a') /* Need to adjust it to production env */ : jose.base64url.decode(`${process.env.REACT_APP_SECRET}`)
 
 export const generateJwtToken = async (userId: string): Promise<string> => {
     try {
