@@ -15,6 +15,7 @@ userEmployee: {
                 day: number,
                 time: "hhmm"
             },
+        employerMsg : ['fuck yoy', 'Eat shit']
 		employees: [123,456],
 		
     }
@@ -50,7 +51,9 @@ Firebase structure {
                 day = number,
                 time = string
             },
-            employees = array}
+            employees = array,
+            employerMsg = array
+            }
         }
     }
     

@@ -1,6 +1,6 @@
 'use client'
 import { userService } from '@/services/user.service';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, cache } from 'react';
 import { useMutation } from 'react-query';
 import { queryClient } from './TanstackProvider';
 import { useRouter } from 'next/navigation';
@@ -18,38 +18,39 @@ export const UserProvider = ({ children }) => {
     const router = useRouter()
 
     useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage and 
-        if (user) {
-            setLoadingAuth(false)
-            return
-        }
         const authUser = async () => {
             let loggedInUser = await userService.getLoggedInUser()
             if (loggedInUser) {
-                queryClient.setQueryData('loggedInUser', loggedInUser)
+                // queryClient.setQueryData('loggedInUser', loggedInUser)
                 setUser(loggedInUser)
-
             }
             setLoadingAuth(false)
             if (!loggedInUser) router.push('/')
         }
-
-        let loggedInUser: any = queryClient.getQueryData('loggedInUser')
-
-        if (loggedInUser) {
-            // Done: if got from query - new Employer/Employee() : make a function or InstanceOf
-            loggedInUser = CreateUserInstance(loggedInUser)
-            setUser(loggedInUser)
+        if (user) {
             setLoadingAuth(false)
-        } else authUser()
+            return
+        }
+        else authUser()
+
+        // let loggedInUser: any = queryClient.getQueryData('loggedInUser')
+        // if (loggedInUser) setUserState(loggedInUser)
+        // else if (!loggedInUser) loggedInUser = queryClient.getMutationCache()
+        // if (loggedInUser.mutations.length) setUserState(loggedInUser.mutations[0])
     }, [user])
 
+    // const setUserState = (user) => {
+    //     user = CreateUserInstance(user)
+    //     setUser(user)
+    //     setLoadingAuth(false)
+    // }
 
     const loginMutation = useMutation({
         mutationFn: async (credentials: Credentials) => await userService.login(credentials),
         onSuccess(data) {
             const loggedInUser = CreateUserInstance(data)
-            setUser(loggedInUser);
             queryClient.setQueryData('loggedInUser', loggedInUser);
+            setUser(loggedInUser);
         }
     })
 
@@ -57,7 +58,9 @@ export const UserProvider = ({ children }) => {
 
     const login = async (credentials: Credentials) => {
         try {
-            await loginMutation.mutateAsync(credentials)
+            let user = await userService.login(credentials)
+            user = CreateUserInstance(user)
+            setUser(user)
         } catch (error) {
             console.error('Login error:', error);
         }
@@ -65,17 +68,15 @@ export const UserProvider = ({ children }) => {
     };
 
     const logout = () => {
-        // Perform logout logic (e.g., clear user data or session)
-        setUser(null);
+        queryClient.clear()
+        setUser(null)
+
     };
 
-    const getLoggedInUser = async (): Promise<Employee | Employer | boolean> => {
-        if (user) return user
-        else return false
-    }
+
 
     return (
-        <UserContext.Provider value={{ isLoadingAuth, user, setUser, login, logout, getLoggedInUser }}>
+        <UserContext.Provider value={{ isLoadingAuth, user, setUser, login, logout }}>
             {children}
         </UserContext.Provider>
     );

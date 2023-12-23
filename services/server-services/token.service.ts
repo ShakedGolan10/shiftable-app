@@ -1,9 +1,7 @@
 'use server'
-import { User } from "firebase/auth";
 import * as jose from "jose";
 
-const secret = (process.env.NODE_ENV === 'production') ? jose.base64url.decode('a') /* Need to adjust it to production env */ : jose.base64url.decode(`${process.env.REACT_APP_SECRET}`)
-
+const secret = jose.base64url.decode(process.env.JWT_SECRET)
 export const generateJwtToken = async (userId: string): Promise<string> => {
     try {
         const jwtEncrypted = await new jose.EncryptJWT({ userId })
@@ -13,34 +11,26 @@ export const generateJwtToken = async (userId: string): Promise<string> => {
             .setAudience('urn:example:audience')
             .setExpirationTime('30m')
             .encrypt(secret)
-        console.log('=======>', jwtEncrypted)
         return jwtEncrypted
     } catch (error) {
         console.log(error)
+        throw new Error('token-service: Could\'nt generate JWT token')
+
     }
 }
 
 
-export const validateJwtToken = async (token: string) => {
+
+export const validateJwtToken = async (token: any): Promise<string> => {
     try {
-        const jwtDecryptToken = await jose.jwtDecrypt(token, secret)
-        console.log('//////////>', jwtDecryptToken)
-        return jwtDecryptToken.payload.userId
-        // await jose.jwtVerify(token, secret)
+        const { payload } = await jose.jwtDecrypt(token, secret, {
+            issuer: 'urn:example:issuer',
+            audience: 'urn:example:audience',
+        })
+        return payload.userId as string
     } catch (error) {
         console.log(error)
+        throw new Error('token-service: Could\'nt validate JWT token')
+
     }
 }
-
-
-
-// const secret = new TextEncoder().encode(
-//     'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
-// )
-// const alg = 'HS256'
-// const jwt = await new jose.SignJWT({ name: 'aa', age: 5 }).setProtectedHeader({ alg })
-//     .setIssuedAt()
-//     .setIssuer('Admin')
-//     .setAudience('User')
-//     .setExpirationTime('30m')
-//     .sign(secret)

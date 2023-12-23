@@ -12,7 +12,7 @@ const login = async (credentials: Credentials): Promise<Employee | Employer> => 
         const user = await fetchService.POST<Employee | Employer>('auth', credentials)
         return user
     } catch (error) {
-        throw new Error('unable to login - user service')
+        throw new Error('USER_SERVICE: unable to login', error)
     }
 
 }
@@ -25,15 +25,15 @@ const logout = () => {
 const getLoggedInUser = async () => {
     try {
         let loggedInUser = await fetchService.GET<Employee | Employer | boolean>('user', '')
-
-        // Todo: make distenguish between employee and employer ux ui by checking key existence
+        console.log('whattttttttttttttttttttttt', loggedInUser)
         if (loggedInUser) {
             // Todo: Upgrade the constructor of Employer and Employee
-            return CreateUserInstance(loggedInUser as Employee | Employer)
+            return CreateUserInstance<Employee | Employer>(loggedInUser as Employee | Employer)
         } else return false
 
     } catch (error) {
-        throw new Error('unable to get user from server - user isnt loggedIn')
+        throw new Error('USER_SERVICE: user isnt logged in', error)
+
     }
 
 

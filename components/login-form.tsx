@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 export function LoginForm({ toggleLoginModal }) {
 
-    const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
+    const [credentials, handleInputChange] = useForm<Credentials>({ email: 'Shaked11@gmail.io', password: 'A1B2C3D4' })
     const { login } = useAuth();
     const router = useRouter()
     const onLogin = async (ev: React.FormEvent) => {

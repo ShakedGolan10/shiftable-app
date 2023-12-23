@@ -1,20 +1,39 @@
 'use server'
-import { app } from "@/firebaseConfig.mjs";
 import { getCookie } from "@/services/server-services/cookie.service";
-import { NextResponse } from "next/server";
-export async function GET() {
-    // Todo: Apply it in middleware instead of checking everytime for loggedInUser - wait a sec not yet..... need to check the user context and its durbillity across refreshes
-    try {
-        const cookieCheck = await getCookie('loggedInUser')
-        // console.log('==================>', cookieCheck)
-    } catch (error) {
-        console.log('couldnt verify id token', error)
+import { NextRequest, NextResponse } from "next/server";
+import { validateJwtToken } from '@/services/server-services/token.service'
+import { getUser } from "@/services/server-services/user.service";
+
+export async function GET(request: NextRequest) {
+    // Todo: Apply it in middleware instead of checking everytime for loggedInUser - wait a sec not yet..... need to check the user context and
+    // its durbillity across refreshes
+    const userId = request.nextUrl.searchParams.get('userId')
+    if (userId) {
+        try {
+            // Todo: handle the get user (not loggedInUser)
+        } catch (error) {
+            console.log('GET_USER - couldnt get user', error)
+            return new NextResponse(`couldnt get user - ${error}`, { status: 500 })
+        }
     }
-    // const secret = request.nextUrl.searchParams.get('secret')
-    // const tag = request.nextUrl.searchParams.get('tag')
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    return NextResponse.json(null)
+    else {
+        try {
+            const jwtEncryptedToken = await getCookie('loggedInUserToken')
+            console.log('checking user!!!!!!!!!!!!!!!!', jwtEncryptedToken)
+            if (jwtEncryptedToken) {
+                const uid = await validateJwtToken(jwtEncryptedToken)
+                const user = await getUser(uid)
+                return NextResponse.json(user, { status: 200 })
+            } else {
+                return NextResponse.json(null, { status: 200 })
+            }
+        } catch (error) {
+            console.log('GET_USER - couldnt get loggedin user', error)
+            return new NextResponse(`couldnt get loggedin user - ${error}`, { status: 500 })
+        }
+    }
 }
+
 
 
 // return NextResponse.json({

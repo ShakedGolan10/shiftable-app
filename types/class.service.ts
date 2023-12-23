@@ -104,7 +104,7 @@ export class Employer {
 
 }
 
-export const CreateUserInstance = (userObject: Employee | Employer) => {
+export const CreateUserInstance = <T>(userObject: T) => {
     if (userObject.hasOwnProperty('employees')) {
         const { id, name, applicationTime, email, employees, employerMsg = null } = userObject as Employer
         return new Employer(id, name, applicationTime, employees, email, employerMsg)

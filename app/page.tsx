@@ -18,7 +18,6 @@ export default function Home() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
   const toggleLoginModal = () => {
-    console.log('hi')
     setIsLoginModalOpen(prev => !prev)
   }
   useEffect(() => {

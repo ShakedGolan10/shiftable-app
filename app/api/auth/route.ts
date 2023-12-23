@@ -6,32 +6,23 @@ import { UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/au
 import { app } from '@/firebaseConfig.mjs'
 import { setCookie } from '@/services/server-services/cookie.service'
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
+import { getUser } from '@/services/server-services/user.service'
 
-export async function POST(request: NextRequest) {
-    // Todo: Provide the response with the following classes: Employee Or Employer 
+export async function POST(request: NextRequest, response: NextResponse) {
+    // Todo: Provide the response with the following classes: Employee \ Employer 
+    // Todo: Handle credintial error - also in front
     try {
         const { email, password } = await request.json()
         const auth = getAuth(app)
-        const { user }: UserCredential = await signInWithEmailAndPassword(auth, email, password)
-        // Todo: Return the user from firestore based on the uid of the loggedin user
+        let { user }: UserCredential = await signInWithEmailAndPassword(auth, email, password)
         const jwtIdToken = await generateJwtToken(user.uid)
-        const userId = await validateJwtToken(jwtIdToken)
-        // console.log('.........>', jwtToken)
-        // await setCookie('loggedInUser', jwtToken)
-        // const secret = request.nextUrl.searchParams.get('secret')
-        // const tag = request.nextUrl.searchParams.get('tag')
-        return NextResponse.json({
-            id: '4646', name: 'Shaked', email: 'Shaked.f@gmail.com', employer: {
-                name: 'Wolt', applicationTime: { day: 3, time: "1630" }, employerMsg: ['Check your Shifts', 'Party Tommrow'
-                    , 'See whos working with you today',
-                    'Memorial day weekend is coming',
-                    'Morning shift - Check the kitchen',
-                    'Closers - Dont forget to put up the alarm'
-                    , 'Remmeber the happening is on friday', 'Remmber to order taxi']
-            }
-        })
+        user = await getUser(user.uid)
+        // Todo: Return the user from firestore based on the uid of the loggedin user
+        await setCookie('loggedInUserToken', jwtIdToken)
+        return NextResponse.json(user, { status: 200 })
     } catch (error) {
-        console.log('couldnt save cookie', error)
+        console.log('POST_AUTH - couldnt login', error)
+        return new NextResponse(`Couldnt login, Error - ${error}`, { status: 500 })
     }
 }
 
