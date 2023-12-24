@@ -45,14 +45,14 @@ export const UserProvider = ({ children }) => {
     //     setLoadingAuth(false)
     // }
 
-    const loginMutation = useMutation({
-        mutationFn: async (credentials: Credentials) => await userService.login(credentials),
-        onSuccess(data) {
-            const loggedInUser = CreateUserInstance(data)
-            queryClient.setQueryData('loggedInUser', loggedInUser);
-            setUser(loggedInUser);
-        }
-    })
+    // const loginMutation = useMutation({
+    //     mutationFn: async (credentials: Credentials) => await userService.login(credentials),
+    //     onSuccess(data) {
+    //         const loggedInUser = CreateUserInstance(data)
+    //         queryClient.setQueryData('loggedInUser', loggedInUser);
+    //         setUser(loggedInUser);
+    //     }
+    // })
 
 
 

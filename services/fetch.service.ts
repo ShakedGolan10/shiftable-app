@@ -1,9 +1,6 @@
 'use client'
 
-import { Employee } from "@/types/class.service"
 import Axios from "axios"
-import { KeyObjectType } from "crypto"
-import Error from "next/error"
 
 const BASE_URL = process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/api/'
