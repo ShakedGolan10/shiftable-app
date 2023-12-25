@@ -10,7 +10,7 @@ import NavbarMenu from '@/components/responsive-navbar-menu'
 import MainHeader from '@/components/main-header'
 
 
-export default function Home() {
+export default function HomePage({ children }: { children: React.ReactNode }) {
   const { user, isLoadingAuth } = useAuth()
 
   const router = useRouter()
@@ -24,7 +24,7 @@ export default function Home() {
     if (user) router.push('/main')
   }, [isLoadingAuth, user])
 
-  return isLoadingAuth ? (<main className="flex min-h-screen flex-col items-center justify-between p-24"><h1><LoadingElement /></h1></main>) :
+  return isLoadingAuth ? (<main className="flex min-h-screen flex-col items-center justify-between p-24">{children}</main>) :
     !user && (
       <main className="flex min-h-screen flex-row items-center justify-center">
         {/* Todo: Make a beautiful homepage using pavo template */}

@@ -1,8 +1,7 @@
-'use client'
 import React from 'react'
 
 export default function LoadingElement() {
     return (
-        <>loading...</>
+        <h1>loading...</h1>
     )
 }
