@@ -12,12 +12,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <main onClick={() => { if (isMenuOpen) onToggleMenu() }}>
-
-            <section>
-                <nav className="main-nav">
-                    <MainNavBar onToggleMenu={onToggleMenu} isMenuOpen={isMenuOpen} />
-                </nav>
-            </section>
+            <MainNavBar onToggleMenu={onToggleMenu} isMenuOpen={isMenuOpen} />
             <section>{children}</section>
         </main>
     )
