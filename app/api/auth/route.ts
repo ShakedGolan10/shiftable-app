@@ -8,7 +8,7 @@ import { setCookie } from '@/services/server-services/cookie.service'
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest) {
     // Todo: Provide the response with the following classes: Employee \ Employer 
     // Todo: Handle credintial error - also in front
     try {

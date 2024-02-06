@@ -1,11 +1,11 @@
 import "firebase/auth";
-import fetch from 'node-fetch'
+import fetch, { Request } from 'node-fetch'
 import { doc, getDoc, getFirestore } from 'firebase/firestore'
 import { initializeApp, } from "firebase/app";
 
 globalThis.fetch = fetch
 
-
+console.log('chekcing -------->', process.env.FIREBASE_API_KEY)
 // const serviceAccount = 'shiftable-app@shiftable-407203.iam.gserviceaccount.com'
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -19,4 +19,8 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 export const firestore = getFirestore()
 
-// In the proccess: build db.service 
+// In the proccess: build db.service
+// const url = 'https://joni-b1a26-default-rtdb.europe-west1.firebasedatabase.app//JONI/send.json'
+// const request = new Request(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: 972544777605, text: 'אתה סופר סופר גיי' }) })
+// await fetch(request)
+

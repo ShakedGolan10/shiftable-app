@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <defs>
+    <pattern id="stripes" patternUnits="userSpaceOnUse" width="4" height="4">
+      <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" style="stroke:#eee; stroke-width:1"/>
+    </pattern>
+  </defs>
+  <rect x="5" y="10" width="40" height="35" style="fill:#000000;stroke:#000000;stroke-width:2" />
+  <rect x="10" y="15" width="30" height="25" style="fill:url(#stripes);stroke:#000000;stroke-width:2" />
+  <line x1="5" y1="20" x2="45" y2="20" style="stroke:#000000;stroke-width:2" />
+  <rect x="15" y="5" width="5" height="10" style="fill:#ffffff;stroke:#000000;stroke-width:2" />
+  <rect x="30" y="5" width="5" height="10" style="fill:#ffffff;stroke:#000000;stroke-width:2" />
+  <text x="25" y="35" font-family="Verdana" font-size="12" text-anchor="middle" fill="red">15</text>
+  <text x="25" y="20" font-family="Verdana" font-size="6" text-anchor="middle" fill="black">April</text>
+</svg>

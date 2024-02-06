@@ -68,7 +68,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const logout = () => {
-        queryClient.clear()
+        // queryClient.clear()
         setUser(null)
 
     };

@@ -47,6 +47,7 @@ const api = async (endpoint: string, method: string = 'GET', data: any = null) =
         if (error.response && error.response.status === 401) { // 401 means luck of authentication and that why we clear the session storage and redirect
             sessionStorage.clear()
             window.location.assign('/')
+            return null
         }
         throw error
     }

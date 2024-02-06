@@ -17,6 +17,7 @@ const config: Config = {
         'green': '#008000',
         'light-green': '#90EE90',
         'red': '#B22222',
+        'app-background': '#49c5b6'
       },
       keyframes: {
         scrollMessages: {
