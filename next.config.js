@@ -2,6 +2,7 @@
 // const pat
 
 const nextConfig = {
+    output: 'standalone',
     reactStrictMode: false,
     experimental: {
         serverActions: true

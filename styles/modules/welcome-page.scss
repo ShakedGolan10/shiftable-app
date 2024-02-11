@@ -7,7 +7,7 @@
 }
 
 
-.offcanvas-collapse {
+.ham-menu-btn {
     position: fixed;
     top: 3.25rem;
     /* adjusts the height between the top of the page and the offcanvas menu */
@@ -31,7 +31,7 @@
 }
 
 @media (min-width: 1024px) {
-    .offcanvas-collapse {
+    .ham-menu-btn {
         position: static;
         top: auto;
         bottom: auto;
@@ -49,23 +49,17 @@
         transform: none;
     }
 
-    .nav-link {
+    .link-welcome-page-navbar-menu {
         padding-right: 0.625rem;
         padding-left: 0.625rem;
     }
-}
-
-.container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .header {
     background: linear-gradient(rgba(197, 234, 249, 1), rgba(255, 255, 255, 1));
 }
 
-.nav-link {
+.link-welcome-page-navbar-menu {
     display: block;
     padding-top: 0.625rem;
     padding-bottom: 0.625rem;
@@ -93,47 +87,50 @@
     }
 
 }
-
-.btn-solid-lg {
+.welcome-page-summery {
+button {
     display: inline-block;
-    padding: 1.625rem 2.75rem 1.625rem 2.75rem;
-    border: 1px solid #594cda;
-    border-radius: 32px;
-    background-color: #594cda;
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 0.875rem;
-    line-height: 0;
-    text-decoration: none;
-    transition: all 0.2s;
-    margin-right: 0.25rem;
-    margin-bottom: 1.25rem;
-    margin-left: 0.25rem;
+        padding: 1.625rem 2.75rem 1.625rem 2.75rem;
+        border-radius: 32px;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.875rem;
+        line-height: 0;
+        text-decoration: none;
+        transition: all 0.2s;
+        margin-right: 0.25rem;
+        margin-bottom: 1.25rem;
+        margin-left: 0.25rem;
+    &.login-btn {
+        border: 1px solid #594cda;
+        background-color: #594cda;
+
+        &:hover {
+            background-color: transparent;
+            color: #594cda;
+            /* needs to stay here because of the color property of a tag */
+            text-decoration: none;
+        }
+    }
+    
+    
+    &.contact-us-btn {
+        border: 1px solid #eb427e;
+        background-color: #eb427e;
+        &:hover {
+            background: transparent;
+            color: #eb427e;
+            /* needs to stay here because of the color property of a tag */
+        }
+    }
+    
+}
 }
 
-.btn-solid-lg:hover {
-    border: 1px solid #594cda;
-    background-color: transparent;
-    color: #594cda;
-    /* needs to stay here because of the color property of a tag */
-    text-decoration: none;
-}
-
-.secondary {
-    border: 1px solid #eb427e;
-    background-color: #eb427e;
-}
-
-.secondary:hover {
-    border: 1px solid #eb427e;
-    background: transparent;
-    color: #eb427e;
-    /* needs to stay here because of the color property of a tag */
-}
 
 // .dropdown.show>a,
-// .nav-link:hover,
-// .nav-link.active {
+// .link-welcome-page-navbar-menu:hover,
+// .link-welcome-page-navbar-menu.active {
 //     color: #ff6e84;
 //     text-decoration: none;
 // }

@@ -19,7 +19,6 @@ export async function GET(request: NextRequest) {
     else {
         try {
             const jwtEncryptedToken = await getCookie('loggedInUserToken')
-            console.log('checking user!!!!!!!!!!!!!!!!', jwtEncryptedToken)
             if (jwtEncryptedToken) {
                 const uid = await validateJwtToken(jwtEncryptedToken)
                 const user = await getUser(uid)

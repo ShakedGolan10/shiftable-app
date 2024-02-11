@@ -3,20 +3,25 @@
 import { useForm } from '@/hooks/useForm'
 import { useAuth } from './UserContextProvider';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import ErrorElement from './error-element';
 
 
 export function LoginForm({ toggleLoginModal }) {
 
     const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
+    const [loginError, setLoginError] = useState<string>('')
     const { login } = useAuth();
     const router = useRouter()
-    const onLogin = async (ev: React.FormEvent) => {
+    const onLogin = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault()
         try {
+            setLoginError('')
             await login(credentials)
             router.push('/main')
         } catch (error) {
-
+            setLoginError('Username or password doesnt meet the right requirments, Try again plaese')
+            setTimeout(()=> setLoginError(''), 1500)
         }
     }
     return (
@@ -52,6 +57,7 @@ export function LoginForm({ toggleLoginModal }) {
                                 </div>
                             </div>
 
+                                {loginError && <ErrorElement message={loginError} />}
                             <div>
                                 <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Log in</button>
                             </div>

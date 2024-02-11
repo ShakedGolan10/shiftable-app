@@ -6,8 +6,21 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+darkMode: [
+
+],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'grid-large': '100px 1fr 100px',
+        'grid-medium': '50px 1fr 50px',
+        'grid-small': '1fr',
+      },
+      gridColumn: {
+        'column-large': '2/3',
+        'column-medium': '2/-1',
+        'column-small|full': '1/-1',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -17,6 +30,8 @@ const config: Config = {
         'green': '#008000',
         'light-green': '#90EE90',
         'red': '#B22222',
+        'app-red': '#f2b0bc',
+        'app-blue': '#b0d1f2',
         'app-background': '#49c5b6'
       },
       keyframes: {
@@ -30,7 +45,8 @@ const config: Config = {
       },
       animation: {
         scrollMsg: 'scrollMessages 10s linear infinite'
-      }
+      },
+      
     },
   },
   plugins: [

@@ -22,11 +22,11 @@ export function AlertModal() {
     }, [])
 
     return isModalOpen && (
-        <section className='alert-modal'>
+        <section className='alert-modal '>
 
             <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`back-screen fixed opacity-100 z-5 inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
 
-            <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div className="fixed flex max-w-96 mx-auto z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
                 <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-100 translate-y-0 sm:scale-100 ease-out duration-300`}
                 >
                     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">

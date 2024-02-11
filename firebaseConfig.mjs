@@ -5,7 +5,6 @@ import { initializeApp, } from "firebase/app";
 
 globalThis.fetch = fetch
 
-console.log('chekcing -------->', process.env.FIREBASE_API_KEY)
 // const serviceAccount = 'shiftable-app@shiftable-407203.iam.gserviceaccount.com'
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
