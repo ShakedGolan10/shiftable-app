@@ -13,9 +13,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <>
+        {/* border-4 rounded-3xl */}
         {/* bg-gradient-to-r from-app-blue to-app-red  */}
         <MainNavBar onToggleMenu={onToggleMenu} isMenuOpen={isMenuOpen} />
-        <main className="mt-24 mx-auto container p-4 border-4 rounded-3xl" onClick={() => { if (isMenuOpen) onToggleMenu() }}>
+        <main className="mt-24 mx-auto container p-4 " onClick={() => { if (isMenuOpen) onToggleMenu() }}>
             {children}
         </main>
         </>

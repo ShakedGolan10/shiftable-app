@@ -4,10 +4,12 @@ import { EmailGenerator, Employee } from '@/types/class.service'
 import React, { useEffect, useState } from 'react'
 import EmployerMsg from './employer-msg'
 import { useSystemActions } from '@/store/actions/system.actions'
+import { useRouter } from 'next/navigation'
 
 export default function EmployeeHomePage({ employeeUser }: { employeeUser: Employee }) {
     // Todo: Modal opens if the user has a shift today - Make the shifts database first
     const { toggleModalAction } = useSystemActions()
+    const router = useRouter()
     const toggleAlertModal = () => {
         toggleModalAction('You have a shift today!')
     }
@@ -33,7 +35,7 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
                 <EmployerMsg />
             </section>
             <div className='flex flex-col gap-2 my-2'>
-                <button className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</button>
+                <button onClick={()=> router.push('/main/shifts-application')} className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</button>
                 <button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Check who's working with you today</button>
                 <button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</button>
                 <button onClick={() => toggleAlertModal()} className='open-modal-button flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Toggle Modal</button>

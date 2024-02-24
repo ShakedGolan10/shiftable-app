@@ -24,8 +24,9 @@ darkMode: 'class',
       backgroundImage: {
         'bgc-light': 'linear-gradient(to left ,#f2b0bc, #b0d1f2)',
         'bgc-dark':
-          'linear-gradient(to left, #0d1b2a, #701f57, #1b263b, #4b778d);',
+          'linear-gradient(33deg, rgba(10,6,68,1) 26%, rgba(69,10,10,1) 76%);',
       },
+
       colors: {
         'green': '#008000',
         'light-green': '#90EE90',
@@ -58,13 +59,10 @@ darkMode: 'class',
           colors: {} // light theme colors
         },
         dark: {
-          layout: {
-            
-          }, // dark theme layout tokens
+          layout: {}, // dark theme layout tokens
           colors: {
-            foreground: '#FFFFFF', // forground for text color
+            foreground: '#FFFFFF', // forground is default text color
           } // dark theme colors,
-        
         },
         }
       })

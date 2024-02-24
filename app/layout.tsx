@@ -26,13 +26,13 @@ export default function RootLayout({
   return (
 
     <html lang="en" className='h-full'>
-      <body className={inter.className + ` h-full`}>
+      <body className={inter.className + ` h-full bg-bgc-light dark:bg-bgc-dark`}>
         <NextUiProvider>
         {/* <TanstackProvider> */}
           <UserProvider>
             <ReduxProvider>
               <AlertModal />
-              <div className='main-layout bg-bgc-light dark:bg-bgc-dark'>
+              <div className='main-layout '>
               {children}
               <ThemeSwitcher />
               </div>

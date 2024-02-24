@@ -31,13 +31,13 @@ export default function mainNavBar({ onToggleMenu, isMenuOpen }) {
                         </div>
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
-                                <Link className='text-black hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' href={'/shifts-application'}>Apply Shifts</Link>
-                                <Link className='text-black hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' href={'/my-shifts'}>My Shifts</Link>
+                                <Link className=' hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' href={'/shifts-application'}>Apply Shifts</Link>
+                                <Link className=' hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' href={'/my-shifts'}>My Shifts</Link>
                             </div>
                         </div>
                     </div>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        <button type="button" className="relative rounded-full bg-emerald-400 p-1 text-black hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                        <button type="button" className="relative rounded-full bg-emerald-400 p-1 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5"></span>
                             <span className="sr-only">View notifications</span>
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
@@ -65,13 +65,13 @@ export default function mainNavBar({ onToggleMenu, isMenuOpen }) {
                                 aria-labelledby="user-menu-button"
                             >
                                 {/* Menu items */}
-                                <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" id="user-menu-item-0">
+                                <a href="#" className="block px-4 py-2 text-sm " role="menuitem" id="user-menu-item-0">
                                     Your Profile
                                 </a>
-                                <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" id="user-menu-item-1">
+                                <a href="#" className="block px-4 py-2 text-sm " role="menuitem" id="user-menu-item-1">
                                     Settings
                                 </a>
-                                <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" id="user-menu-item-2">
+                                <a href="#" className="block px-4 py-2 text-sm " role="menuitem" id="user-menu-item-2">
                                     Sign out
                                 </a>
                             </div>
@@ -84,8 +84,8 @@ export default function mainNavBar({ onToggleMenu, isMenuOpen }) {
             <div hidden={!isMobileMenu} className='sm:hidden rounded-3xl' onClick={() => setMobileMenu(!isMobileMenu)} id="mobile-menu">
                 <div className="flex-row align-center space-y-1 px-2 pb-3 pt-2 justify">
                     {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                    <Link className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href={'/shifts-application'}>Apply Shifts</Link>
-                    <Link className='text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' href={'/my-shifts'}>My Shifts</Link>
+                    <Link className=" hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href={'/shifts-application'}>Apply Shifts</Link>
+                    <Link className=' hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' href={'/my-shifts'}>My Shifts</Link>
 
                 </div>
             </div>

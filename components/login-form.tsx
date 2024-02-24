@@ -30,10 +30,10 @@ export function LoginForm({ toggleLoginModal }) {
             <div onClick={toggleLoginModal} className={`back-screen fixed opacity-100 z-5 inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
 
             <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all my-8 w-full max-w-lg opacity-100 translate-y-0 sm:scale-100 ease-out duration-300`}>
+                <div className={` bg-white dark:bg-bgc-dark relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all my-8 w-full max-w-lg opacity-100 translate-y-0 sm:scale-100 ease-out duration-300`}>
                     <div className="mx-auto w-full">
                         {/* <img className="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" /> */}
-                        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">כניסה למערכת</h2>
+                        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">כניסה למערכת</h2>
                     </div>
 
                     <div className="mt-10 mx-auto w-full px-4">
@@ -63,7 +63,7 @@ export function LoginForm({ toggleLoginModal }) {
                             </div>
                         </form>
                     </div>
-                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <button onClick={() => toggleLoginModal()} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-red px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-white sm:mt-0 sm:w-auto">Close</button>
                     </div>
                 </div>
