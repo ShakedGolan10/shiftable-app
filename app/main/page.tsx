@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuth } from "@/components/UserContextProvider"
+import { useAuth } from "@/providers/UserContextProvider"
 import EmployeeHomePage from "@/components/employee-home-page";
 import EmployerHomePage from "@/components/employer-home-page";
 import LoadingElement from "@/components/loading-element";

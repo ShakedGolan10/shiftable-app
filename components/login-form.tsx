@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm } from '@/hooks/useForm'
-import { useAuth } from './UserContextProvider';
+import { useAuth } from '../providers/UserContextProvider';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ErrorElement from './error-element';
@@ -30,13 +30,13 @@ export function LoginForm({ toggleLoginModal }) {
             <div onClick={toggleLoginModal} className={`back-screen fixed opacity-100 z-5 inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
 
             <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-100 translate-y-0 sm:scale-100 ease-out duration-300`}>
-                    <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all my-8 w-full max-w-lg opacity-100 translate-y-0 sm:scale-100 ease-out duration-300`}>
+                    <div className="mx-auto w-full">
                         {/* <img className="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" /> */}
                         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">כניסה למערכת</h2>
                     </div>
 
-                    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                    <div className="mt-10 mx-auto w-full px-4">
                         <form onSubmit={onLogin} className="space-y-6" action="#" method="POST">
                             <div>
                                 <label className="block text-sm font-medium leading-6 text-gray-900">Email address</label>

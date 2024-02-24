@@ -1,6 +1,6 @@
 'use client'
 
-import { queryClient } from "@/components/TanstackProvider"
+import { queryClient } from "@/providers/TanstackProvider"
 import { fetchService } from "./fetch.service"
 import { CreateUserInstance, Employee, Employer } from "@/types/class.service"
 

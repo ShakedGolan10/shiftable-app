@@ -7,12 +7,12 @@ export default function mainNavBar({ onToggleMenu, isMenuOpen }) {
     const [isMobileMenu, setMobileMenu] = useState(false)
 
     return (
-        <nav className="bg-emerald-400 fixed full w-full top-0">
-            <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                <div className="relative flex h-16 items-center justify-between">
+        <nav className="bg-app-background fixed full w-full top-0">
+            {/* <div className="mx-auto px-2 sm:px-6 lg:px-8"> */}
+                <div className="mx-auto px-2 sm:px-6 lg:px-8 relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                         {/* <!-- Mobile menu button--> */}
-                        <button onClick={() => { setMobileMenu(!isMobileMenu) }} type="button" className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <button onClick={() => { setMobileMenu(!isMobileMenu) }} type="button" className="relative inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-700 hover:text-white" aria-controls="mobile-menu" aria-expanded="false">
                             <span className="absolute -inset-0.5"></span>
                             <span className="sr-only">Open main menu</span>
 
@@ -77,11 +77,11 @@ export default function mainNavBar({ onToggleMenu, isMenuOpen }) {
                             </div>
                         </div>
                     </div>
-                </div>
+                {/* </div> */}
             </div>
 
             {/* <!-- Mobile menu, show/hide based on menu state. --> */}
-            <div hidden={!isMobileMenu} className='sm:hidden' onClick={() => setMobileMenu(!isMobileMenu)} id="mobile-menu">
+            <div hidden={!isMobileMenu} className='sm:hidden rounded-3xl' onClick={() => setMobileMenu(!isMobileMenu)} id="mobile-menu">
                 <div className="flex-row align-center space-y-1 px-2 pb-3 pt-2 justify">
                     {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
                     <Link className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href={'/shifts-application'}>Apply Shifts</Link>

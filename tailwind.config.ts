@@ -1,14 +1,14 @@
 import type { Config } from 'tailwindcss'
+import { nextui } from '@nextui-org/react'
 
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
-darkMode: [
-
-],
+darkMode: 'class',
   theme: {
     extend: {
       gridTemplateColumns: {
@@ -22,9 +22,9 @@ darkMode: [
         'column-small|full': '1/-1',
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'bgc-light': 'linear-gradient(to left ,#f2b0bc, #b0d1f2)',
+        'bgc-dark':
+          'linear-gradient(to left, #0d1b2a, #701f57, #1b263b, #4b778d);',
       },
       colors: {
         'green': '#008000',
@@ -32,7 +32,7 @@ darkMode: [
         'red': '#B22222',
         'app-red': '#f2b0bc',
         'app-blue': '#b0d1f2',
-        'app-background': '#49c5b6'
+        
       },
       keyframes: {
         scrollMessages: {
@@ -50,7 +50,24 @@ darkMode: [
     },
   },
   plugins: [
-    require('@tailwindcss/forms')
+    require('@tailwindcss/forms'),
+    nextui({
+      themes: {
+        light: {
+          layout: {}, // light theme layout tokens
+          colors: {} // light theme colors
+        },
+        dark: {
+          layout: {
+            
+          }, // dark theme layout tokens
+          colors: {
+            foreground: '#FFFFFF', // forground for text color
+          } // dark theme colors,
+        
+        },
+        }
+      })
   ],
 }
 export default config

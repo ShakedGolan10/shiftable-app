@@ -11,7 +11,7 @@ export default function NavbarMenu() {
   }
   return (
     <>
-      <button onClick={toggleMenu} className="bg-transparent rounded text-xl leading-none hover:no-underline focus:no-underline lg:hidden lg:text-gray-400" type="button">
+      <button onClick={toggleMenu} className="bg-transparent rounded text-xl leading-none hover:no-underline focus:no-underline lg:hidden" type="button">
         <span className='navbar-toggler-icon inline-block w-8 h-8 align-middle'></span>
       </button>
 

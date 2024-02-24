@@ -1,0 +1,22 @@
+How will it look:
+    A table of 7 days, in each cube (cell) will be a shift
+    The number of cubes and cells will be determine by the Employer settings (based on the shifts in that correct job)
+    As an Employee you can check the cells (shifts) you can work on based on the Employer defenitions and also mark specific Shifts you cant
+
+    The Shifts that the Employee want to work at would be marked in green
+    Those he cant will be marked in red
+
+    At the end of marking the Employee would need to confirm his choices,
+    and If he doesnt stands up to the requirments he would be notified and couldnt complete
+
+Technologies and Libraries:
+    NextUI: 
+        - Built on top of Tailwind css
+        - Effortless dark mode
+        - Ready components
+        - Compability with NextJS
+
+    Socket.io:
+        - fast syncronize between employees and availble (not taken) shifts
+        - Realtime notifications to Employer on shifts application did by employees
+        

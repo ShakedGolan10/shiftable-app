@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useAuth } from './UserContextProvider'
+import { useAuth } from '../providers/UserContextProvider'
 import Carousel from './carousel'
 
 export default function EmployerMsg() {
