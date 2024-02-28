@@ -28,34 +28,15 @@ export const UserProvider = ({ children }) => {
                 setLoadingAuth(false)
                 router.push('/')
             }
-                // queryClient.setQueryData('loggedInUser', loggedInUser)
         }
         if (user) {
             setLoadingAuth(false)
             return
         }
         else authUser()
-
-        // let loggedInUser: any = queryClient.getQueryData('loggedInUser')
-        // if (loggedInUser) setUserState(loggedInUser)
-        // else if (!loggedInUser) loggedInUser = queryClient.getMutationCache()
-        // if (loggedInUser.mutations.length) setUserState(loggedInUser.mutations[0])
     }, [user])
 
-    // const setUserState = (user) => {
-    //     user = CreateUserInstance(user)
-    //     setUser(user)
-    //     setLoadingAuth(false)
-    // }
-
-    // const loginMutation = useMutation({
-    //     mutationFn: async (credentials: Credentials) => await userService.login(credentials),
-    //     onSuccess(data) {
-    //         const loggedInUser = CreateUserInstance(data)
-    //         queryClient.setQueryData('loggedInUser', loggedInUser);
-    //         setUser(loggedInUser);
-    //     }
-    // })
+   
 
 
 
@@ -74,7 +55,7 @@ export const UserProvider = ({ children }) => {
     const logout = () => {
         // queryClient.clear()
         setUser(null)
-
+        router.push('/')
     };
 
 
@@ -89,3 +70,24 @@ export const UserProvider = ({ children }) => {
 export const useAuth = () => {
     return useContext(UserContext);
 };
+
+
+ // const setUserState = (user) => {
+    //     user = CreateUserInstance(user)
+    //     setUser(user)
+    //     setLoadingAuth(false)
+    // }
+
+    // const loginMutation = useMutation({
+    //     mutationFn: async (credentials: Credentials) => await userService.login(credentials),
+    //     onSuccess(data) {
+    //         const loggedInUser = CreateUserInstance(data)
+    //         queryClient.setQueryData('loggedInUser', loggedInUser);
+    //         setUser(loggedInUser);
+    //     }
+    // })
+
+      // let loggedInUser: any = queryClient.getQueryData('loggedInUser')
+        // if (loggedInUser) setUserState(loggedInUser)
+        // else if (!loggedInUser) loggedInUser = queryClient.getMutationCache()
+        // if (loggedInUser.mutations.length) setUserState(loggedInUser.mutations[0])
