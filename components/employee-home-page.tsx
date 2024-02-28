@@ -18,6 +18,8 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
 
     useEffect(() => {
         if (employeeUser.employer.applicationTime.day === new Date().getDay()) toggleModalAction('Apply shifts today!')
+
+        console.log('-------->>>>>', employeeUser)
     }, [])
 
     return (

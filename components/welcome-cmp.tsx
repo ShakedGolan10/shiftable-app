@@ -16,7 +16,7 @@ export default function WelcomeCmp({ toggleLoginModal }) {
                     <button className='contact-us-btn'><a target='_blank' href="https://wa.me/972535302345">Not a member? Contact us!</a></button>
                 </div>
                 <div className="xl:text-right">
-                    <Image className='inline' src={smartphoneIMG} alt='front page img' width={500} height={500} />
+                    <Image className='inline w-auto h-auto' priority src={smartphoneIMG} alt='front page img' width={500} height={500} />
                 </div>
             </div>
         </main>

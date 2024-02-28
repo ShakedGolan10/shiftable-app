@@ -9,15 +9,12 @@ import { generateJwtToken, validateJwtToken } from '@/services/server-services/t
 import { getUser } from '@/services/server-services/user.service'
 
 export async function POST(request: NextRequest) {
-    // Todo: Provide the response with the following classes: Employee \ Employer 
-    // Todo: Handle credintial error - also in front
+    const auth = getAuth(app)
+    const { email, password } = await request.json()
     try {
-        const { email, password } = await request.json()
-        const auth = getAuth(app)
         let { user }: UserCredential = await signInWithEmailAndPassword(auth, email, password)
         const jwtIdToken = await generateJwtToken(user.uid)
         user = await getUser(user.uid)
-        // Todo: Return the user from firestore based on the uid of the loggedin user
         await setCookie('loggedInUserToken', jwtIdToken)
         return NextResponse.json(user, { status: 200 })
     } catch (error) {

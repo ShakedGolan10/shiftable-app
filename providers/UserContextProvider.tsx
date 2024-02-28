@@ -19,13 +19,16 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage and 
         const authUser = async () => {
-            let loggedInUser = await userService.getLoggedInUser()
-            if (loggedInUser) {
-                // queryClient.setQueryData('loggedInUser', loggedInUser)
+            try {
+                let loggedInUser = await userService.getLoggedInUser()
                 setUser(loggedInUser)
+                setLoadingAuth(false)
+                
+            } catch (error) {
+                setLoadingAuth(false)
+                router.push('/')
             }
-            setLoadingAuth(false)
-            if (!loggedInUser) router.push('/')
+                // queryClient.setQueryData('loggedInUser', loggedInUser)
         }
         if (user) {
             setLoadingAuth(false)

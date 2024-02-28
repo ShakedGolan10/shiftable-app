@@ -43,7 +43,6 @@ const api = async (endpoint: string, method: string = 'GET', data: any = null) =
         return await res.json()
     } catch (error: any) {
         console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
-        console.dir(error)
         if (error.response && error.response.status === 401) { // 401 means luck of authentication and that why we clear the session storage and redirect
             sessionStorage.clear()
             window.location.assign('/')

@@ -9,7 +9,7 @@ export default function NextUiProvider({children}: {children: React.ReactNode}) 
     <NextUIProvider>
             <NextThemeProvider
                 attribute='class'
-                defaultTheme='dark'
+                defaultTheme='light'
                 themes={['light', 'dark']}
             >
                 {children}

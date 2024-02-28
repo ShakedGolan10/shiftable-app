@@ -13,7 +13,7 @@ export default function ShiftsTable({rows, columns}:any) {
         <TableBody items={rows}>
           {(item: any) => (
             <TableRow key={item.key}>
-              {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+              {(columnKey) => <TableCell className='bg-white text-gray-950'>{getKeyValue(item, columnKey)}</TableCell>}
             </TableRow>
           )}
         </TableBody>

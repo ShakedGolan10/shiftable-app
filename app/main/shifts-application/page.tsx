@@ -1,11 +1,13 @@
 
+import { shiftService } from "@/services/server-services/shifts.service";
 import ShiftsTable from "./shifts-table";
 
 // import { rows } from './rows';
 // import { columns } from './columns';
 
-export default function page() {
+export default async function page() {
    
+    const shiftsTable = await shiftService.getApplicableShifts()
       const rows =  [
         {
           key: "1",
