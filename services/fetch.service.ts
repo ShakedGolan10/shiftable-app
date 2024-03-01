@@ -15,7 +15,7 @@ const BASE_URL = process.env.NODE_ENV === 'development'
 
 
 export const fetchService = {
-    GET<T>(endpoint: string, data: string | object): Promise<T> {
+    GET<T>(endpoint: string, data?: string | object): Promise<T> {
         return api(endpoint, 'GET', data)
     },
     POST<T>(endpoint: string, data: string | object): Promise<T> {
@@ -29,9 +29,11 @@ export const fetchService = {
     }
 }
 const api = async (endpoint: string, method: string = 'GET', data: any = null) => {
-    const url = (method === 'GET') ? `${BASE_URL}${endpoint}` : `${BASE_URL}${endpoint}?${new URLSearchParams(data)}`
+    const url = (method === 'GET' && data) ? `${BASE_URL}${endpoint}?${new URLSearchParams(data)}` : `${BASE_URL}${endpoint}`
     const request = (method === 'GET') ? new Request(url, { method }) :
         new Request(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+
+        console.log('the url!', url)
     try {
         const res = await fetch(request)
         // const res = await fetch({

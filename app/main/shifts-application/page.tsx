@@ -1,4 +1,4 @@
-
+'use client'
 import { shiftService } from "@/services/server-services/shifts.service";
 import ShiftsTable from "./shifts-table";
 
@@ -7,7 +7,8 @@ import ShiftsTable from "./shifts-table";
 
 export default async function page() {
    
-    const shiftsTable = await shiftService.getApplicableShifts()
+    const shiftsTable = await shiftService.getUserApplicableShifts()
+    // console.log(shiftsTable)
       const rows =  [
         {
           key: "1",
