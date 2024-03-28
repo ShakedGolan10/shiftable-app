@@ -1,5 +1,5 @@
 // import { ReduxProvider } from '@/store/provider'
-import { TanstackProvider } from '@/providers/TanstackProvider';
+// import { TanstackProvider } from '@/providers/TanstackProvider';
 import '@/styles/globals.scss'
 
 import type { Metadata } from 'next'

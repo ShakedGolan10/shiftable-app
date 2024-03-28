@@ -1,4 +1,3 @@
-'use client'
 import { shiftService } from "@/services/server-services/shifts.service";
 import ShiftsTable from "./shifts-table";
 

@@ -71,7 +71,6 @@ export class Employee {
         this.email = email
         this.employer = employer
     }
-
     // Todo: methods for shifts
     public async setEmployeeShifts() {
         // const employeeShifts = await userService
