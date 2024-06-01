@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation'
 import { useDisclosure } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import logo from '@/assets/imgs/shiftable-logo.png'
-import WelcomePageNavbarMenu from '@/components/welcome-page-navbar-menu'
 import WelcomeCmp from '@/components/welcome-cmp'
 
 
