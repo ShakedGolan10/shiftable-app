@@ -1,0 +1,41 @@
+// import { ReduxProvider } from '@/store/provider'
+// import { TanstackProvider } from '@/providers/TanstackProvider';
+
+import { Inter } from 'next/font/google'
+const inter = Inter({ subsets: ['latin'] })
+import { UserProvider } from '@/providers/UserContextProvider';
+import { ReduxProvider } from '@/store/provider';
+import { AlertModal } from '@/components/alert-modal';
+import NextUiProvider from '@/providers/NextUIProvider';
+import ThemeSwitcher from '@/components/themeSwitcher';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+
+  return (
+
+    <html lang="en" className='h-full' suppressHydrationWarning>
+      <body className={inter.className + ` h-full bg-bgc-light dark:bg-bgc-dark`}>
+        <NextUiProvider>
+        {/* <TanstackProvider> */}
+          <UserProvider>
+            <ReduxProvider>
+              <AlertModal />
+              <div className='main-layout '>
+              {children}
+              <ThemeSwitcher />
+              </div>
+            </ReduxProvider>
+          </UserProvider>
+        {/* </TanstackProvider> */}
+        </NextUiProvider>
+      </body>
+    </html>
+
+  )
+}
+
+// If want store - uncomment the ReduxProvider

@@ -1,8 +1,9 @@
 'use client'
+import { Spinner } from '@nextui-org/react'
 import React from 'react'
 
 export default function LoadingElement() {
     return (
-        <><h1>loading...</h1></>
+        <><Spinner className='my-10vh'/></>
     )
 }
