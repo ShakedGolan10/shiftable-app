@@ -3,7 +3,7 @@ import smartphoneIMG from '@/assets/imgs/header-smartphone.png'
 import Image from 'next/image'
 import '@/styles/modules/welcome-page.scss'
 
-export default function WelcomeCmp({ toggleLoginModal }) {
+export default function WelcomeCmp({ onOpen }) {
 
     return (
         <main id="main" className={`py-28 text-center md:pt-36 lg:text-left xl:pb-32`}>
@@ -11,7 +11,7 @@ export default function WelcomeCmp({ toggleLoginModal }) {
                 <div className="welcome-page-summery mb-16 lg:mt-32 xl:mt-40 xl:mr-12">
                     <h1 className='h1-large mb-5'>Shift management application</h1>
                     <p className='p-large mb-8'>Start getting things done together with your team based on Shiftable's revolutionary shift management features</p>
-                    <button className='login-btn' onClick={toggleLoginModal}>Login</button>
+                    <button className='login-btn' onClick={onOpen}>Login</button>
                     {/* Done: Create a login modal, No need for store usage, better use props! */}
                     <button className='contact-us-btn'><a target='_blank' href="https://wa.me/972535302345">Not a member? Contact us!</a></button>
                 </div>

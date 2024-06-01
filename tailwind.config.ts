@@ -21,6 +21,11 @@ darkMode: 'class',
         'column-medium': '2/-1',
         'column-small|full': '1/-1',
       },
+      screens: {
+        'mobile': { 'max': '640px' },
+        'smMobile': { 'max': '420px' },
+        // => @media (max-width: 639px) { ... }
+      },
       backgroundImage: {
         'bgc-light': 'linear-gradient(to left ,#f2b0bc, #b0d1f2)',
         'bgc-dark':

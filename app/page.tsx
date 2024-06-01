@@ -4,6 +4,7 @@ import { useAuth } from '@/providers/UserContextProvider'
 import LoadingElement from '@/components/loading-element'
 import { LoginForm } from '@/components/login-form'
 import { useRouter } from 'next/navigation'
+import { useDisclosure } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import logo from '@/assets/imgs/shiftable-logo.png'
 import WelcomePageNavbarMenu from '@/components/welcome-page-navbar-menu'
@@ -14,12 +15,9 @@ export default function HomePage() {
   const { user, isLoadingAuth } = useAuth()
 
   const router = useRouter()
+  const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
-  const toggleLoginModal = () => {
-    setIsLoginModalOpen(prev => !prev)
-  }
   useEffect(() => {
     if (user) router.push('/main')
   }, [isLoadingAuth, user])
@@ -27,18 +25,17 @@ export default function HomePage() {
   return isLoadingAuth ? (<main className="flex min-h-screen flex-col items-center justify-between p-24"><LoadingElement /></main>) :
     !user && (
       <main className="flex min-h-screen items-center justify-center">
-        {/* Todo: Make a beautiful homepage using pavo template */}
         {/* <Image className='fixed' src={logo} alt='aaaaa' width={100} height={100} /> */}
         <nav className="navbar fixed top-0 right-0 left-0 z-50 flex items-center pt-3">
           <div className='w-full mx-auto sm:px-4 lg:px-8 flex flex-wrap items-center justify-between lg:flex-nowrap'>
-            <a className="font-semibold text-3xl leading-4 no-underline">Shiftable</a>
-            <WelcomePageNavbarMenu />
+            <a className="font-semibold m-[10px] text-3xl leading-4 no-underline">Shiftable</a>
+            {/* <WelcomePageNavbarMenu /> */}
           </div>
         </nav>
         <>
-          <WelcomeCmp toggleLoginModal={toggleLoginModal} />
+          <WelcomeCmp onOpen={onOpen} />
         </>
-        {isLoginModalOpen && <LoginForm toggleLoginModal={toggleLoginModal} />}
+        <LoginForm isOpen={isOpen} onClose={onClose} />
       </main>
     )
 }
