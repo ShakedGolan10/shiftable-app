@@ -9,16 +9,14 @@ import { useRouter } from 'next/navigation'
 export default function EmployeeHomePage({ employeeUser }: { employeeUser: Employee }) {
     // Todo: Modal opens if the user has a shift today - Make the shifts database first
     const { toggleModalAction } = useSystemActions()
+
     const router = useRouter()
-    const toggleAlertModal = () => {
-        toggleModalAction('You have a shift today!')
-    }
+  
     // let emails = new EmailGenerator('or', 'gabay', null, 'zeronetworks', 'com')
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     useEffect(() => {
         if (employeeUser.employer.applicationTime.day === new Date().getDay()) toggleModalAction('Apply shifts today!')
-
         console.log('-------->>>>>', employeeUser)
     }, [])
 
@@ -40,7 +38,7 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
                 <button onClick={()=> router.push('/main/shifts-application')} className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</button>
                 <button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Check who's working with you today</button>
                 <button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</button>
-                <button onClick={() => toggleAlertModal()} className='open-modal-button flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Toggle Modal</button>
+                <button onClick={() => toggleModalAction('You have a shift today!')} className='open-modal-button flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Toggle Modal</button>
             </div>
             {/* <div className='flex flex-col'>
                 {emails.emailList.map((email, idx) => <span key={idx}>{email}</span>)}
