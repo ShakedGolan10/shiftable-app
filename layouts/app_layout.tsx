@@ -1,8 +1,6 @@
 // import { ReduxProvider } from '@/store/provider'
 // import { TanstackProvider } from '@/providers/TanstackProvider';
 
-import { Inter } from 'next/font/google'
-const inter = Inter({ subsets: ['latin'] })
 import { UserProvider } from '@/providers/UserContextProvider';
 import { ReduxProvider } from '@/store/provider';
 import { AlertModal } from '@/components/alert-modal';
@@ -16,9 +14,6 @@ export default function RootLayout({
 }) {
 
   return (
-
-    <html lang="en" className='h-full' suppressHydrationWarning>
-      <body className={inter.className + ` h-full bg-bgc-light dark:bg-bgc-dark`}>
         <NextUiProvider>
         {/* <TanstackProvider> */}
           <UserProvider>
@@ -32,8 +27,7 @@ export default function RootLayout({
           </UserProvider>
         {/* </TanstackProvider> */}
         </NextUiProvider>
-      </body>
-    </html>
+     
 
   )
 }

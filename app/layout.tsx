@@ -18,11 +18,11 @@ export default function RootLayout({
 }) {
 
   return (
-
-   <>
+    <html lang="en" className='h-full' suppressHydrationWarning>
+      <body className={`h-full bg-bgc-light dark:bg-bgc-dark`}>
     <AppLayout children={children} />
-   </>
-
+    </body>
+    </html>
   )
 }
 
