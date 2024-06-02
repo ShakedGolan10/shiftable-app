@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Loading from "@/components/loading-element";
 
 export const ShiftsApplicationLayout = dynamic(() => import("../layouts/shift_application_layout"), {
-	ssr: false,
+	ssr: true,
 	loading: function LoadingComponent() {
 		return <Loading />;
 	},
@@ -14,7 +14,7 @@ export const MainPageLayout = dynamic(() => import("../layouts/main_page_layout"
 	},
 });
 export const AppLayout = dynamic(() => import("../layouts/app_layout"), {
-	ssr: false,
+	ssr: true,
 	loading: function LoadingComponent() {
 		return <Loading />;
 	},

@@ -1,7 +1,5 @@
-'use client'
-
 import MainNavBar from "@/components/main-nav-bar";
-import React, { useState } from "react";
+import React from "react";
 
 
 export default function MainPageLayout({ children }: { children: React.ReactNode }) {
