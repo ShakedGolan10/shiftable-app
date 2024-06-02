@@ -1,8 +1,6 @@
 'use client'
 
-import { useAuth } from "@/providers/UserContextProvider"
 
-import LoadingElement from "@/components/loading-element";
 import { Employee, Employer } from "@/types/class.service";
 import EmployeeHomePage from "@/components/employee-home-page";
 import EmployerHomePage from "@/components/employer-home-page";
@@ -13,10 +11,8 @@ import EmployerHomePage from "@/components/employer-home-page";
 // Move the useAuth to layout? and move the user as a prop?
 // But! -> The user eventually is brought throw a hook so..... how can I conditinally bring the user data and render on certain compopnent accordingly? 
 // Watch a video on youtube!
-export default function MainPage() {
-    const { user, isLoadingAuth } = useAuth()
-
-    // if (isLoadingAuth) return (<div><LoadingElement /></div>)
+export default function MainPage(user: Employee | Employer) {
+console.log('hiiiiiiiiiiiiii', user)
     return (
         user instanceof Employee ? (<EmployeeHomePage employeeUser={user} />) : user instanceof Employer && (
         (<EmployerHomePage employerUser={user} />)

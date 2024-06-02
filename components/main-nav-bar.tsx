@@ -1,26 +1,22 @@
+'use client'
 import React from "react";
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar} from "@nextui-org/react";
 
 export default function MainNavBar() {
   return (
-    <Navbar>
+    <Navbar className="full bg-transparent">
       <NavbarBrand>
-        <p className="font-bold text-inherit">ACME</p>
+        <p className="font-bold text-inherit">Shiftable</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link color="foreground" href="#">
-            Features
+            My shifts
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
           <Link href="#" aria-current="page" color="secondary">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
+            Apply shifts
           </Link>
         </NavbarItem>
       </NavbarContent>
@@ -58,3 +54,5 @@ export default function MainNavBar() {
     </Navbar>
   );
 }
+
+

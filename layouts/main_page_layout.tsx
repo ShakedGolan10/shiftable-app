@@ -1,4 +1,6 @@
+'use client'
 import MainNavBar from "@/components/main-nav-bar";
+import { useAuth } from "@/providers/UserContextProvider";
 import React from "react";
 
 

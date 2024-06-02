@@ -10,7 +10,7 @@ export default function AppLayout({
   return (
               <>
               <AlertModal />
-              <div className='main-layout '>
+              <div className='main-layout'>
               {children}
               <ThemeSwitcher />
               </div>
