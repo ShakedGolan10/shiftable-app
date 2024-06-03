@@ -7,7 +7,9 @@ export default function ShiftsApplicationLayout({ children }: { children: React.
 
     return (
         <>
-        <ShiftsApplicationLayout children={children} />
+        <main className="mt-24 mx-auto container ">
+            {children}
+        </main>
         </>
     )
 }

@@ -5,15 +5,22 @@ import { useMutation } from 'react-query';
 import { queryClient } from './TanstackProvider';
 import { useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
+import { Falsey } from 'lodash';
+
+interface useAuth {
+    isLoadingAuth: boolean
+    user: Employee | Employer | Falsey
+    login: () => Promise<void> 
+    logout: () => void 
+    
+}
 
 const UserContext = createContext(null);
 
-export const UserProvider = ({ children }) => {
 
-    // Done: change LoggedInUser to Employee
-    // Done: create New Employee
+export const UserProvider = ({ children } : {children: React.ReactNode}) => {
 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState<Employee | Employer | Falsey>(null)
     const [isLoadingAuth, setLoadingAuth] = useState(true)
     const router = useRouter()
 
@@ -40,7 +47,7 @@ export const UserProvider = ({ children }) => {
 
 
 
-    const login = async (credentials: Credentials) => {
+    const login = async (credentials: Credentials) : Promise<void> => {
         try {
             let user = await userService.login(credentials)
             user = CreateUserInstance(user)
@@ -52,7 +59,7 @@ export const UserProvider = ({ children }) => {
 
     };
 
-    const logout = () => {
+    const logout = () : void => {
         // queryClient.clear()
         setUser(null)
         router.push('/')
@@ -61,13 +68,13 @@ export const UserProvider = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ isLoadingAuth, user, setUser, login, logout }}>
+        <UserContext.Provider value={{ isLoadingAuth, user, login, logout }}>
             {children}
         </UserContext.Provider>
     );
 };
 
-export const useAuth = () => {
+export const useAuth = () : useAuth => {
     return useContext(UserContext);
 };
 
