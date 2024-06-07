@@ -12,9 +12,9 @@ import WelcomeCmp from '@/components/welcome-cmp'
 
 export default function HomePage() {
   const { user, isLoadingAuth } = useAuth()
+  const {isOpen, onOpen, onClose} = useDisclosure();
 
   const router = useRouter()
-  const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
 
 
   useEffect(() => {
