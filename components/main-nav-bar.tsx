@@ -4,7 +4,7 @@ import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, Drop
 import { useAuth } from "@/providers/UserContextProvider";
 
 export default function MainNavBar() {
-  const { user } = useAuth()
+  const { user,logout } = useAuth()
   return (
     <Navbar className="full bg-transparent">
       <NavbarBrand>
@@ -47,7 +47,7 @@ export default function MainNavBar() {
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem onClick={logout} key="logout" color="danger">
               Log Out
             </DropdownItem>
           </DropdownMenu>

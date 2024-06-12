@@ -1,5 +1,7 @@
 'use client'
 
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
+
 // import Axios from "axios"
 // import { Request } from "node-fetch"
 
@@ -15,11 +17,10 @@ const BASE_URL = process.env.NODE_ENV === 'development'
 
 
 export const fetchService = {
-    GET<T>(endpoint: string, data?: string | object): Promise<T> {
-        console.log('checking if running', endpoint)
+    GET<T>(endpoint: string, data?: Params): Promise<T> {
         return api(endpoint, 'GET', data)
     },
-    POST<T>(endpoint: string, data: string | object): Promise<T> {
+    POST<T>(endpoint: string, data?: string | object): Promise<T> {
         return api(endpoint, 'POST', data)
     },
     PUT<T>(endpoint: string, data: string | object): Promise<T> {

@@ -1,6 +1,6 @@
 'use client'
 import { userService } from '@/services/user.service';
-import React, { createContext, useContext, useState, useEffect, cache } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import { Falsey } from 'lodash';
@@ -27,11 +27,11 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             try {
                 let loggedInUser = await userService.getLoggedInUser()
                 setUser(loggedInUser)
-                setLoadingAuth(false)
                 } catch (error) {
-                    setLoadingAuth(false)
                     router.push('/')
-                    }
+                } finally {
+                    setLoadingAuth(false)
+                }
             }
             if (user) {
                 setLoadingAuth(false)
@@ -49,8 +49,9 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                     console.error('Login error:', error);
                     throw error
                     }};
-            const logout = () : void => {
+            const logout = async () : Promise<void> => {
                 // queryClient.clear()
+                await userService.logout()
                 setUser(null)
                 router.push('/')
                 };

@@ -32,7 +32,8 @@
     "redux": "^4.2.1",
     "sass": "^1.69.5",
     "socket.io": "^4.7.4",
-    "supports-color": "^9.4.0"
+    "supports-color": "^9.4.0",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^20",

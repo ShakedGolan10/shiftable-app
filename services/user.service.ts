@@ -17,14 +17,14 @@ const login = async (credentials: Credentials): Promise<Employee | Employer> => 
 
 }
 
-const logout = () => {
+const logout = async () : Promise<void> => {
     // Todo: Make this function work with the UserContextProvider
-    // return { fullname: '', employer: '', }
+    await fetchService.POST('auth')
 }
 
 const getLoggedInUser = async () => {
     try {
-        let loggedInUser = await fetchService.GET<Employee | Employer | boolean>('user', '')
+        let loggedInUser = await fetchService.GET<Employee | Employer | boolean>('user')
         if (loggedInUser) {
             // Todo: Upgrade the constructor of Employer and Employee
             return CreateUserInstance<Employee | Employer>(loggedInUser as Employee | Employer)

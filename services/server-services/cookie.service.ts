@@ -22,3 +22,14 @@ export const getCookie = async (name: string): Promise<string | boolean> => {
         throw new Error('cookie-service: Could\'nt get cookie')
     }
 }
+
+export const clearCookie = async (key: string): Promise<void> => {
+    try {
+        cookies().delete(key)
+    } catch (error) {
+        console.log(error)
+        throw new Error('cookie-service: Could\'nt get cookie')
+    }
+}
+
+
