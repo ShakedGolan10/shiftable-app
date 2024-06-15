@@ -4,9 +4,10 @@
 const nextConfig = {
     output: 'standalone',
     reactStrictMode: false,
-    // experimental: {
-    //     serverActions: true
-    // },
+    experimental: {
+        // appDir: true,
+        // serverActions: true
+    },
     env: {
         JWT_SECRET: process.env.NEXT_PRIVATE_JWT_SECRET,
         FIREBASE_API_KEY: process.env.NEXT_PRIVATE_FIREBASE_APIKEY,

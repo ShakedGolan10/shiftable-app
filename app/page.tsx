@@ -1,7 +1,6 @@
 'use client'
 import '@/styles/modules/welcome-page.scss'
 import { useAuth } from '@/providers/UserContextProvider'
-import LoadingElement from '@/components/loading-element'
 import { LoginForm } from '@/components/login-form'
 import { useRouter } from 'next/navigation'
 import { useDisclosure } from '@nextui-org/react'
@@ -15,7 +14,6 @@ export default function HomePage() {
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const router = useRouter()
-
 
   useEffect(() => {
     if (user) router.push('/main')

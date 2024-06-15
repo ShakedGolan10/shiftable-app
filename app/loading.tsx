@@ -3,6 +3,7 @@ import React from 'react'
 
 export default function Loading() {
   return (
-    <LoadingElement />
+    <div className='h-full w-full bg-cyan-400'></div>
+    // <LoadingElement />
   )
 }

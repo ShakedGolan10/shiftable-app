@@ -1,14 +1,15 @@
 'use client'
 import { userService } from '@/services/user.service';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import { Falsey } from 'lodash';
+import LoadingElement from '@/components/loading-element';
 
 interface useAuth {
     isLoadingAuth: boolean
     user: Employee | Employer 
-    login: () => Promise<void> 
+    login: (credentials: Credentials) => Promise<void> 
     logout: () => void 
     
 }
@@ -19,10 +20,11 @@ const UserContext = createContext(null);
 export const UserProvider = ({ children } : {children: React.ReactNode}) => {
 
     const [user, setUser] = useState<Employee | Employer | Falsey>(null)
-    const [isLoadingAuth, setLoadingAuth] = useState(true)
+    const [isLoadingAuth, setLoadingAuth] = useState(null)
     const router = useRouter()
     
     useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage and 
+        setLoadingAuth(true)
         const authUser = async () => {
             try {
                 let loggedInUser = await userService.getLoggedInUser()
@@ -41,6 +43,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
     }, [user])
                         
             const login = async (credentials: Credentials) : Promise<void> => {
+                    setLoadingAuth(true)
                 try {
                     let user = await userService.login(credentials)
                     user = CreateUserInstance(user)
@@ -48,15 +51,28 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                 } catch (error) {
                     console.error('Login error:', error);
                     throw error
-                    }};
-            const logout = async () : Promise<void> => {
-                // queryClient.clear()
+                    } finally{
+                        setLoadingAuth(false)
+                        }
+                        };
+                const logout = async () : Promise<void> => {
+                setLoadingAuth(true)
                 await userService.logout()
                 setUser(null)
+                setLoadingAuth(false)
                 router.push('/')
                 };
+
+                const value = useMemo(() => ({
+                    isLoadingAuth,
+                    user,
+                    login,
+                    logout
+                }), [isLoadingAuth, user]);
+        
         return (
-        <UserContext.Provider value={{ isLoadingAuth, user, login, logout }}>
+        <UserContext.Provider value={{ ...value }}>
+            {isLoadingAuth && <LoadingElement />}
             {children}
         </UserContext.Provider>
     )};

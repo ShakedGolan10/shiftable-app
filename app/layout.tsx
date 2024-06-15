@@ -27,9 +27,9 @@ export default function RootLayout({
 
     <html lang="en" className='h-full' suppressHydrationWarning>
       <body className={inter.className + ` h-full bg-bgc-light dark:bg-bgc-dark`}>
-        <NextUiProvider>
-        {/* <TanstackProvider> */}
           <UserProvider>
+            <NextUiProvider>
+            {/* <TanstackProvider> */}
             <ReduxProvider>
               <AlertModal />
               <div className='main-layout '>
@@ -37,9 +37,9 @@ export default function RootLayout({
               <ThemeSwitcher />
               </div>
             </ReduxProvider>
+            {/* </TanstackProvider> */}
+            </NextUiProvider>
           </UserProvider>
-        {/* </TanstackProvider> */}
-        </NextUiProvider>
       </body>
     </html>
 

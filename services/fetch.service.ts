@@ -5,16 +5,8 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 // import Axios from "axios"
 // import { Request } from "node-fetch"
 
-const BASE_URL = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000/api/'
-    : '/api/'
+const BASE_URL = '/api/'
 // const API_KEY: string = process.env.DATA_API_KEY as string
-
-// BIG Todo: Transform it to using fetch instead of axios
-// let axios = Axios.create({
-//     withCredentials: true
-// })
-
 
 export const fetchService = {
     GET<T>(endpoint: string, data?: Params): Promise<T> {

@@ -3,7 +3,7 @@
 import { useForm } from '@/hooks/useForm'
 import { useAuth } from '../providers/UserContextProvider';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ErrorElement from './error-element';
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Image} from "@nextui-org/react";
 
@@ -12,7 +12,7 @@ export function LoginForm({ isOpen, onClose }) {
 
     const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
     const [loginError, setLoginError] = useState<string>('')
-    const { login } = useAuth();
+    const { login, isLoadingAuth } = useAuth();
     const router = useRouter()
     const onLogin = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault()
@@ -54,12 +54,16 @@ export function LoginForm({ isOpen, onClose }) {
 
                                 {loginError && <ErrorElement message={loginError} />}
                             <div>
-                                <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Log in</button>
+                                <Button color='success' isDisabled={(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials.email)) || credentials.password.length < 4) } 
+                                isLoading={isLoadingAuth} 
+                                type="submit" className="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm">
+                                  Log in
+                                </Button>
                             </div>
                         </form>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button color="danger" variant="light" onPress={onClose} >
                   close
                 </Button>
               </ModalFooter>
