@@ -2,7 +2,7 @@
 // const pat
 
 const nextConfig = {
-    output: 'standalone',
+    // output: 'standalone',
     reactStrictMode: false,
     experimental: {
         // appDir: true,
