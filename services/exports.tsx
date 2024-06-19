@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { LoadingElement } from "@/components/loading-element";
+import LoadingElement from "@/components/loading-element";
 
 // export const ShiftsApplicationLayout = dynamic(() => import("../dynamic_cmps/shift_application_page_cmp"), {
 // 	ssr: true,

@@ -2,7 +2,7 @@
 import { Spinner } from '@nextui-org/react'
 import React from 'react'
 
-export function LoadingElement({ msg } : { msg?: string}) {
+export default function LoadingElement({ msg } : { msg?: string}) {
     return (
         <div className='flex flex-col items-center z-[300] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
         <Spinner className='my-2' />
