@@ -1,6 +1,5 @@
 'use server'
 
-import { NextResponse } from "next/server"
 import { queryOne } from "./db.service"
 
 export const getUser = async (uid: string) => {
