@@ -1,18 +1,14 @@
-'use client'
-
 import React from 'react'
-import { useAuth } from '../providers/UserContextProvider'
 import Carousel from './carousel'
+import { Employee } from '@/types/class.service'
 
-export default function EmployerMsg() {
+export default function EmployerMsg({ employee }: { employee: Employee }) {
 
-  const { user } = useAuth()
-  console.log(user.employer.employerMsg)
   return (
     <>
-      <h3 className='text-center text-2xl underline'>Latest messeges from Wolt {/*user.employer.name*/} </h3>
+      <h3 className='text-center text-2xl underline'>Latest messeges from {employee.employer.name} </h3>
       <section className='w-[100%] m-auto pt-11'>
-        <Carousel slides={user.employer.employerMsg} />
+        <Carousel slides={employee.employer.employerMsg} />
       </section>
     </>
   )

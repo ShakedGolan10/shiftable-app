@@ -31,7 +31,7 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
             {/* Done: Design the apply shifts alert */}
             {/* Todo: Design a button for checking whos working with you this week ! (nice feacture) */}
             <section className='my-10 h-fit'>
-                <EmployerMsg />
+                <EmployerMsg employee={ employeeUser } />
             </section>
             <div className='flex flex-col gap-2 my-2'>
                 <button onClick={()=> router.push('/main/shifts-application')} className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</button>
