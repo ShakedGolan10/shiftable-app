@@ -1,7 +1,6 @@
 'use client'
 import '@/styles/modules/welcome-page.scss'
 import { useAuth } from '@/providers/UserContextProvider'
-import LoadingElement from '@/components/loading-element'
 import { LoginForm } from '@/components/login-form'
 import { useRouter } from 'next/navigation'
 import { useDisclosure } from '@nextui-org/react'
@@ -12,17 +11,15 @@ import WelcomeCmp from '@/components/welcome-cmp'
 
 export default function HomePage() {
   const { user, isLoadingAuth } = useAuth()
+  const {isOpen, onOpen, onClose} = useDisclosure();
 
   const router = useRouter()
-  const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
-
 
   useEffect(() => {
     if (user) router.push('/main')
   }, [isLoadingAuth, user])
 
-  return isLoadingAuth ? (<main className="flex min-h-screen flex-col items-center justify-between p-24"><LoadingElement /></main>) :
-    !user && (
+  return (
       <main className="flex min-h-screen items-center justify-center">
         {/* <Image className='fixed' src={logo} alt='aaaaa' width={100} height={100} /> */}
         <nav className="navbar fixed top-0 right-0 left-0 z-50 flex items-center pt-3">

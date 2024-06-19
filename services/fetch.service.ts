@@ -1,24 +1,18 @@
 'use client'
 
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
+
 // import Axios from "axios"
 // import { Request } from "node-fetch"
 
-const BASE_URL = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000/api/'
-    : '/api/'
+const BASE_URL = '/api/'
 // const API_KEY: string = process.env.DATA_API_KEY as string
 
-// BIG Todo: Transform it to using fetch instead of axios
-// let axios = Axios.create({
-//     withCredentials: true
-// })
-
-
 export const fetchService = {
-    GET<T>(endpoint: string, data?: string | object): Promise<T> {
+    GET<T>(endpoint: string, data?: Params): Promise<T> {
         return api(endpoint, 'GET', data)
     },
-    POST<T>(endpoint: string, data: string | object): Promise<T> {
+    POST<T>(endpoint: string, data?: string | object): Promise<T> {
         return api(endpoint, 'POST', data)
     },
     PUT<T>(endpoint: string, data: string | object): Promise<T> {
@@ -32,8 +26,6 @@ const api = async (endpoint: string, method: string = 'GET', data: any = null) =
     const url = (method === 'GET' && data) ? `${BASE_URL}${endpoint}?${new URLSearchParams(data)}` : `${BASE_URL}${endpoint}`
     const request = (method === 'GET') ? new Request(url, { method }) :
         new Request(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
-
-        console.log('the url!', url)
     try {
         const res = await fetch(request)
         // const res = await fetch({

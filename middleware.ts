@@ -8,7 +8,6 @@ import { headers } from 'next/headers'
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.includes('auth')) return NextResponse.next() // if auth request let the req throw
-    
     const newHeaders = new Headers(request.headers)
     try {
         const jwtEncryptedToken = await getCookie('loggedInUserToken')

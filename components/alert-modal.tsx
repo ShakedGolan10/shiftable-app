@@ -17,10 +17,9 @@ export function AlertModal() {
     }
 
     // Todo: make this use Effect work
-    useEffect(() => {
-        console.log(isModalOpen, modalMsg)
-        // if (userShiftToday) setIsModalOpen(true)
-    }, [])
+    // useEffect(() => {
+    //     // if (userShiftToday) setIsModalOpen(true)
+    // }, [])
     return ( <>
         <Modal backdrop={'blur'} isOpen={isModalOpen} onClose={toggleModalAction} className="max-h-90vh max-w-70vw overflow-auto rounded-3xl">
            <ModalContent>
