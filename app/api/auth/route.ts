@@ -1,11 +1,10 @@
 'use server'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
-import { UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { app } from '@/firebaseConfig.mjs'
+import { UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { clearCookie, setCookie } from '@/services/server-services/cookie.service'
-import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
+import { generateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 
 export async function POST(request: NextRequest) {
