@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import { Falsey } from 'lodash';
-import LoadingElement from '@/components/loading-element';
+import {LoadingElement} from '@/components/loading-element';
 
 interface useAuth {
     isLoadingAuth: boolean
@@ -43,7 +43,6 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
     }, [user])
                         
             const login = async (credentials: Credentials) : Promise<void> => {
-                    setLoadingAuth(true)
                 try {
                     let user = await userService.login(credentials)
                     user = CreateUserInstance(user)
@@ -51,10 +50,9 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                 } catch (error) {
                     console.error('Login error:', error);
                     throw error
-                    } finally{
-                        setLoadingAuth(false)
-                        }
-                        };
+                    }
+                }
+                
                 const logout = async () : Promise<void> => {
                 setLoadingAuth(true)
                 await userService.logout()
@@ -72,7 +70,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         
         return (
         <UserContext.Provider value={{ ...value }}>
-            {isLoadingAuth && <LoadingElement />}
+            {isLoadingAuth && <LoadingElement msg='Loading user...' />}
             {children}
         </UserContext.Provider>
     )};

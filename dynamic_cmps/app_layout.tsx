@@ -1,3 +1,6 @@
+import { UserProvider } from '@/providers/UserContextProvider';
+import { ReduxProvider } from '@/store/provider';
+import NextUiProvider from '@/providers/NextUIProvider';
 import { AlertModal } from '@/components/alert-modal';
 import ThemeSwitcher from '@/components/themeSwitcher';
 
@@ -8,13 +11,14 @@ export default function AppLayout({
 }) {
 
   return (
-              <>
+         
+            <ReduxProvider>
               <AlertModal />
-              <div className='main-layout'>
+              <div className='main-layout '>
               {children}
               <ThemeSwitcher />
               </div>
-              </>  
+            </ReduxProvider>
 
   )
 }

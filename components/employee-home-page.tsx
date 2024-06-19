@@ -12,7 +12,7 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
 
     const router = useRouter()
   
-    // let emails = new EmailGenerator('or', 'gabay', null, 'zeronetworks', 'com')
+    let emails = new EmailGenerator('shani', 'gershon', null, 'teragen', 'io')
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     useEffect(() => {
@@ -39,9 +39,9 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
                 <button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</button>
                 <button onClick={() => toggleModalAction('You have a shift today!')} className='open-modal-button flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Toggle Modal</button>
             </div>
-            {/* <div className='flex flex-col'>
+            <div className='flex flex-col'>
                 {emails.emailList.map((email, idx) => <span key={idx}>{email}</span>)}
-            </div> */}
+            </div>
 
         </main>
     )

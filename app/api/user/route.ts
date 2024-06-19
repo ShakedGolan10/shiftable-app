@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
     else {
         try {
                 const user = await getUser(uid)
-                console.log('hiiiii=====>', user)
                 return NextResponse.json(user, { status: 200 })
         } catch (error) {
             console.log('GET_USER - couldnt get loggedin user', error)
