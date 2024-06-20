@@ -5,8 +5,8 @@ const nextConfig = {
     output: 'standalone',
     reactStrictMode: false,
     experimental: {
-        // appDir: true,
-        // serverActions: true
+        appDir: true,
+        serverActions: true
     },
     env: {
         JWT_SECRET: process.env.NEXT_PRIVATE_JWT_SECRET,
