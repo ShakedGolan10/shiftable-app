@@ -9,46 +9,43 @@ runConfig:
 # Environment variables and secrets
 env:
   - variable: NEXT_PRIVATE_JWT_SECRET
-    secret: NEXT_PRIVATE_JWT_SECRET
+    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_JWT_SECRET/versions/latest
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_APIKEY
-    secret: NEXT_PRIVATE_FIREBASE_APIKEY
+    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_APIKEY/versions/latest
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
-    secret: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
+    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_AUTHDOMAIN/versions/latest
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_PROJECTID
-    secret: NEXT_PRIVATE_FIREBASE_PROJECTID
+    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_PROJECTID/versions/latest
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-    secret: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-
-  - variable: NEXT_PRIVATE_FIREBASE_APPID
-    secret: NEXT_PRIVATE_FIREBASE_APPID
+    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_STORAGEBUCKET/versions/latest
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
-    secret: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
+    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID/versions/latest
+    availability:
+      - BUILD
+      - RUNTIME
 
-resources:
-  limits:
-    cpu: 2
-    memory: 1024Mi
-
-runtime: nodejs14
-
-betaSettings:
-  secretEnvironmentVariables:
-    - key: NEXT_PRIVATE_JWT_SECRET
-      secret: NEXT_PRIVATE_JWT_SECRET
-    - key: NEXT_PRIVATE_FIREBASE_APIKEY
-      secret: NEXT_PRIVATE_FIREBASE_APIKEY
-    - key: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
-      secret: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
-    - key: NEXT_PRIVATE_FIREBASE_PROJECTID
-      secret: NEXT_PRIVATE_FIREBASE_PROJECTID
-    - key: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-      secret: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-    - key: NEXT_PRIVATE_FIREBASE_APPID
-      secret: NEXT_PRIVATE_FIREBASE_APPID
-    - key: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
-      secret: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
+  - variable: NEXT_PRIVATE_FIREBASE_APPID
+    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_APPID/versions/latest
+    availability:
+      - BUILD
+      - RUNTIME

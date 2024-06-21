@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-// const pat
 
 const nextConfig = {
     output: 'standalone',
