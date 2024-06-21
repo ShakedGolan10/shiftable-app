@@ -5,7 +5,6 @@ const nextConfig = {
     output: 'standalone',
     reactStrictMode: false,
     experimental: {
-        appDir: true,
         serverActions: true
     },
     env: {
