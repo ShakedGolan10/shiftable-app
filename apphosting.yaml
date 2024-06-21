@@ -9,43 +9,43 @@ runConfig:
 # Environment variables and secrets
 env:
   - variable: NEXT_PRIVATE_JWT_SECRET
-    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_JWT_SECRET/versions/1
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_JWT_SECRET/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_APIKEY
-    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_APIKEY/versions/1
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_APIKEY/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
-    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_AUTHDOMAIN/versions/1
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_AUTHDOMAIN/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_PROJECTID
-    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_PROJECTID/versions/1
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_PROJECTID/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_STORAGEBUCKET/versions/1
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_STORAGEBUCKET/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
-    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID/versions/1
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_APPID
-    secret: projects/shiftable-67b5d/secrets/NEXT_PRIVATE_FIREBASE_APPID/versions/1
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_APPID/
     availability:
       - BUILD
       - RUNTIME
