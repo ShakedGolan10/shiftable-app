@@ -1,38 +1,38 @@
-# Settings for Cloud Run
-runConfig:
-  maxInstances: 100
-  concurrency: 100
-  cpu: 1
-  memoryMiB: 512
+# # Settings for Cloud Run
+# runConfig:
+#   maxInstances: 100
+#   concurrency: 100
+#   cpu: 1
+#   memoryMiB: 512
 
-# Environment variables and secrets
-env:
-  - variable: NEXT_PRIVATE_JWT_SECRET
-    secret: NEXT_PRIVATE_JWT_SECRET
+# # Environment variables and secrets
+# env:
+#   - variable: NEXT_PRIVATE_JWT_SECRET
+#     secret: NEXT_PRIVATE_JWT_SECRET
 
-    # Same as API_KEY above but with a pinned version.
-  - variable: NEXT_PRIVATE_FIREBASE_APIKEY
-    secret: NEXT_PRIVATE_FIREBASE_APIKEY
+#     # Same as API_KEY above but with a pinned version.
+#   - variable: NEXT_PRIVATE_FIREBASE_APIKEY
+#     secret: NEXT_PRIVATE_FIREBASE_APIKEY
 
-  - variable: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
-    secret: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
+#   - variable: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
+#     secret: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
 
-  - variable: NEXT_PRIVATE_FIREBASE_PROJECTID
-    secret: NEXT_PRIVATE_FIREBASE_PROJECTID
+#   - variable: NEXT_PRIVATE_FIREBASE_PROJECTID
+#     secret: NEXT_PRIVATE_FIREBASE_PROJECTID
 
-  - variable: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-    secret: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
+#   - variable: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
+#     secret: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
 
-  - variable: NEXT_PRIVATE_FIREBASE_APPID
-    secret: NEXT_PRIVATE_FIREBASE_APPID
+#   - variable: NEXT_PRIVATE_FIREBASE_APPID
+#     secret: NEXT_PRIVATE_FIREBASE_APPID
 
-  - variable: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
-    secret: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
+#   - variable: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
+#     secret: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
 
-  #   # Same as API_KEY above but with the long form secret reference as defined by Cloud Secret Manager.
-  # - variable: VERBOSE_API_KEY
-  #   secret: projects/test-project/secrets/secretID
+#   #   # Same as API_KEY above but with the long form secret reference as defined by Cloud Secret Manager.
+#   # - variable: VERBOSE_API_KEY
+#   #   secret: projects/test-project/secrets/secretID
 
-  #   # Same as API_KEY above but with the long form secret reference with pinned version.
-  # - variable: PINNED_VERBOSE_API_KEY
-  #   secret: projects/test-project/secrets/secretID/versions/5
+#   #   # Same as API_KEY above but with the long form secret reference with pinned version.
+#   # - variable: PINNED_VERBOSE_API_KEY
+#   #   secret: projects/test-project/secrets/secretID/versions/5
