@@ -12,7 +12,7 @@ export function LoginForm({ isOpen, onClose }) {
 
     const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
     const [loginError, setLoginError] = useState<string>('')
-    const { login, isLoadingAuth } = useAuth();
+    const { login, isLoadingLogin } = useAuth();
     const router = useRouter()
     const onLogin = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault()
@@ -25,8 +25,9 @@ export function LoginForm({ isOpen, onClose }) {
             setTimeout(()=> setLoginError(''), 1500)
         }
     }
-     return ( <>
-     <Modal backdrop={'blur'} isOpen={isOpen} onClose={onClose} className="max-h-90vh max-w-70vw overflow-auto rounded-3xl">
+     return ( 
+     <>
+      <Modal backdrop={'blur'} isOpen={isOpen} onClose={onClose} className="max-h-90vh max-w-70vw overflow-auto rounded-3xl">
         <ModalContent>
           {(onClose) => (
             <>
@@ -55,7 +56,7 @@ export function LoginForm({ isOpen, onClose }) {
                                 {loginError && <ErrorElement message={loginError} />}
                             <div>
                                 <Button color='success' isDisabled={(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials.email)) || credentials.password.length < 4) } 
-                                isLoading={isLoadingAuth} 
+                                isLoading={isLoadingLogin} 
                                 type="submit" className="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm">
                                   Log in
                                 </Button>

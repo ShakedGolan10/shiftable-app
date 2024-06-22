@@ -24,7 +24,9 @@ const logout = async () : Promise<void> => {
 
 const getLoggedInUser = async () => {
     try {
+        console.log('in userService')
         let loggedInUser = await fetchService.GET<Employee | Employer | boolean>('user')
+        console.log('in userService - after fetching, loggedInUser value :', loggedInUser)
         if (loggedInUser) {
             // Todo: Upgrade the constructor of Employer and Employee
             return CreateUserInstance<Employee | Employer>(loggedInUser as Employee | Employer)
@@ -32,7 +34,6 @@ const getLoggedInUser = async () => {
 
     } catch (error) {
         throw new Error('USER_SERVICE: unabled to verify if user logged in', error)
-
     }
 
 
