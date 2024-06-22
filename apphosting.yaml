@@ -21,31 +21,31 @@ env:
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_AUTHDOMAIN/versions/latest
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_AUTHDOMAIN/versions/latest/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_PROJECTID
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_PROJECTID/versions/latest
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_PROJECTID/versions/latest/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_STORAGEBUCKET/versions/latest
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_STORAGEBUCKET/versions/latest/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID/versions/latest
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID/versions/latest/
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_APPID
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_APPID/versions/latest
+    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_APPID/versions/latest/
     availability:
       - BUILD
       - RUNTIME
