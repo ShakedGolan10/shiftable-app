@@ -16,8 +16,7 @@ export async function POST(request: NextRequest) {
             console.log('POST_AUTH - couldnt login', error)
             return new NextResponse(`Couldnt logout, Error - ${error}`, { status: 500 })
         }
-    }
-    try { // LOGIN
+    } else try { // LOGIN
         let { user }: UserCredential = await signInWithEmailAndPassword(auth, UserCredentials.email, UserCredentials.password)
         const jwtIdToken = await generateJwtToken(user.uid)
         user = await getUser(user.uid)

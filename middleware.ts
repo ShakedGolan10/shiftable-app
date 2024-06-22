@@ -5,9 +5,7 @@ import { getCookie } from './services/server-services/cookie.service'
 import { getUser } from './services/server-services/user.service'
 import { headers } from 'next/headers'
  
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
-    return NextResponse.next()
     if (request.nextUrl.pathname.includes('auth')) return NextResponse.next() // if auth request let the req throw
     const newHeaders = new Headers(request.headers)
     try {

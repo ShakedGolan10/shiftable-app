@@ -5,6 +5,7 @@ import { queryOne } from "./db.service"
 export const getUser = async (uid: string) => {
     try {
         let user = await queryOne(uid)
+        console.log('at user.service server : ', user, uid)
         if (user.hasOwnProperty('employees')) {
             user = { id: uid, ...user }
         }

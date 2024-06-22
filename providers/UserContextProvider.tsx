@@ -26,15 +26,12 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
     const router = useRouter()
     
     useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage and 
-        console.log('in userProvider useEffect')
         setLoadingAuth(true)
         const authUser = async () => {
             try {
-                console.log('in userProvider useEffect - authUser func')
                 let loggedInUser = await userService.getLoggedInUser()
                 setUser(loggedInUser)
                 } catch (error) {
-                    console.log('in userProvider useEffect - authUser func error catched')
                     router.push('/')
                 } finally {
                     setLoadingAuth(false)

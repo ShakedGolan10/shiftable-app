@@ -8,7 +8,6 @@ const api = async (endpoint: string, method: string = 'GET', data: any = null) =
     const request = (method === 'GET') ? new Request(url, { method }) :
         new Request(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
 
-        console.log('the url!', url, request.headers)
     try {
         const res = await fetch(request)
         // const res = await fetch({
