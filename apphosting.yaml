@@ -9,43 +9,43 @@ runConfig:
 # Environment variables and secrets
 env:
   - variable: NEXT_PRIVATE_JWT_SECRET
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_JWT_SECRET/
+    secret: NEXT_PRIVATE_JWT_SECRET
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_APIKEY
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_APIKEY/
+    secret: NEXT_PRIVATE_FIREBASE_APIKEY
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_AUTHDOMAIN/
+    secret: NEXT_PRIVATE_FIREBASE_AUTHDOMAIN
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_PROJECTID
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_PROJECTID/
+    secret: NEXT_PRIVATE_FIREBASE_PROJECTID
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_STORAGEBUCKET/
+    secret: NEXT_PRIVATE_FIREBASE_STORAGEBUCKET
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID/
+    secret: NEXT_PRIVATE_FIREBASE_MESSAGINGSENDERID
     availability:
       - BUILD
       - RUNTIME
 
   - variable: NEXT_PRIVATE_FIREBASE_APPID
-    secret: projects/129673392024/secrets/NEXT_PRIVATE_FIREBASE_APPID/
+    secret: NEXT_PRIVATE_FIREBASE_APPID
     availability:
       - BUILD
       - RUNTIME
