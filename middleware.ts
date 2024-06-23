@@ -7,6 +7,7 @@ import { headers } from 'next/headers'
  
 export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.includes('auth')) return NextResponse.next() // if auth request let the req throw
+    console.log('headers at middleware : ', request.headers)
     const newHeaders = new Headers(request.headers)
     try {
         console.log('arrived at middleware <-->')
