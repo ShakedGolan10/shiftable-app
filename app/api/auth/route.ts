@@ -20,15 +20,8 @@ export async function POST(request: NextRequest) {
         let { user }: UserCredential = await signInWithEmailAndPassword(auth, UserCredentials.email, UserCredentials.password)
         const jwtIdToken = await generateJwtToken(user.uid)
         user = await getUser(user.uid)
-        // await setCookie('loggedInUserToken', jwtIdToken)
-        let setCookie = `loggedInUserToken=${jwtIdToken}; Path=/; HttpOnly; SameSite=Lax`;
-        const domain = 'us-central1.hosted.app';
-        if (process.env.NODE_ENV === 'production') {
-            setCookie += `; Secure; Domain=${domain}`;
-        }
-        const headers = new Headers();
-        headers.append('Set-Cookie', setCookie);
-        return NextResponse.json(user, { status: 200, headers})
+        await setCookie('loggedInUserToken', jwtIdToken)
+        return NextResponse.json(user, { status: 200 })
     } catch (error) {
         console.log('POST_AUTH - couldnt login', error)
         return new NextResponse(`Couldnt login, Error - ${error}`, { status: 500 })

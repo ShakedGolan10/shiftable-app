@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 export const setCookie = async (name: string, data: any) => {
     try {
         const halfAnHour = 24 * 60 * 60 * 1000
-        cookies().set(name, JSON.stringify(data), { expires: (Date.now() + halfAnHour), sameSite: 'lax', secure: process.env.NODE_ENV === 'production' })
+        cookies().set(name, JSON.stringify(data), { expires: (Date.now() + halfAnHour), sameSite: 'none', secure: process.env.NODE_ENV === 'production' })
     } catch (error) {
         console.log(error)
         throw new Error('cookie-service: Could\'nt set cookie')
