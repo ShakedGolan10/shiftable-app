@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 
 export const setCookie = async (name: string, data: any) => {
     try {
+        console.log('the env :', process.env.NODE_ENV)
         const halfAnHour = 24 * 60 * 60 * 1000
         cookies().set(name, JSON.stringify(data), { expires: (Date.now() + halfAnHour), sameSite: 'lax', secure: process.env.NODE_ENV === 'production' })
     } catch (error) {
