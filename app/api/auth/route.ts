@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
     } else try { // LOGIN
         let { user }: UserCredential = await signInWithEmailAndPassword(auth, UserCredentials.email, UserCredentials.password)
         const jwtIdToken = await generateJwtToken(user.uid)
+        console.log('at login function ---> jwtIdToken : ', jwtIdToken)
         user = await getUser(user.uid)
         await setCookie('loggedInUserToken', jwtIdToken)
         return NextResponse.json(user, { status: 200 })

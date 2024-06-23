@@ -9,6 +9,7 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.includes('auth')) return NextResponse.next() // if auth request let the req throw
     const newHeaders = new Headers(request.headers)
     try {
+        console.log('arrived at middleware <-->')
         const jwtEncryptedToken = await getCookie('loggedInUserToken')
         if (jwtEncryptedToken) {
             const uid = await validateJwtToken(jwtEncryptedToken)
