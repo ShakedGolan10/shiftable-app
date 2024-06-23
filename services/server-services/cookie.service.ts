@@ -5,7 +5,7 @@ export const setCookie = async (name: string, data: any) => {
     try {
         
         const halfAnHour = 30 * 60 * 1000
-        cookies().set(name, JSON.stringify(data))
+        cookies().set(name, JSON.stringify(data), { expires: Date.now() + halfAnHour })
     } catch (error) {
         console.log(error)
         throw new Error('cookie-service: Could\'nt set cookie')
