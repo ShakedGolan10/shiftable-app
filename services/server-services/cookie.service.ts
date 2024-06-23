@@ -3,9 +3,8 @@ import { cookies } from 'next/headers'
 
 export const setCookie = async (name: string, data: any) => {
     try {
-        
-        const halfAnHour = 30 * 60 * 1000
-        cookies().set(name, JSON.stringify(data), { expires: Date.now() + halfAnHour })
+        const halfAnHour = 24 * 60 * 60 * 1000
+        cookies().set(name, JSON.stringify(data), { expires: (Date.now() + halfAnHour), sameSite: 'lax', secure: process.env.NODE_ENV === 'production' })
     } catch (error) {
         console.log(error)
         throw new Error('cookie-service: Could\'nt set cookie')
@@ -14,10 +13,8 @@ export const setCookie = async (name: string, data: any) => {
 
 export const getCookie = async (name: string): Promise<string | boolean> => {
     try {
-        console.log('at getCookie')
         const cookieStore = cookies()
         const loggedInUser = cookieStore.get(name)
-        console.log('the loggedin user cookie -->', loggedInUser)
         if (loggedInUser) return JSON.parse(loggedInUser.value)
         else return false
     } catch (error) {

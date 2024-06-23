@@ -19,13 +19,12 @@ export async function POST(request: NextRequest) {
     } else try { // LOGIN
         let { user }: UserCredential = await signInWithEmailAndPassword(auth, UserCredentials.email, UserCredentials.password)
         const jwtIdToken = await generateJwtToken(user.uid)
-        console.log('at login function ---> jwtIdToken : ', jwtIdToken)
         user = await getUser(user.uid)
-        // await setCookie('loggedInUserToken', jwtIdToken)
-        const setCookie = `loggedInUserToken=${jwtIdToken};`;
-        const headers = new Headers();
-        headers.append('Set-Cookie', setCookie);
-        return NextResponse.json(user, { status: 200, headers })
+        await setCookie('loggedInUserToken', jwtIdToken)
+        // const setCookie = `loggedInUserToken=${jwtIdToken};`;
+        // const headers = new Headers();
+        // headers.append('Set-Cookie', setCookie);
+        return NextResponse.json(user, { status: 200})
     } catch (error) {
         console.log('POST_AUTH - couldnt login', error)
         return new NextResponse(`Couldnt login, Error - ${error}`, { status: 500 })
