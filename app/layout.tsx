@@ -23,8 +23,8 @@ export default function RootLayout({
 
   return (
 
-    <html lang="en" className='' suppressHydrationWarning>
-      <body className={inter.className + ` h-max bg-bgc-light dark:bg-bgc-dark`}>
+    <html lang="en" className='h-full' suppressHydrationWarning>
+      <body className={inter.className + `h-full bg-bgc-light dark:bg-bgc-dark`}>
       <UserProvider>
         <NextUiProvider>
           <AppLayout children={children} />
