@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
         const jwtIdToken = await generateJwtToken(user.uid)
         user = await getUser(user.uid)
         await setCookie('loggedInUserToken', jwtIdToken)
+        // Try to return new NextResponse as last result (with set cookie header)
         return NextResponse.json(user, { status: 200 })
     } catch (error) {
         console.log('POST_AUTH - couldnt login', error)

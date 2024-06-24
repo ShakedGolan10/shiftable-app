@@ -10,14 +10,18 @@ import WelcomeCmp from '@/components/welcome-cmp'
 
 
 export default function HomePage() {
-  const { user, isLoadingAuth } = useAuth()
+  const { user, login, isLoadingLogin } = useAuth()
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const router = useRouter()
-
+  const demoUserCred = {email: process.env.NEXT_PUBLIC_DEMO_USER_EMAIL, password: process.env.NEXT_PUBLIC_DEMO_USER_PASSWORD}
+  const onLoginDemoUser = async () => {
+    await login(demoUserCred)
+    router.push('/main')
+  }
   useEffect(() => {
     if (user) router.push('/main')
-  }, [isLoadingAuth, user])
+  }, [user])
 
   return (
       <main className="flex min-h-screen items-center justify-center">
@@ -29,7 +33,7 @@ export default function HomePage() {
           </div>
         </nav>
         <>
-          <WelcomeCmp onOpen={onOpen} />
+          <WelcomeCmp onOpen={onOpen} onLoginDemoUser={onLoginDemoUser} isLoadingLogin={isLoadingLogin} />
         </>
         <LoginForm isOpen={isOpen} onClose={onClose} />
       </main>
