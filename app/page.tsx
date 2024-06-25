@@ -7,7 +7,6 @@ import { Navbar, NavbarBrand, useDisclosure } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import logo from '@/assets/imgs/shiftable-logo.png'
 import WelcomeCmp from '@/components/welcome-cmp'
-import { Navbar, NavbarBrand } from '@nextui-org/react'
 
 export default function HomePage() {
   const { user, login, isLoadingLogin } = useAuth()
