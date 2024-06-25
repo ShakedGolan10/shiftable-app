@@ -67,7 +67,8 @@ darkMode: 'class',
         dark: {
           layout: {}, // dark theme layout tokens
           colors: {
-            foreground: '#FFFFFF', // forground is default text color
+            // foreground: '#FFFFFF', // forground is default text color
+            // background: 'linear-gradient(33deg, rgba(10,6,68,1) 26%, rgba(69,10,10,1) 76%);'
           } // dark theme colors,
         },
         }
