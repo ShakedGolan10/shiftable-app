@@ -7,7 +7,7 @@ import { Navbar, NavbarBrand, useDisclosure } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import logo from '@/assets/imgs/shiftable-logo.png'
 import WelcomeCmp from '@/components/welcome-cmp'
-
+import { Navbar, NavbarBrand } from '@nextui-org/react'
 
 export default function HomePage() {
   const { user, login, isLoadingLogin } = useAuth()
@@ -27,10 +27,10 @@ export default function HomePage() {
       <main className="flex min-h-screen items-center justify-center">
         {/* <Image className='fixed' src={logo} alt='aaaaa' width={100} height={100} /> */}
         <Navbar style={{justifyContent: 'flex-start'}} className="full bg-transparent absolute">
-      <NavbarBrand>
-        <p className="font-bold text-inherit">Shiftable</p>
-      </NavbarBrand>
-      </Navbar>
+          <NavbarBrand>
+            <p className="font-bold text-inherit">Shiftable</p>
+          </NavbarBrand>
+        </Navbar>
         <>
           <WelcomeCmp onOpen={onOpen} onLoginDemoUser={onLoginDemoUser} isLoadingLogin={isLoadingLogin} />
         </>
