@@ -8,7 +8,7 @@ export default function MainNavBar() {
   return (
     <Navbar className="full bg-transparent">
       <NavbarBrand>
-        <p className="font-bold text-inherit">Shiftable</p>
+        <a href="/main"><p className="font-bold text-inherit">Shiftable</p></a>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>

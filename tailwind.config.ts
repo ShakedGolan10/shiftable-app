@@ -24,6 +24,7 @@ darkMode: 'class',
       screens: {
         'mobile': { 'max': '640px' },
         'smMobile': { 'max': '420px' },
+        'tablet': {'max': '1025px'}
         // => @media (max-width: 639px) { ... }
       },
       backgroundImage: {

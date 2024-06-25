@@ -7,9 +7,9 @@ import { Button } from '@nextui-org/react'
 export default function WelcomeCmp({ onOpen, onLoginDemoUser, isLoadingLogin }) {
 
     return (
-        <main id="main" className={`py-28 text-center md:pt-36 lg:text-left xl:pb-32`}>
+        <main className={`py-28 text-center md:pt-36 lg:text-left xl:pb-32`}>
             <div className="container mx-auto lg:grid lg:grid-cols-2 lg:gap-x-8">
-                <div className="welcome-page-summery mb-16 lg:mt-32 xl:mt-40 xl:mr-12">
+                <div className="welcome-page-summery flex flex-col items-start tablet:items-center mb-16 lg:mt-32 xl:mt-40 xl:mr-12">
                     <h1 className='h1-large mb-5'>Shift management application</h1>
                     <p className='p-large mb-8'>Start getting things done together with your team based on Shiftable's revolutionary shift management features</p>
                     <Button className='login-btn' onClick={onOpen}>Login</Button>
