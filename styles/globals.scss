@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// :root {
+//   background: linear-gradient(rgba(197, 234, 249, 1), rgba(255, 255, 255, 1))
+//   --foreground-rgb: 0, 0, 0;
+//   --background-end-rgb: 255, 255, 255;
+// }
+
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     --foreground-rgb: 255, 255, 255;
+//     --background-end-rgb: 0, 0, 0;
+//   }
+// }
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+p.error-msg {
+  animation: dance 0.5s infinite;
+    font-weight: bold;
+    font-size: small;
+    color: red;
+    
+    @keyframes dance {
+      0% { transform: translateY(0px); }
+      12% { transform: translateY(1px); }
+      25% { transform: translateY(2px); }
+    }
+  }
+  
+ .loading-text {
+  animation: sizeChange 2s infinite;
+  // animation: sizeChange 2s infinite;
+  font-weight: bold;
+  // font-size: small;
+  // color: wh;
+    
+    // @keyframes colorChange {
+    //   0%, 100% {
+    //     color: #000; /* black */
+    //   }
+    //   50% {
+    //     color: #f00; /* red */
+    //   }
+    // }
+    
+    @keyframes sizeChange {
+      0%, 100% {
+        font-size: 2rem;
+      }
+      50% {
+        font-size: 2.5rem;
+      }
+      75% {
+        font-size: 3rem;
+      }
+    }
+    
+    
+    .sizeChange {
+      animation: sizeChange 2s infinite;
+    }
+  
+ }
