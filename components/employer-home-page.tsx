@@ -1,6 +1,6 @@
 'use client'
 
-import { EmailGenerator, Employee, Employer } from '@/types/class.service'
+import { Employee, Employer } from '@/types/class.service'
 import React, { useEffect, useState } from 'react'
 import EmployerMsg from './employer-msg'
 import { useSystemActions } from '@/store/actions/system.actions'
