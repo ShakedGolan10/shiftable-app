@@ -1,8 +1,7 @@
 'use client'
 import { useForm } from '@/hooks/useForm'
 import { useAuth } from '../providers/UserContextProvider';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ErrorElement from './error-element';
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Image} from "@nextui-org/react";
 
@@ -12,13 +11,11 @@ export function LoginForm({ isOpen, onClose }) {
     const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
     const [loginError, setLoginError] = useState<string>('')
     const { login, isLoadingLogin } = useAuth();
-    const router = useRouter()
     const onLogin = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault()
         try {
             setLoginError('')
             await login(credentials)
-            router.push('/main')
         } catch (error) {
             setLoginError('Username or password doesnt meet the right requirments, Try again plaese')
             setTimeout(()=> setLoginError(''), 1500)

@@ -50,6 +50,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                     let user = await userService.login(credentials)
                     user = CreateUserInstance(user)
                     setUser(user)
+                    router.push('/main')
                 } catch (error) {
                     console.error('Login error:', error);
                     throw error
@@ -63,12 +64,12 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                     setLoadingAuth(true)
                     await userService.logout()
                     setUser(null)
-                    setLoadingAuth(false)
                     router.push('/')
-
                 } catch (error) {
                     console.error('Logout error:', error);
                     throw error
+                } finally {
+                    setLoadingAuth(false)
                 }
                 };
 
@@ -91,23 +92,3 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         return useContext(UserContext);
         };
         
-        
-        // const setUserState = (user) => {
-            //     user = CreateUserInstance(user)
-            //     setUser(user)
-            //     setLoadingAuth(false)
-            // }
-            
-            // const loginMutation = useMutation({
-                //     mutationFn: async (credentials: Credentials) => await userService.login(credentials),
-                //     onSuccess(data) {
-    //         const loggedInUser = CreateUserInstance(data)
-    //         queryClient.setQueryData('loggedInUser', loggedInUser);
-    //         setUser(loggedInUser);
-    //     }
-    // })
-
-      // let loggedInUser: any = queryClient.getQueryData('loggedInUser')
-        // if (loggedInUser) setUserState(loggedInUser)
-        // else if (!loggedInUser) loggedInUser = queryClient.getMutationCache()
-        // if (loggedInUser.mutations.length) setUserState(loggedInUser.mutations[0])

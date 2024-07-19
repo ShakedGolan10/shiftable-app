@@ -16,7 +16,6 @@ export default function HomePage() {
   const demoUserCred = {email: process.env.NEXT_PUBLIC_DEMO_USER_EMAIL, password: process.env.NEXT_PUBLIC_DEMO_USER_PASSWORD}
   const onLoginDemoUser = async () => {
     await login(demoUserCred)
-    router.push('/main')
   }
   useEffect(() => {
     if (user) router.push('/main')
