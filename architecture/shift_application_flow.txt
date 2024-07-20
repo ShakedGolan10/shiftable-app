@@ -5,7 +5,7 @@
     - A set of rules is presented to the cmp that checks after every cell marked if it stands by the application_rules
     - A userEmployee can have a special set of rules.
     - Every shift (cell) is the key as the hour, and a value that can be true, false and 'cant'
-    - The user apply the shifts, and send a post call to api/shift-application/:userId with body {shifts}
+    - The user apply the shifts, and send a post call to api/shift_application/:userId with body {shifts}
     - The backend saves at the shiftsRequests collection.
     - Return to the front a 200 status and successful msg is presented
     

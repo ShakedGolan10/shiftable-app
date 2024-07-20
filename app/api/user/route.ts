@@ -1,12 +1,7 @@
-'use server'
-import { getCookie } from "@/services/server-services/cookie.service";
 import { NextRequest, NextResponse } from "next/server";
-import { validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from "@/services/server-services/user.service";
 
 export async function GET(request: NextRequest) {
-    // Todo: Apply it in middleware instead of checking everytime for loggedInUser - wait a sec not yet..... need to check the user context and
-    // its durbillity across refreshes
     const uid = request.headers.get('uid')
     const userId = request.nextUrl.searchParams.get('userId')
     if (userId) {
@@ -14,16 +9,16 @@ export async function GET(request: NextRequest) {
             // Todo: handle the get user (not loggedInUser)
         } catch (error) {
             console.log('GET_USER - couldnt get user', error)
-            return new NextResponse(`couldnt get user - ${error}`, { status: 500 })
+            return NextResponse.json(`couldnt get user - ${error}`, { status: 500 })
         }
     }
     else {
         try {
-                const user = await getUser(uid)
-                return NextResponse.json(user, { status: 200 })
+            const user = await getUser(uid)
+            return NextResponse.json(user, { status: 200 })
         } catch (error) {
             console.log('GET_USER - couldnt get loggedin user', error)
-            return new NextResponse(`couldnt get loggedin user - ${error}`, { status: 500 })
+            return NextResponse.json(`couldnt get loggedin user - ${error}`, { status: 500 })
         }
     }
 }
