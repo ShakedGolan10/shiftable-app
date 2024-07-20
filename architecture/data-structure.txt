@@ -20,16 +20,17 @@ userEmployee: {
         weeklyWorkflow: {day: string[]}[],
         application_rules {
             minDays: number,
+            numOfCant: 2
             mandatoryDay: string,
             mandatoryShifts {
                 friday: 08-13
             }[],
             optionalShifts [
-                (shiftCombination)
-                [0]: {minChoices: number,
+                [0]: {
+                minChoices: number,
                 shiftsToChoose: {
                 friday: 08-13
-            }[],
+                },
             }]
         }
     }
@@ -39,7 +40,7 @@ userEmployee: {
 	    employerId: 1223,
         applyTime: Date
         shifts: {
-        sunday: {08-14: true, 14-21: false, 16-22: true} 
+        sunday: {08-14: true, 16-22: cant} 
         monday: []
         tuesday: []
         wednesday: []
