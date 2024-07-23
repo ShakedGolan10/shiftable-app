@@ -1,0 +1,17 @@
+* The logic :
+    - A table of 7 days, in each cube (cell) will be a shift and every row is a day.
+    - The number of cubes and cells will be determine by the Employer settings (based on the shifts in that correct job), and also by the applicable_shifts
+        subCollection that is uniuqe to every userEmployee.
+    - A set of rules is presented to the cmp that checks after every cell marked if it stands by the application_rules
+    - A userEmployee can have a special set of rules.
+    - Every shift (cell) is the key as the hour, and a value that can be true, false and 'cant'
+    - The user apply the shifts, and send a post call to api/shift_application/:userId with body {shifts}
+    - The backend saves at the shiftsRequests collection.
+    - Return to the front a 200 status and successful msg is presented
+    
+* Design : 
+    - The Shifts that the Employee marks as can-work would be marked in green Those he cant will be marked in red
+    - All the other shifts will be in yellow
+
+    At the end of marking the Employee would need to confirm his choices,
+    and If he doesnt stands up to the requirments he would be notified and couldnt complete

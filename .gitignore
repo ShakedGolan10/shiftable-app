@@ -36,5 +36,3 @@ next-env.d.ts
 
 # firebase-admin
 firebase-admin-credentials.json
-
-*.txt

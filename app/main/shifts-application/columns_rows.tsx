@@ -1,4 +1,19 @@
-export const rows = [
+export const columns = [
+    {
+      key: "name",
+      label: "NAME",
+    },
+    {
+      key: "role",
+      label: "ROLE",
+    },
+    {
+      key: "status",
+      label: "STATUS",
+    },
+  ];
+
+  export const rows = [
     {
       key: "1",
       name: "Tony Reichert",

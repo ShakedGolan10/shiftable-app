@@ -1,0 +1,134 @@
+DataStructure: {
+
+userEmployee: {
+		id: string,
+		email: string,
+		fullName: string,
+		employerId: string	
+	
+}	
+	userEmployer: {
+		id,
+		name: string,
+		email: string
+		applicationTime: {
+                day: number,
+                time: "hhmm"
+            },
+        employerMsg : string[],
+		employees: string[],
+        weeklyWorkflow: {day: string[]}[],
+        application_rules {
+            minDays: number,
+            numOfCant: 2
+            mandatoryDay: string,
+            mandatoryShifts {
+                friday: 08-13
+            }[],
+            optionalShifts [
+                [0]: {
+                minChoices: number,
+                shiftsToChoose: {
+                friday: 08-13
+                },
+            }]
+        }
+    }
+    
+    shiftsRequests { 
+    	employeeName: Shak,
+	    employerId: 1223,
+        applyTime: Date
+        shifts: {
+        sunday: {08-14: true, 16-22: cant} 
+        monday: []
+        tuesday: []
+        wednesday: []
+        thursday: []
+        firday: []
+        saturday: []
+        }
+}
+            // the key name should be a num for example: 8-14 that means a shift between 08:00 - 14:00
+            // if we wan-t semi hour so for example 1630 - 2030 write it like this 16.5-20.5
+            // every object in the array represnt a day of the week (indexes 0-6: 7 days)
+
+}
+
+
+Firebase structure { 
+
+    Users collection {
+        documantId - employeeUID / employerUID {
+            name/fullName = string,
+            email = string,
+            if (employee) employerUID = string  
+            /* employee structure ends here */ 
+            else { /* employer structure continue */
+                applicationTime {
+                day = number,
+                time = string
+            },
+            employees = string[],
+            employerMsg = string[],
+            weeklyWorkflow = map {
+                sunday = array [
+                            0 = string (shift hours in hh:mm-hh:mm) \
+                            1 = string (shift hours in hh:mm-hh:mm)  ---> if no shift -> no value in the map (no certain day key)
+                            2 = string (shift hours in hh:mm-hh:mm) /
+                        ],  
+                 }
+            }
+            application_rules {
+            minDays: number,
+            mandatoryShifts {
+                friday: 08-13,
+                sunday: 09-16
+            },
+            optionalShifts [
+                minChoices: number,
+                shiftsToChoose: {
+                friday: 08-13
+                },
+            ]
+        }
+            applicable_shifts subCollection {
+                 documantId - employeeUID
+                 docValue: {
+                    sunday = array [
+                            0 = string (shift hours in hh:mm-hh:mm) \
+                            1 = string (shift hours in hh:mm-hh:mm)  ---> if no shift -> no value in the map (no certain day key)
+                            2 = string (shift hours in hh:mm-hh:mm) /
+                        ], 
+                        Tuesday = array... and so on.
+                 }
+            }
+        }
+    }
+    
+    employeesShifts collection {
+        documantId - employerUID {
+            subCollection - employeeUID {
+                documantId - `${year}/${week number}` {
+                    employeeName = string,
+                    shifts = map {
+                        sunday = array [
+                            0 = string (shift hours in hh:mm-hh:mm) \
+                            1 = string (shift hours in hh:mm-hh:mm)  ---> if no shift -> no value in the map (no certain day key)
+                            2 = string (shift hours in hh:mm-hh:mm) /
+                        ], 
+                        Tuesday = array... and so on.
+                    }
+                }
+            }
+        }
+
+    }
+
+    employerShifts
+
+    ShiftsReq {
+        // Todo: Build the Requests modal
+    }
+
+}
