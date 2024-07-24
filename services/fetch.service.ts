@@ -24,17 +24,14 @@ export const fetchService = {
 }
 const api = async (endpoint: string, method: string = 'GET', data: any = null) => {
     const url = (method === 'GET' && data) ? `${BASE_URL}${endpoint}?${new URLSearchParams(data)}` : `${BASE_URL}${endpoint}`
-    const request = (method === 'GET') ? new Request(url, { method }) :
-        new Request(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+   
     try {
-        // const res = await fetch(request)
         const res = await axios({
             url,
             method,
             data: (method === 'GET') ? '' : data,
             
         })
-        console.log('res:',res)
         return await res.data
     } catch (err) {
         console.log('arrived error', err)

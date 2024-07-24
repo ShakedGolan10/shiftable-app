@@ -6,9 +6,10 @@ interface Credentials {
 }
 
 interface EmployerSummery {
-    name: String
+    id: string
+    name: string
     applicationTime?: ApplicationTime
-    employerMsg?: Array<String>
+    employerMsg?: Array<string>
 }
 
 interface ApplicationTime {
@@ -31,21 +32,3 @@ interface Shifts {
 // type InitialState = {
 //     loggedInUser: LoggedInUser
 // }
-
-// type LoggedInUser = {
-//     name: string,
-//     isAdmin: boolean
-// }
-
-
-
-class ReturnTypeDeterminer<T> {
-    private result: T | undefined
-
-
-    constructor(result: T) {
-        this.result = result
-    }
-}
-
-

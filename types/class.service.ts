@@ -8,13 +8,13 @@ export class Shift {
 
 
 export class Employee {
-    public id: String
-    public name: String
-    public email: String
+    public id: string
+    public name: string
+    public email: string
     public employer?: EmployerSummery
     public shifts?: Array<Shift>
-    constructor(id: String, email: String, name: String, employer?: EmployerSummery) {
-        // super(name, email)
+    constructor(id: string, email: string, name: string, employer?: EmployerSummery) {
+        this.id = id
         this.name = name
         this.email = email
         this.employer = employer
@@ -32,14 +32,14 @@ export class Employee {
 
 
 export class Employer {
-    public id: String
-    public name: String
+    public id: string
+    public name: string
     public applicationTime: ApplicationTime
-    public email: String
-    public employerMsg?: Array<String>
-    public employees: Array<String> = []
+    public email: string
+    public employerMsg?: Array<string>
+    public employees: Array<string> = []
 
-    constructor(id: String, name: String, applicationTime: ApplicationTime, employees: Array<String>, email: String, employerMsg: Array<String>) {
+    constructor(id: string, name: string, applicationTime: ApplicationTime, employees: Array<string>, email: string, employerMsg: Array<string>) {
         // super(name, email)
         this.id = id
         this.name = name

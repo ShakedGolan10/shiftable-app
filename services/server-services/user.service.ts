@@ -1,16 +1,18 @@
 'use server'
 
+import { Employee, Employer } from "@/types/user/types.server"
 import { queryOne } from "./db.service"
 
 export const getUser = async (uid: string) => {
     try {
-        let user = await queryOne(uid)
+        let user = await queryOne<Employee | Employer>(`users/${uid}`)
+        
         if (user.hasOwnProperty('employees')) {
             user = { id: uid, ...user }
         }
-        if (user.hasOwnProperty('employerId')) {
-            let { name, applicationTime, employerMsg } = await queryOne(user.employerId)
-            user = { id: uid, ...user, employer: { name, applicationTime, employerMsg } }
+        else if (user.hasOwnProperty('employerId')) {
+            let { name, applicationTime, employerMsg, id } = await queryOne<Employer>(`users/${(user as Employee).employerId}`)
+            user = { id: uid, ...user, employer: { id ,name, applicationTime, employerMsg } }
         }
         return user
     } catch (error) {
