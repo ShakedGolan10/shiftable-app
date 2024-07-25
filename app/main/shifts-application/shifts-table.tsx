@@ -1,42 +1,70 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Button} from "@nextui-org/react";
+import React, { useEffect, useState } from 'react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { getUserApplicableShiftsData } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
-import { Employee } from '@/types/class.service';
+import { Employee } from '@/types/class.service'; // Assuming your types
 
-export default function ShiftsTable({rows, columns}:any) {
-  const { user } = useAuth()
-  const [shiftsData, setShiftsData] = useState<WeeklyWorkflow>(null)
-  const [applyRules, setApplyRules] = useState<Application_Rules>(null)
+const daysOfWeek = [
+  { day: 'Sunday', key: '0' },
+  { day: 'Monday', key: '1' },
+  { day: 'Tuesday', key: '2' },
+  { day: 'Wednesday', key: '3' },
+  { day: 'Thursday', key: '4' },
+  { day: 'Friday', key: '5' },
+  { day: 'Saturday', key: '6' }
+];
 
-  useEffect(()=> {
+export default function ShiftsTable() {
+  const { user } = useAuth();
+  const [shiftsData, setShiftsData] = useState(null);
+  const [applyRules, setApplyRules] = useState(null);
+  
+  useEffect(() => {
     const getShiftsData = async () => {
-      const {applicable_shifts, application_rules} = await getUserApplicableShiftsData((user as Employee).employer.id)
-      setShiftsData(applicable_shifts)
-      setApplyRules(application_rules)
-    }
-    if (user) getShiftsData()
+      const { applicable_shifts, application_rules } = await getUserApplicableShiftsData((user as Employee).employer.id);
+      setShiftsData(applicable_shifts);
+      setApplyRules(application_rules);
+    };
+    if (user) getShiftsData();
+  
+  }, [user]);
 
-  },[user])
+  const createRows = () => {
+    if (!shiftsData) return [];
 
-  useEffect(()=> {console.log('the data :', shiftsData, applyRules)},[shiftsData, applyRules])
-  return (
-    <>
-    <Table>
-        <TableHeader columns={columns}>
-          {(column: any) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-        </TableHeader>
-        <TableBody items={rows}>
-          {(item: any) => (
-            <TableRow key={item.key}>
-              {(columnKey) => <TableCell className='bg-white text-gray-950'>{getKeyValue(item, columnKey)}</TableCell>}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    
-      </>
-  )
+    const maxShiftsPerDay = Math.max(...daysOfWeek.map(day => shiftsData[day.day.toLowerCase()]?.length || 0));
+
+    return Array.from({ length: maxShiftsPerDay }, (_, rowIndex) => {
+      return {
+        key: rowIndex.toString(),
+        shifts: daysOfWeek.map(day => shiftsData[day.day.toLowerCase()]?.[rowIndex] || "")
+      };
+    });
+  };
+
+  const chooseShift = (item) => {
+    console.log('item:', item);
+  };
+
+  return shiftsData && (
+    <Table aria-label="Shifts table">
+      <TableHeader columns={daysOfWeek}>
+        {(column) => <TableColumn aria-label={column.day} key={column.key}>{column.day}</TableColumn>}
+      </TableHeader>
+      <TableBody items={createRows()}>
+        {(item) => (
+          <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
+            {item.shifts.map((shift, index) => (
+              <TableCell key={index} onClick={() => chooseShift(item)} aria-labelledby={`shift-${item.key}-${index}`} 
+              className="light:bg-green dark:bg-slate-700 hover:dark:bg-light-green hover:bg-light-green cursor-pointer text-center">
+                {shift || "No Shifts"}
+              </TableCell>
+            ))}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
 }
