@@ -17,18 +17,24 @@ interface ApplicationTime {
     time: string
 }
 
-interface Shifts {
-    sunday: string
-    monday: string
-    tuesday: string
-    wednesday: string
-    thursday: string
-    friday: string
-    saturday: string
+interface WeeklyWorkflow {
+    sunday: string[]
+    monday: string[]
+    tuesday: string[]
+    wednesday: string[]
+    thursday: string[]
+    friday: string[]
+    saturday: string[]
 }
-// Done: Change everywhere there is a LoggedInUser type and replace it with Class Employee
 
+interface Application_Rules {
+    mandatoryShifts: Days | undefined
+    minDays: number
+    numOfCant: number
+    optionlShifts: OptionalShifts
+}
 
-// type InitialState = {
-//     loggedInUser: LoggedInUser
-// }
+interface OptionalShifts {
+    minChoices: number
+    shiftsToChoose: Days[]
+}
