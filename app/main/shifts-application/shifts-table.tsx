@@ -44,27 +44,29 @@ export default function ShiftsTable() {
     });
   };
 
-  const chooseShift = (item) => {
-    console.log('item:', item);
+  const selectShift = (item, index) => {
+    console.log('item:', item, index);
   };
 
   return shiftsData && (
-    <Table aria-label="Shifts table">
-      <TableHeader columns={daysOfWeek}>
-        {(column) => <TableColumn aria-label={column.day} key={column.key}>{column.day}</TableColumn>}
-      </TableHeader>
-      <TableBody items={createRows()}>
-        {(item) => (
-          <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
-            {item.shifts.map((shift, index) => (
-              <TableCell key={index} onClick={() => chooseShift(item)} aria-labelledby={`shift-${item.key}-${index}`} 
-              className="light:bg-green dark:bg-slate-700 hover:dark:bg-light-green hover:bg-light-green cursor-pointer text-center">
-                {shift || "No Shifts"}
-              </TableCell>
-            ))}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <Table aria-label="Shifts table" className="w-full">
+    <TableHeader columns={daysOfWeek}>
+      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-lg">{column.day}</TableColumn>}
+    </TableHeader>
+    <TableBody items={createRows()}>
+      {(item) => (
+        <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
+          {item.shifts.map((shift, index) => (
+            <TableCell key={index} onClick={() => selectShift(item, index)} 
+              aria-labelledby={`shift-${item.key}-${index}`} 
+              className={`light:bg-green dark:bg-slate-700 hover:bg-light-green hover:dark:bg-light-green 
+              ${shift ? ` cursor-pointer` : `cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`}  text-center p-[3%] text-lg`}>
+              {shift || "No Shifts"}
+            </TableCell>
+          ))}
+        </TableRow>
+      )}
+    </TableBody>
+  </Table>
   );
 }
