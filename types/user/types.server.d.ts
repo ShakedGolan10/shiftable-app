@@ -26,7 +26,7 @@ export interface Employer {
     email: string
     employerMsg?: Array<string>
     employees: Array<string> = []
-    application_rules: Application_Rules
+    application_rules: ApplicationRules
     weeklyWorkflow: WeeklyWorkflow
 }
 
@@ -50,7 +50,7 @@ interface WeeklyWorkflow {
     saturday: string[]
 }
 
-interface Application_Rules {
+interface ApplicationRules {
     mandatoryShifts: Days | undefined
     minDays: number
     numOfCant: number

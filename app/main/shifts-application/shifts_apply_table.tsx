@@ -17,9 +17,9 @@ const daysOfWeek = [
   { day: 'Saturday', key: '6' }
 ];
 
-export default function ShiftsTable() {
+export function ShiftsApplyTable() {
   const { user } = useAuth();
-  const [shiftsData, setShiftsData] = useState(null);
+  const [applicableShifts, setApplicableShifts] = useState(null);
   const [applyRules, setApplyRules] = useState(null);
   const [numOfCantRule, setNumOfCantRule] = useState<number>(0);
   const [minDaysRule, setMinDaysRule] = useState<number>(0);
@@ -28,10 +28,10 @@ export default function ShiftsTable() {
   
   useEffect(() => {
     const getShiftsData = async () => {
-      const { applicable_shifts, application_rules } = await getUserApplicableShiftsData((user as Employee).employer.id);
-      setShiftsData(applicable_shifts);
-      setApplyRules(application_rules);
-      console.log('rules:', application_rules)
+      const { applicableShifts, applicationRules } = await getUserApplicableShiftsData((user as Employee).employer.id);
+      setApplicableShifts(applicableShifts);
+      setApplyRules(applicationRules);
+      console.log('rules:', applicationRules)
     };
     if (user) getShiftsData();
   
@@ -39,14 +39,14 @@ export default function ShiftsTable() {
 
   
   const createRows = () => {
-    if (!shiftsData) return [];
+    if (!applicableShifts) return [];
 
-    const maxShiftsPerDay = Math.max(...daysOfWeek.map(day => shiftsData[day.day.toLowerCase()]?.length || 0));
+    const maxShiftsPerDay = Math.max(...daysOfWeek.map(day => applicableShifts[day.day.toLowerCase()]?.length || 0));
 
     return Array.from({ length: maxShiftsPerDay }, (_, rowIndex) => {
       return {
         key: rowIndex.toString(),
-        shifts: daysOfWeek.map(day => shiftsData[day.day.toLowerCase()]?.[rowIndex] || "")
+        shifts: daysOfWeek.map(day => applicableShifts[day.day.toLowerCase()]?.[rowIndex] || "")
       };
     });
   };
@@ -55,7 +55,7 @@ export default function ShiftsTable() {
     console.log('item:', item, index);
   };
 
-  return shiftsData && (
+  return applicableShifts && (
     <>
     <span className='text-5xl font-serif mt-10 mb-5 '>Please apply shifts</span>
     <Table aria-label="Shifts table" className="w-full my-2">

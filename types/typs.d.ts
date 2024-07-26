@@ -27,7 +27,7 @@ interface WeeklyWorkflow {
     saturday: string[]
 }
 
-interface Application_Rules {
+interface ApplicationRules {
     mandatoryShifts: Days | undefined
     minDays: number
     numOfCant: number

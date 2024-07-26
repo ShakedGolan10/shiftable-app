@@ -7,7 +7,7 @@ interface RulesState {
   numOfCantRule: number
   optionalShiftsRule: number[]
 }
-export function ApplicationRules({ applicationRules, rulesState }: { applicationRules: Application_Rules, rulesState: RulesState }) {
+export function ApplicationRules({ applicationRules, rulesState }: { applicationRules: ApplicationRules, rulesState: RulesState }) {
   
   const formatDaysObject = (days: Days): string => {
     const capitalizeFirstLetter =(string: string): string => {
@@ -47,7 +47,7 @@ export function ApplicationRules({ applicationRules, rulesState }: { application
 
   return (
     <>
-    <span className='text-2xl font-serif mt-10 mb-5 '>Shifts Rules</span> 
+    <span className='text-2xl font-serif mt-10 mb-5 '>Shift application rules</span> 
     <Table aria-label="Application Rules Table" className="w-full">
       <TableHeader>
         <TableColumn>Rule</TableColumn>

@@ -1,4 +1,4 @@
-import ShiftsTable from "./shifts-table";
+import { ShiftsApplyTable } from "./shifts_apply_table";
 import { columns, rows } from "./columns_rows";
 
 
@@ -9,7 +9,7 @@ export default async function page() {
  
   return (
     <>
-        <ShiftsTable />
+        <ShiftsApplyTable />
     </>
   )
 }
