@@ -31,10 +31,19 @@ interface Application_Rules {
     mandatoryShifts: Days | undefined
     minDays: number
     numOfCant: number
-    optionlShifts: OptionalShifts
+    optionalShifts: OptionalShifts[]
 }
 
 interface OptionalShifts {
     minChoices: number
-    shiftsToChoose: Days[]
+    shiftsToChoose: Days
+}
+interface Days {
+    sunday?: string
+    monday?: string
+    tuesday?: string
+    wednesday?: string
+    thursday?: string
+    friday?: string
+    saturday?: string
 }

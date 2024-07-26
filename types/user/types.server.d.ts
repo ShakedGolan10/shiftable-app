@@ -54,12 +54,12 @@ interface Application_Rules {
     mandatoryShifts: Days | undefined
     minDays: number
     numOfCant: number
-    optionlShifts: OptionalShifts
+    optionalShifts: OptionalShifts[]
 }
 
 interface OptionalShifts {
     minChoices: number
-    shiftsToChoose: Days[]
+    shiftsToChoose: Days
 }
 interface ApplicationTime {
     day: number

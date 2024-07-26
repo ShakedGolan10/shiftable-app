@@ -5,6 +5,7 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from 
 import { getUserApplicableShiftsData } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
+import { ApplicationRules } from '@/components/application_rules';
 
 const daysOfWeek = [
   { day: 'Sunday', key: '0' },
@@ -20,17 +21,23 @@ export default function ShiftsTable() {
   const { user } = useAuth();
   const [shiftsData, setShiftsData] = useState(null);
   const [applyRules, setApplyRules] = useState(null);
+  const [numOfCantRule, setNumOfCantRule] = useState<number>(0);
+  const [minDaysRule, setMinDaysRule] = useState<number>(0);
+  const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
+  const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([0]);
   
   useEffect(() => {
     const getShiftsData = async () => {
       const { applicable_shifts, application_rules } = await getUserApplicableShiftsData((user as Employee).employer.id);
       setShiftsData(applicable_shifts);
       setApplyRules(application_rules);
+      console.log('rules:', application_rules)
     };
     if (user) getShiftsData();
   
   }, [user]);
 
+  
   const createRows = () => {
     if (!shiftsData) return [];
 
@@ -49,9 +56,11 @@ export default function ShiftsTable() {
   };
 
   return shiftsData && (
-    <Table aria-label="Shifts table" className="w-full">
+    <>
+    <span className='text-5xl font-serif mt-10 mb-5 '>Please apply shifts</span>
+    <Table aria-label="Shifts table" className="w-full my-2">
     <TableHeader columns={daysOfWeek}>
-      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-lg">{column.day}</TableColumn>}
+      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-lg text-center">{column.day}</TableColumn>}
     </TableHeader>
     <TableBody items={createRows()}>
       {(item) => (
@@ -60,7 +69,7 @@ export default function ShiftsTable() {
             <TableCell key={index} onClick={() => selectShift(item, index)} 
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light:bg-green dark:bg-slate-700 hover:bg-light-green hover:dark:bg-light-green 
-              ${shift ? ` cursor-pointer` : `cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`}  text-center p-[3%] text-lg`}>
+              ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`} text-center p-[3%] text-lg`}>
               {shift || "No Shifts"}
             </TableCell>
           ))}
@@ -68,5 +77,7 @@ export default function ShiftsTable() {
       )}
     </TableBody>
   </Table>
+  <ApplicationRules applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} />
+  </>
   );
 }

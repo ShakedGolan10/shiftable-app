@@ -7,7 +7,7 @@ export default function MainRouteLayout({ children }: { children: React.ReactNod
     return (
         <>
         <MainNavBar />
-        <main className="mt-24 mx-auto container p-4">
+        <main className="mt-24 mx-auto container p-4 flex flex-col items-center">
             {children}
         </main>
         </>

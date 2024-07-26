@@ -13,7 +13,7 @@ export const columns = [
     },
   ];
 
-  export const rows = [
+  export const rows = [ 
     {
       key: "1",
       name: "Tony Reichert",
