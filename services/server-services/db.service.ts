@@ -7,7 +7,7 @@ export const queryOne = async <T>(docPath: string): Promise<T> => {
     try {
         const docRef = doc(firestore, docPath)
         const docData = await getDoc(docRef)
-        return {...docData.data(), id: docData.id} as T
+        return {...docData.data()} as T
     } catch (error) {
         console.log('DB_SERVICE - couldnt get user from database', error)
         throw error

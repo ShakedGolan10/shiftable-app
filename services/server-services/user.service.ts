@@ -11,8 +11,8 @@ export const getUser = async (uid: string) => {
             user = { id: uid, ...user }
         }
         else if (user.hasOwnProperty('employerId')) {
-            let { name, applicationTime, employerMsg, id } = await queryOne<Employer>(`users/${(user as Employee).employerId}`)
-            user = { id: uid, ...user, employer: { id ,name, applicationTime, employerMsg } }
+            let { name, applicationTime, employerMsg } = await queryOne<Employer>(`users/${(user as Employee).employerId}`)
+            user = { id: uid, ...user, employer: { id: (user as Employee).employerId, name, applicationTime, employerMsg } }
         }
         return user
     } catch (error) {

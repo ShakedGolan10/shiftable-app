@@ -7,15 +7,16 @@ interface RulesState {
   numOfCantRule: number
   optionalShiftsRule: number[]
 }
-export function ApplicationRules({ applicationRules, rulesState }: { applicationRules: ApplicationRules, rulesState: RulesState }) {
+export function RulesTable({ applicationRules, rulesState }: { applicationRules: ApplicationRules, rulesState: RulesState }) {
   
   const formatDaysObject = (days: Days): string => {
-    const capitalizeFirstLetter =(string: string): string => {
+    const capitalizeFirstLetter = (string: string): string => {
       return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+    };
+  
     return Object.entries(days)
       .map(([day, time]) => `${capitalizeFirstLetter(day)}: ${time}`)
-      .join(' \n ');
+      .join(', ');
   }
   const generateRows = () => {
     const rows = [];
