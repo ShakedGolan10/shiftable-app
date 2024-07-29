@@ -17,19 +17,40 @@ const daysOfWeek = [
   { day: 'Saturday', key: '6' }
 ];
 
+const emptySelectedShifts = {
+  sunday: [],
+  monday: [],
+  tuesday: [],
+  wednesday: [],
+  thursday: [],
+  friday: [],
+  saturday: [],
+}
+
 interface TableShifts  {
-    sunday: {shift: string, isSelected: boolean}[]
-    monday: {shift: string, isSelected: boolean}[]
-    tuesday: {shift: string, isSelected: boolean}[]
-    wednesday: {shift: string, isSelected: boolean}[]
-    thursday: {shift: string, isSelected: boolean}[]
-    friday: {shift: string, isSelected: boolean}[]
-    saturday: {shift: string, isSelected: boolean}[]
+    sunday: Shift[]
+    monday: Shift[]
+    tuesday: Shift[]
+    wednesday: Shift[]
+    thursday: Shift[]
+    friday: Shift[]
+    saturday: Shift[]
+}
+
+interface Shift {
+  shift: string
+  isSelected: boolean
+}
+
+interface RowItem {
+  key: string 
+  shifts: Shift[] 
 }
 
 export function ShiftsApplyTable() {
   const { user } = useAuth();
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
+  const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
   const [applyRules, setApplyRules] = useState<ApplicationRules>(undefined);
   const [numOfCantRule, setNumOfCantRule] = useState<number>(0);
   const [minDaysRule, setMinDaysRule] = useState<number>(0);
@@ -57,7 +78,7 @@ export function ShiftsApplyTable() {
   
   }, [user]);
 
-  const createRows = () => {
+  const createRows = (): RowItem[] => {
     const maxShiftsPerDay = daysOfWeek.reduce((max, day) => {
       const shifts = applicableShifts[day.day.toLowerCase()] || [];
       return Math.max(max, shifts.length);
@@ -66,21 +87,56 @@ export function ShiftsApplyTable() {
     const rows = [];
   
     for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-      const shifts = daysOfWeek.map(day => applicableShifts[day.day.toLowerCase()]?.[rowIndex] || "");
+      const shifts: Shift[] = daysOfWeek.map(day => applicableShifts[day.day.toLowerCase()]?.[rowIndex] || "");
       rows.push({
         key: rowIndex.toString(),
         shifts
       });
     }
-    
     return rows;
   };
   
-  const selectShift = (shiftIdx: string, day: string) => {
-    setApplicableShifts(prev => {
-      if (prev[day.toLowerCase()][shiftIdx]) prev[day.toLowerCase()][shiftIdx].isSelected = !prev[day.toLowerCase()][shiftIdx].isSelected 
+  const checkRules = (item: RowItem, day: string) => {
+    const { shift } = applicableShifts[day][item.key] as Shift
+    setSelectedShifts(prev => {
+      const shiftIdx = (prev[day]).indexOf(shift)
+      for (const key in applyRules) {
+        switch (key) {
+          case "minDays":
+            if (!prev[day].length) {
+              prev[day].push(shift)
+              setMinDaysRule(previous=> previous + 1)
+            }
+              else if (shiftIdx === -1) {
+                prev[day].push(shift)
+                if (!prev[day].length) setMinDaysRule(previous=> previous + 1)
+              } else {  
+                  if (prev[day].length === 1) setMinDaysRule(previous=> previous - 1)
+                  prev[day].splice(shiftIdx, 1)
+            }
+            break;
+          case "numOfCant":
+            break;
+          case "mandatoryShifts":
+            break;
+          case "optionalShifts":
+            break;
+          
+        }
+      }
       return {...prev}
     })
+   
+  }
+
+  const selectShift = (item: RowItem, day: string) => {
+    if (!applicableShifts[day][item.key]) return 
+    setApplicableShifts(prev => {
+      prev[day][item.key].isSelected = !prev[day][item.key].isSelected 
+      return {...prev}
+    })
+      checkRules(item, day)
+
   }
 
   return applicableShifts && (
@@ -94,7 +150,7 @@ export function ShiftsApplyTable() {
       {(item) => (
         <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
             {item.shifts.map((shift, index) => (
-            <TableCell key={index} onClick={() => selectShift(item.key, daysOfWeek[index].day)} 
+            <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light:bg-green dark:bg-slate-700 hover:bg-light-green hover:dark:bg-light-green 
               ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`} 
