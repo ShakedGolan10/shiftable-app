@@ -96,31 +96,20 @@ export function ShiftsApplyTable() {
     return rows;
   };
   
-  const checkRules = (item: RowItem, day: string) => {
-    const { shift } = applicableShifts[day][item.key] as Shift
+  const checkRules = (day: string, shift: string, isRemove: boolean) => {
     let isAllMandatoryShiftsSelected:boolean = false 
-    setSelectedShifts(prev => {
-      const shiftIdx = (prev[day]).indexOf(shift)
+      const existingShiftIdx = (selectedShifts[day]).indexOf(shift)
       for (const key in applyRules) {
         switch (key) {
           case "minDays":
-            if (!prev[day].length) {
-              prev[day].push(shift)
-              setMinDaysRule(previous=> previous + 1)
-            }
-              else if (shiftIdx === -1) {
-                prev[day].push(shift)
-                if (!prev[day].length) setMinDaysRule(previous=> previous + 1)
-              } else {  
-                  if (prev[day].length === 1) setMinDaysRule(previous=> previous - 1)
-                  prev[day].splice(shiftIdx, 1)
-            }
+            if (selectedShifts[day].length === 1 && !isRemove) setMinDaysRule(previous=> previous + 1)
+              else if (selectedShifts[day].length === 0) setMinDaysRule(previous=> previous - 1)
             break;
           case "numOfCant":
             break;
           case "mandatoryShifts":
             for (const day in applyRules.mandatoryShifts) {
-              if (prev[day].includes(applyRules.mandatoryShifts[day])) isAllMandatoryShiftsSelected = true
+              if (selectedShifts[day].includes(applyRules.mandatoryShifts[day])) isAllMandatoryShiftsSelected = true
               else {
                 isAllMandatoryShiftsSelected = false
                 break
@@ -129,13 +118,18 @@ export function ShiftsApplyTable() {
             setMandatoryShiftsRule(isAllMandatoryShiftsSelected)
             break;
           case "optionalShifts":
+            applyRules.optionalShifts.forEach(({minChoices, shiftsToChoose}, idx) => {
+              let count = 0
+              for (const day in shiftsToChoose) {
+                if (selectedShifts[day].includes(shiftsToChoose[day])) count++
+                else count--
+              }
+              setOptionalShiftsRule(prev => [...prev, count])
+            })
             break;
           
         }
       }
-      return {...prev}
-    })
-   
   }
 
   const selectShift = (item: RowItem, day: string) => {
@@ -144,7 +138,17 @@ export function ShiftsApplyTable() {
       prev[day][item.key].isSelected = !prev[day][item.key].isSelected 
       return {...prev}
     })
-      checkRules(item, day)
+      const { shift } = applicableShifts[day][item.key] as Shift
+      let shiftIdx: number
+      setSelectedShifts(prev => {
+        shiftIdx = (prev[day]).indexOf(shift)
+        if (shiftIdx === (-1)) prev[day].push(shift)
+        else prev[day].splice(shiftIdx, 1)
+        return {...prev}
+      })
+      setTimeout(()=> {
+        checkRules(day, shift, (shiftIdx === -1) ? false : true)
+      }, 10)
 
   }
 
