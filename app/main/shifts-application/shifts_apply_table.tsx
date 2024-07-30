@@ -123,10 +123,8 @@ export function ShiftsApplyTable() {
               for (const day in shiftsToChoose) {
                 if (selectedShifts[day].includes(shiftsToChoose[day])) count++
                 else if (isRemove && selectedShifts[day].includes(shiftsToChoose[day])) count--
-                else console.log('hi')
               }
               setOptionalShiftsRule(prev => {
-                console.log('prev:', prev)
                 prev[idx] = count
                 return [...prev]
               })
