@@ -122,9 +122,14 @@ export function ShiftsApplyTable() {
               let count = 0
               for (const day in shiftsToChoose) {
                 if (selectedShifts[day].includes(shiftsToChoose[day])) count++
-                else count--
+                else if (isRemove && selectedShifts[day].includes(shiftsToChoose[day])) count--
+                else console.log('hi')
               }
-              setOptionalShiftsRule(prev => [...prev, count])
+              setOptionalShiftsRule(prev => {
+                console.log('prev:', prev)
+                prev[idx] = count
+                return [...prev]
+              })
             })
             break;
           
@@ -146,7 +151,7 @@ export function ShiftsApplyTable() {
         else prev[day].splice(shiftIdx, 1)
         return {...prev}
       })
-      setTimeout(()=> {
+      setTimeout(()=> { // needs timeout because the set state of the selectedShifts is async 
         checkRules(day, shift, (shiftIdx === -1) ? false : true)
       }, 10)
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 
 interface RulesState {
   mandatoryShiftsRule: boolean
@@ -18,12 +19,14 @@ export function RulesTable({ applicationRules, rulesState }: { applicationRules:
       .map(([day, time]) => `${capitalizeFirstLetter(day)}: ${time}`)
       .join(', ');
   }
+  
   const generateRows = () => {
+    console.log('the rules :', rulesState)
     const rows = [];
     rows.push({
       rule: "Mandatory Shifts",
       need: formatDaysObject(applicationRules.mandatoryShifts),
-      current: JSON.stringify(rulesState.mandatoryShiftsRule),
+      current: rulesState.mandatoryShiftsRule
     });
     rows.push({
       rule: "Minimum Days",
@@ -60,7 +63,9 @@ export function RulesTable({ applicationRules, rulesState }: { applicationRules:
           <TableRow key={index}>
             <TableCell>{row.rule}</TableCell>
             <TableCell>{row.need}</TableCell>
-            <TableCell>{row.current}</TableCell>
+            <TableCell>{(row.current === true || row.current >= row.need) ? 
+              <CheckCircleIcon className='h-5 w-5' color='green' /> : (typeof row.current === 'boolean' ? 
+              <XCircleIcon color='red' className='h-5 w-5' /> : row.current )}</TableCell>
           </TableRow>
         ))}
       </TableBody>
