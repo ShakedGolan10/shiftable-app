@@ -155,8 +155,7 @@ export function ShiftsApplyTable() {
       setSelectedShifts(prev => { // adjust the selectedShifts so it will know how to handle isCant 
         shiftIdx = (prev[day]).indexOf(shift)
         if (shiftIdx === (-1) && !isCant) prev[day].push(shift)
-        else if (shiftIdx > (-1) && !isCant) prev[day].splice(shiftIdx, 1)
-        else if (shiftIdx > (-1) && isCant) prev[day].splice(shiftIdx, 1)
+        else prev[day].splice(shiftIdx, 1)
         return {...prev}
       })
       setTimeout(()=> { // needs timeout because the set state of the selectedShifts is async 
