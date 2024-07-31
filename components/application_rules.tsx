@@ -21,7 +21,6 @@ export function RulesTable({ applicationRules, rulesState }: { applicationRules:
   }
   
   const generateRows = () => {
-    console.log('the rules :', rulesState)
     const rows = [];
     rows.push({
       rule: "Mandatory Shifts",
