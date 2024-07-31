@@ -99,9 +99,8 @@ export function ShiftsApplyTable() {
     return rows;
   };
   
-  const checkRules = (day: string, shift: string, isRemove: boolean) => {
+  const checkRules = (day: string, isRemove: boolean, shiftIdx: string) => {
     let isAllMandatoryShiftsSelected:boolean = false 
-      const existingShiftIdx = (selectedShifts[day]).indexOf(shift)
      for (const key in applyRules) {
         switch (key) {
           case "minDays":
@@ -109,6 +108,12 @@ export function ShiftsApplyTable() {
               else if (selectedShifts[day].length === 0 && isRemove) setMinDaysRule(previous=> previous - 1)
             break;
           case "numOfCant":
+            let count = 0
+              if (applicableShifts[day][shiftIdx].isCant && isCant) count++
+              else if (!applicableShifts[day][shiftIdx].isCant) count--
+            setNumOfCantRule(prev => {
+             return (prev + count > 0) ? prev + count : 0
+            })
             break;
           case "mandatoryShifts":
             for (const day in applyRules.mandatoryShifts) {
@@ -140,12 +145,13 @@ export function ShiftsApplyTable() {
 
   const selectShift = (item: RowItem, day: string) => {
     if (!applicableShifts[day][item.key]) return 
+    if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
     setApplicableShifts(prev => {
       if (!isCant) {
         prev[day][item.key].isSelected = !prev[day][item.key].isSelected 
         prev[day][item.key].isCant = false
       } else {
-        prev[day][item.key].isCant = !prev[day][item.key].isCant
+        prev[day][item.key].isCant = true
         prev[day][item.key].isSelected = false
       }
       return {...prev}
@@ -159,7 +165,7 @@ export function ShiftsApplyTable() {
         return {...prev}
       })
       setTimeout(()=> { // needs timeout because the set state of the selectedShifts is async 
-        checkRules(day, shift, (shiftIdx === -1) ? false : true)
+        checkRules(day, (shiftIdx === -1) ? false : true, item.key)
       }, 10)
 
   }
