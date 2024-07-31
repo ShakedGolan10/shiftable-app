@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Switch } from "@nextui-org/react";
 import { getUserApplicableShiftsData } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
@@ -40,6 +40,7 @@ interface TableShifts  {
 interface Shift {
   shift: string
   isSelected: boolean
+  isCant: boolean
 }
 
 interface RowItem {
@@ -48,6 +49,7 @@ interface RowItem {
 }
 
 export function ShiftsApplyTable() {
+
   const { user } = useAuth();
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
   const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
@@ -56,7 +58,8 @@ export function ShiftsApplyTable() {
   const [minDaysRule, setMinDaysRule] = useState<number>(0);
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
-  
+  const [isCant, setIsCant] = useState<boolean>(false)
+
   useEffect(() => {
     const getShiftsData = async () => {
       const {applicationRules, applicableShifts } = await getUserApplicableShiftsData((user as Employee).employer.id);
@@ -64,7 +67,7 @@ export function ShiftsApplyTable() {
         const dayObj = {}
         daysOfWeek.forEach((day) => {
           if (!applicableShifts[day.day.toLowerCase()].length) dayObj[day.day.toLowerCase()] = []
-          else dayObj[day.day.toLowerCase()] = applicableShifts[day.day.toLowerCase()].map((shift: string)=> {return {shift, isSelected: false}})
+          else dayObj[day.day.toLowerCase()] = applicableShifts[day.day.toLowerCase()].map((shift: string)=> {return {shift, isSelected: false, isCant: false}})
         })
         return dayObj as TableShifts
         
@@ -96,52 +99,80 @@ export function ShiftsApplyTable() {
     return rows;
   };
   
-  const checkRules = (item: RowItem, day: string) => {
-    const { shift } = applicableShifts[day][item.key] as Shift
-    setSelectedShifts(prev => {
-      const shiftIdx = (prev[day]).indexOf(shift)
-      for (const key in applyRules) {
+  const checkRules = (day: string, isRemove: boolean, shiftIdx: string) => {
+    let isAllMandatoryShiftsSelected:boolean = false 
+     for (const key in applyRules) {
         switch (key) {
           case "minDays":
-            if (!prev[day].length) {
-              prev[day].push(shift)
-              setMinDaysRule(previous=> previous + 1)
-            }
-              else if (shiftIdx === -1) {
-                prev[day].push(shift)
-                if (!prev[day].length) setMinDaysRule(previous=> previous + 1)
-              } else {  
-                  if (prev[day].length === 1) setMinDaysRule(previous=> previous - 1)
-                  prev[day].splice(shiftIdx, 1)
-            }
+              if (selectedShifts[day].length === 1 && !isRemove) setMinDaysRule(previous=> previous + 1)
+              else if (selectedShifts[day].length === 0 && isRemove) setMinDaysRule(previous=> previous - 1)
             break;
           case "numOfCant":
+            let count = 0
+              if (applicableShifts[day][shiftIdx].isCant && isCant) count++
+              else if (!applicableShifts[day][shiftIdx].isCant) count--
+            setNumOfCantRule(prev => {
+             return (prev + count > 0) ? prev + count : 0
+            })
             break;
           case "mandatoryShifts":
+            for (const day in applyRules.mandatoryShifts) {
+              if (selectedShifts[day].includes(applyRules.mandatoryShifts[day])) isAllMandatoryShiftsSelected = true
+              else {
+                isAllMandatoryShiftsSelected = false
+                break
+              }
+            }
+            setMandatoryShiftsRule(isAllMandatoryShiftsSelected)
             break;
           case "optionalShifts":
+            applyRules.optionalShifts.forEach(({minChoices, shiftsToChoose}, idx) => {
+              let count = 0
+              for (const day in shiftsToChoose) {
+                if (selectedShifts[day].includes(shiftsToChoose[day])) count++
+                else if (isRemove && selectedShifts[day].includes(shiftsToChoose[day])) count--
+              }
+              setOptionalShiftsRule(prev => {
+                prev[idx] = count
+                return [...prev]
+              })
+            })
             break;
           
         }
       }
-      return {...prev}
-    })
-   
   }
 
   const selectShift = (item: RowItem, day: string) => {
     if (!applicableShifts[day][item.key]) return 
+    if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
     setApplicableShifts(prev => {
-      prev[day][item.key].isSelected = !prev[day][item.key].isSelected 
+      if (!isCant) {
+        prev[day][item.key].isSelected = !prev[day][item.key].isSelected 
+        prev[day][item.key].isCant = false
+      } else {
+        prev[day][item.key].isCant = true
+        prev[day][item.key].isSelected = false
+      }
       return {...prev}
     })
-      checkRules(item, day)
+      const { shift } = applicableShifts[day][item.key] as Shift
+      let shiftIdx: number
+      setSelectedShifts(prev => { // adjust the selectedShifts so it will know how to handle isCant 
+        shiftIdx = (prev[day]).indexOf(shift)
+        if (shiftIdx === (-1) && !isCant) prev[day].push(shift)
+        else prev[day].splice(shiftIdx, 1)
+        return {...prev}
+      })
+      setTimeout(()=> { // needs timeout because the set state of the selectedShifts is async 
+        checkRules(day, (shiftIdx === -1) ? false : true, item.key)
+      }, 10)
 
   }
 
   return applicableShifts && (
     <>
-    <span className='text-5xl font-serif mt-10 mb-5 '>Please apply shifts</span>
+    <span className='text-5xl font-serif my-10 mb-5 '>Please apply shifts</span>
     <Table aria-label="Shifts table" className="w-full my-2">
       <TableHeader columns={daysOfWeek}>
       {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-lg text-center">{column.day}</TableColumn>}
@@ -154,7 +185,7 @@ export function ShiftsApplyTable() {
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light:bg-green dark:bg-slate-700 hover:bg-light-green hover:dark:bg-light-green 
               ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`} 
-              ${shift.isSelected ? ` dark:bg-light-green` : ``}
+              ${(shift.isCant) ? ` dark:bg-red light:bg-red` : (shift.isSelected) ? ` dark:bg-light-green light:bg-light-green` : ``}
               text-center p-[3%] text-lg`}>
               {shift.shift || "No Shifts"}
             </TableCell>
@@ -163,6 +194,9 @@ export function ShiftsApplyTable() {
       )}
       </TableBody>
     </Table>
+    <Switch isSelected={isCant} onValueChange={setIsCant}>
+        Toggle to choost shifts you cant work
+    </Switch> 
   <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} />
   </>
   );
