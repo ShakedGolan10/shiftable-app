@@ -105,8 +105,8 @@ export function ShiftsApplyTable() {
      for (const key in applyRules) {
         switch (key) {
           case "minDays":
-              if (selectedShifts[day].length === 1 && !isRemove && !isCant) setMinDaysRule(previous=> previous + 1)
-              else if (selectedShifts[day].length === 0) setMinDaysRule(previous=> previous - 1)
+              if (selectedShifts[day].length === 1 && !isRemove) setMinDaysRule(previous=> previous + 1)
+              else if (selectedShifts[day].length === 0 && isRemove) setMinDaysRule(previous=> previous - 1)
             break;
           case "numOfCant":
             break;
@@ -152,10 +152,11 @@ export function ShiftsApplyTable() {
     })
       const { shift } = applicableShifts[day][item.key] as Shift
       let shiftIdx: number
-      setSelectedShifts(prev => {
+      setSelectedShifts(prev => { // adjust the selectedShifts so it will know how to handle isCant 
         shiftIdx = (prev[day]).indexOf(shift)
-        if (shiftIdx === (-1)) prev[day].push(shift)
-        else prev[day].splice(shiftIdx, 1)
+        if (shiftIdx === (-1) && !isCant) prev[day].push(shift)
+        else if (shiftIdx > (-1) && !isCant) prev[day].splice(shiftIdx, 1)
+        else if (shiftIdx > (-1) && isCant) prev[day].splice(shiftIdx, 1)
         return {...prev}
       })
       setTimeout(()=> { // needs timeout because the set state of the selectedShifts is async 
