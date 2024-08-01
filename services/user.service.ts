@@ -18,21 +18,15 @@ const login = async (credentials: Credentials): Promise<Employee | Employer> => 
 }
 
 const logout = async () : Promise<void> => {
-    // Todo: Make this function work with the UserContextProvider
     await fetchService.POST('auth')
 }
 
 const getLoggedInUser = async () => {
-    try {
-        let loggedInUser = await fetchService.GET<Employee | Employer | boolean>('user')
-        if (loggedInUser) {
-            // Todo: Upgrade the constructor of Employer and Employee
-            return CreateUserInstance<Employee | Employer>(loggedInUser as Employee | Employer)
-        } else return false
 
-    } catch (error) {
-        throw new Error('USER_SERVICE: unabled to verify if user logged in', error)
-    }
+        let loggedInUser = await fetchService.GET<Employee | Employer>('user')
+        if (loggedInUser) {
+            return CreateUserInstance<Employee | Employer>(loggedInUser)
+        } else throw new Error('USER_SERVICE: unabled to verify if user logged in')
 
 
 }

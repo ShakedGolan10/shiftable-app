@@ -53,7 +53,6 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                     router.push('/main')
                 } catch (error) {
                     console.error('Login error:', error);
-                    throw error
                     } finally {
                         setLoadingLogin(false)
                     }
@@ -67,7 +66,6 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                     router.push('/')
                 } catch (error) {
                     console.error('Logout error:', error);
-                    throw error
                 } finally {
                     setLoadingAuth(false)
                 }

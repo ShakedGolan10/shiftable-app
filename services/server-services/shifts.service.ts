@@ -1,14 +1,11 @@
 
-import { fetchServiceServer } from "./fetch.service.server"
+import { ApplicationRules, Employer, WeeklyWorkflow } from "@/types/user/types.server"
+import { queryOne, queryOneField } from "./db.service"
 
-const getUserApplicableShifts = async () => {
-    // await fetchServiceServer.GET<Shifts>('applicable_shifts')
-    // await fetch('http://localhost:3000/api/applicable_shifts', {method: 'GET'})
-    // path for shifts - /users/<employerID>/applicable_shifts/<employeeId>
+export const getUserApplicableShifts = async (uid: string, employerId: string) => {
+   const applicationRules = await queryOneField<ApplicationRules>(`users/${employerId}`, 'application_rules')
+   const applicableShifts = await queryOne<WeeklyWorkflow>(`users/${employerId}/applicable_shifts/${uid}`)
+    return { applicationRules, applicableShifts }
 }
 
 
-
-export const shiftService = {
-    getUserApplicableShifts
-}

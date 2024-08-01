@@ -6,7 +6,7 @@ import { useAuth } from "@/providers/UserContextProvider";
 export default function MainNavBar() {
   const { user, logout } = useAuth()
   return (
-    <Navbar className="full bg-transparent">
+    <Navbar className="full bg-transparent" style={{height: "6vh"}}>
       <NavbarBrand>
         <a href="/main"><p className="font-bold text-inherit">Shiftable</p></a>
       </NavbarBrand>
