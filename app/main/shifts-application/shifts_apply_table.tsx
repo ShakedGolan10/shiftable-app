@@ -178,7 +178,7 @@ export function ShiftsApplyTable() {
 
   const applyShifts = async () => {
     setIsLoading(true)
-    await applyShiftsRequest(applicableShifts)
+    await applyShiftsRequest(applicableShifts, (user as Employee).employer.id)
     setIsLoading(false)
   }
 

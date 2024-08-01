@@ -50,6 +50,16 @@ interface WeeklyWorkflow {
     saturday: string[]
 }
 
+export interface TableShifts  {
+    sunday: Shift[]
+    monday: Shift[]
+    tuesday: Shift[]
+    wednesday: Shift[]
+    thursday: Shift[]
+    friday: Shift[]
+    saturday: Shift[]
+}
+
 interface ApplicationRules {
     mandatoryShifts: Days | undefined
     minDays: number
