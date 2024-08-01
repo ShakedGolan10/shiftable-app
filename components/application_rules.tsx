@@ -33,13 +33,13 @@ export function RulesTable({ applicationRules, rulesState }: { applicationRules:
       current: rulesState.minDaysRule,
     });
     rows.push({
-      rule: "Number of Can't Do Shifts",
+      rule: "Max number of shifts you can mark as 'cant work'",
       need: applicationRules.numOfCant,
       current: rulesState.numOfCantRule,
     });
     applicationRules.optionalShifts.forEach((optionalShift, index) => {
       rows.push({
-        rule: formatDaysObject(optionalShift.shiftsToChoose),
+        rule: `Shifts to choose from: ${formatDaysObject(optionalShift.shiftsToChoose)}`,
         need: optionalShift.minChoices,
         current: rulesState.optionalShiftsRule[index]
       });
