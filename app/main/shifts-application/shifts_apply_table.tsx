@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Switch } from "@nextui-org/react";
-import { getUserApplicableShiftsData } from '@/services/shifts.service';
+import { applyShiftsRequest, getUserApplicableShiftsData } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
@@ -27,7 +27,7 @@ const emptySelectedShifts = {
   saturday: [],
 }
 
-interface TableShifts  {
+export interface TableShifts  {
     sunday: Shift[]
     monday: Shift[]
     tuesday: Shift[]
@@ -59,6 +59,8 @@ export function ShiftsApplyTable() {
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
 
   useEffect(() => {
     const getShiftsData = async () => {
@@ -174,6 +176,12 @@ export function ShiftsApplyTable() {
 
   }
 
+  const applyShifts = async () => {
+    setIsLoading(true)
+    await applyShiftsRequest(applicableShifts)
+    setIsLoading(false)
+  }
+
   return applicableShifts ? (
     <>
     <span className='text-5xl font-serif '>Please apply your shifts</span>
@@ -202,7 +210,7 @@ export function ShiftsApplyTable() {
     <Switch isSelected={isCant} onValueChange={setIsCant}>
         Toggle to choost shifts you cant work
     </Switch> 
-  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} />
+  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} applyShifts={applyShifts} isLoading={isLoading} />
   </>
   ) : !isLoadingAuth && <LoadingElement msg="Loading your shifts..." />
 }
