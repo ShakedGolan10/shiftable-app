@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Switch } from "@nextui-org/react";
-import { getUserApplicableShiftsData } from '@/services/shifts.service';
+import { applyShiftsRequest, getUserApplicableShiftsData } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
@@ -27,7 +27,7 @@ const emptySelectedShifts = {
   saturday: [],
 }
 
-interface TableShifts  {
+export interface TableShifts  {
     sunday: Shift[]
     monday: Shift[]
     tuesday: Shift[]
@@ -59,6 +59,8 @@ export function ShiftsApplyTable() {
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
 
   useEffect(() => {
     const getShiftsData = async () => {
@@ -115,8 +117,8 @@ export function ShiftsApplyTable() {
             })
             break;
           case "mandatoryShifts":
-            for (const day in applyRules.mandatoryShifts) {
-              if (selectedShifts[day].includes(applyRules.mandatoryShifts[day])) isAllMandatoryShiftsSelected = true
+            for (const weekDay in applyRules.mandatoryShifts) {
+              if (selectedShifts[weekDay].includes(applyRules.mandatoryShifts[weekDay])) isAllMandatoryShiftsSelected = true
               else {
                 isAllMandatoryShiftsSelected = false
                 break
@@ -127,12 +129,13 @@ export function ShiftsApplyTable() {
           case "optionalShifts":
             applyRules.optionalShifts.forEach(({ shiftsToChoose }, idx) => {
               let count = 0
-              for (const day in shiftsToChoose) {
-                if (selectedShifts[day].includes(shiftsToChoose[day])) count++
-                else if (isRemove && selectedShifts[day].includes(shiftsToChoose[day])) count--
+              for (const weekDay in shiftsToChoose) {
+                const isSameShift = Boolean(applicableShifts[day][shiftIdx].shift === shiftsToChoose[weekDay] && weekDay === day)
+                if (isSameShift && !isRemove) count++
+                else if (isSameShift && isRemove) count--
               }
               setOptionalShiftsRule(prev => {
-                prev[idx] = count
+                prev[idx]+=count
                 return [...prev]
               })
             })
@@ -146,7 +149,8 @@ export function ShiftsApplyTable() {
     
     if (!applicableShifts[day][item.key]) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
-    
+    if (isCant && applicableShifts[day][item.key].isCant) return 
+
     let prevStateOfShift: Shift
     
     setApplicableShifts(prev => {
@@ -172,6 +176,12 @@ export function ShiftsApplyTable() {
         checkRules(day, (shiftIdx === -1) ? false : true, item.key, prevStateOfShift)
       }, 10)
 
+  }
+
+  const applyShifts = async () => {
+    setIsLoading(true)
+    await applyShiftsRequest(applicableShifts, (user as Employee).employer.id, new Date('2024-08-02T18:09:55.865Z'))
+    setIsLoading(false)
   }
 
   return applicableShifts ? (
@@ -202,7 +212,7 @@ export function ShiftsApplyTable() {
     <Switch isSelected={isCant} onValueChange={setIsCant}>
         Toggle to choost shifts you cant work
     </Switch> 
-  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} />
+  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} applyShifts={applyShifts} isLoading={isLoading} />
   </>
   ) : !isLoadingAuth && <LoadingElement msg="Loading your shifts..." />
 }

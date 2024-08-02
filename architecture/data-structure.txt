@@ -36,27 +36,30 @@ userEmployee: {
     }
     
     shiftsRequests { 
-    	employeeName: Shak,
-	    employerId: 1223,
+    	employeeId: string,
+	    employerId: string,
         applyTime: Date
         shifts: {
-        sunday: {08-14: true, 16-22: cant} 
-        monday: []
-        tuesday: []
-        wednesday: []
-        thursday: []
-        firday: []
-        saturday: []
+        sunday: Shift[]
+        monday: Shift[]
+        tuesday: Shift[]
+        wednesday: Shift[]
+        thursday: Shift[]
+        firday: Shift[]
+        saturday: Shift[]
         }
 }
-            // the key name should be a num for example: 8-14 that means a shift between 08:00 - 14:00
-            // if we wan-t semi hour so for example 1630 - 2030 write it like this 16.5-20.5
-            // every object in the array represnt a day of the week (indexes 0-6: 7 days)
+    Shift {
+    shift: string
+    isSelected: boolean
+    isCant: boolean
+  }
+            
 
 }
 
 
-Firebase structure { 
+Firebase structure :
 
     Users collection {
         documantId - employeeUID / employerUID {
@@ -64,6 +67,7 @@ Firebase structure {
             email = string,
             if (employee) employerUID = string  
             /* employee structure ends here */ 
+            ********************************************
             else { /* employer structure continue */
                 applicationTime {
                 day = number,
@@ -79,7 +83,7 @@ Firebase structure {
                         ],  
                  }
             }
-            application_rules {
+        application_rules {
             minDays: number,
             mandatoryShifts {
                 friday: 08-13,
@@ -125,10 +129,32 @@ Firebase structure {
 
     }
 
-    employerShifts
 
-    ShiftsReq {
-        // Todo: Build the Requests modal
+    ShiftsReq collection {
+        documantId - employerUID
+        subCollection ForDate {
+    	    documentId: date,
+            subCollection employee {
+                documantId: employeeId
+            shifts: {
+                sunday: Shift[]
+                monday: Shift[]
+                tuesday: Shift[]
+                wednesday: Shift[]
+                thursday: Shift[]
+                firday: Shift[]
+                saturday: Shift[]
+                }
+            }
+        }
     }
 
-}
+    Shift {
+    shift: string
+    isSelected: boolean
+    isCant: boolean
+  }
+            
+
+
+    
