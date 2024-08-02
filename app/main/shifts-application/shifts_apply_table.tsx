@@ -131,7 +131,7 @@ export function ShiftsApplyTable() {
               let count = 0
               for (const weekDay in shiftsToChoose) {
                 const isSameShift = Boolean(applicableShifts[day][shiftIdx].shift === shiftsToChoose[weekDay] && weekDay === day)
-                if (isSameShift && !isRemove) count++
+                if (isSameShift && !isRemove && !isCant) count++
                 else if (isSameShift && isRemove) count--
               }
               setOptionalShiftsRule(prev => {
