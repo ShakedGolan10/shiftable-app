@@ -117,8 +117,8 @@ export function ShiftsApplyTable() {
             })
             break;
           case "mandatoryShifts":
-            for (const day in applyRules.mandatoryShifts) {
-              if (selectedShifts[day].includes(applyRules.mandatoryShifts[day])) isAllMandatoryShiftsSelected = true
+            for (const weekDay in applyRules.mandatoryShifts) {
+              if (selectedShifts[weekDay].includes(applyRules.mandatoryShifts[weekDay])) isAllMandatoryShiftsSelected = true
               else {
                 isAllMandatoryShiftsSelected = false
                 break
@@ -129,12 +129,13 @@ export function ShiftsApplyTable() {
           case "optionalShifts":
             applyRules.optionalShifts.forEach(({ shiftsToChoose }, idx) => {
               let count = 0
-              for (const day in shiftsToChoose) {
-                if (selectedShifts[day].includes(shiftsToChoose[day])) count++
-                else if (isRemove && selectedShifts[day].includes(shiftsToChoose[day])) count--
+              for (const weekDay in shiftsToChoose) {
+                const isSameShift = Boolean(applicableShifts[day][shiftIdx].shift === shiftsToChoose[weekDay] && weekDay === day)
+                if (isSameShift && !isRemove) count++
+                else if (isSameShift && isRemove) count--
               }
               setOptionalShiftsRule(prev => {
-                prev[idx] = count
+                prev[idx]+=count
                 return [...prev]
               })
             })
@@ -148,7 +149,8 @@ export function ShiftsApplyTable() {
     
     if (!applicableShifts[day][item.key]) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
-    
+    if (isCant && applicableShifts[day][item.key].isCant) return 
+
     let prevStateOfShift: Shift
     
     setApplicableShifts(prev => {
@@ -178,7 +180,7 @@ export function ShiftsApplyTable() {
 
   const applyShifts = async () => {
     setIsLoading(true)
-    await applyShiftsRequest(applicableShifts, (user as Employee).employer.id)
+    await applyShiftsRequest(applicableShifts, (user as Employee).employer.id, new Date('2024-08-02T18:09:55.865Z'))
     setIsLoading(false)
   }
 

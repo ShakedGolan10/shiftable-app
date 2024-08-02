@@ -75,3 +75,9 @@ interface ApplicationTime {
     day: number
     time: string
 }
+
+interface Shift {
+    shift: string
+    isSelected: boolean
+    isCant: boolean
+  }
