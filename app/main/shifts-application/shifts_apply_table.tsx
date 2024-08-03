@@ -1,11 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Switch } from "@nextui-org/react";
-import { getUserApplicableShiftsData } from '@/services/shifts.service';
+import { applyShiftsRequest, getUserApplicableShiftsData } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
 import LoadingElement from '@/components/loading-element';
+import { useSystemActions } from '@/store/actions/system.actions';
 
 const daysOfWeek = [
   { day: 'Sunday', key: '0' },
@@ -27,7 +28,7 @@ const emptySelectedShifts = {
   saturday: [],
 }
 
-interface TableShifts  {
+export interface TableShifts  {
     sunday: Shift[]
     monday: Shift[]
     tuesday: Shift[]
@@ -59,8 +60,13 @@ export function ShiftsApplyTable() {
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [forDate, setForDate] = useState<string>(undefined)
+  const { toggleModalAction } = useSystemActions()
 
   useEffect(() => {
+    if (!user) return 
+
     const getShiftsData = async () => {
       const {applicationRules, applicableShifts } = await getUserApplicableShiftsData((user as Employee).employer.id);
       const adJustedShifts = (): TableShifts => {
@@ -75,8 +81,9 @@ export function ShiftsApplyTable() {
       setApplicableShifts(tableShifts);
       setApplyRules(applicationRules);
       setOptionalShiftsRule(applicationRules.optionalShifts.map(() => 0))
+      setForDate(getDateOfApply((user as Employee).employer.applicationTime.day, (user as Employee).employer.applicationTime.time))
     };
-    if (user) getShiftsData();
+      getShiftsData();
   
   }, [user]);
 
@@ -115,8 +122,8 @@ export function ShiftsApplyTable() {
             })
             break;
           case "mandatoryShifts":
-            for (const day in applyRules.mandatoryShifts) {
-              if (selectedShifts[day].includes(applyRules.mandatoryShifts[day])) isAllMandatoryShiftsSelected = true
+            for (const weekDay in applyRules.mandatoryShifts) {
+              if (selectedShifts[weekDay].includes(applyRules.mandatoryShifts[weekDay])) isAllMandatoryShiftsSelected = true
               else {
                 isAllMandatoryShiftsSelected = false
                 break
@@ -127,12 +134,13 @@ export function ShiftsApplyTable() {
           case "optionalShifts":
             applyRules.optionalShifts.forEach(({ shiftsToChoose }, idx) => {
               let count = 0
-              for (const day in shiftsToChoose) {
-                if (selectedShifts[day].includes(shiftsToChoose[day])) count++
-                else if (isRemove && selectedShifts[day].includes(shiftsToChoose[day])) count--
+              for (const weekDay in shiftsToChoose) {
+                const isSameShift = Boolean(applicableShifts[day][shiftIdx].shift === shiftsToChoose[weekDay] && weekDay === day)
+                if (isSameShift && !isRemove && !isCant) count++
+                else if (isSameShift && isRemove) count--
               }
               setOptionalShiftsRule(prev => {
-                prev[idx] = count
+                prev[idx]+=count
                 return [...prev]
               })
             })
@@ -146,7 +154,8 @@ export function ShiftsApplyTable() {
     
     if (!applicableShifts[day][item.key]) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
-    
+    if (isCant && applicableShifts[day][item.key].isCant) return 
+
     let prevStateOfShift: Shift
     
     setApplicableShifts(prev => {
@@ -174,9 +183,39 @@ export function ShiftsApplyTable() {
 
   }
 
+  const getDateOfApply = (day: number, time: string): string =>  {
+    const [targetHour, targetMinute] = time.split(':').map(Number);
+      const now = new Date();
+      const nowDay = now.getDay();
+      const nowHour = now.getHours();
+      const nowMinute = now.getMinutes();
+      
+      const isAfterTargetDay = nowDay > day || (nowDay === day && (nowHour > targetHour || (nowHour === targetHour && nowMinute > targetMinute)));
+
+      const nextSunday = new Date();
+      nextSunday.setDate(now.getDate() + (7 - nowDay + (isAfterTargetDay ? 7 : 0)));
+
+      const nextSundayString = nextSunday.toDateString();
+
+      return nextSundayString;
+  }
+
+  const applyShifts = async () => {
+    try {
+      setIsLoading(true)
+      console.log('hi:', forDate)
+      await applyShiftsRequest(applicableShifts, (user as Employee).employer.id, forDate)
+      toggleModalAction('Shifts applied successfuly !', false)
+    } catch (error) {
+      toggleModalAction('Shifts falied to apply', true)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return applicableShifts ? (
     <>
-    <span className='text-5xl font-serif '>Please apply your shifts</span>
+    <span className='text-5xl font-serif '>Please apply your shifts for {forDate}</span>
     <span className='text-2xl '>Pay attention to the rules table</span>
     <Table aria-label="Shifts table" className="w-full">
       <TableHeader columns={daysOfWeek}>
@@ -202,7 +241,7 @@ export function ShiftsApplyTable() {
     <Switch isSelected={isCant} onValueChange={setIsCant}>
         Toggle to choost shifts you cant work
     </Switch> 
-  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} />
+  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} applyShifts={applyShifts} isLoading={isLoading} />
   </>
   ) : !isLoadingAuth && <LoadingElement msg="Loading your shifts..." />
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@nextui-org/react";
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 
 interface RulesState {
@@ -8,7 +8,8 @@ interface RulesState {
   numOfCantRule: number
   optionalShiftsRule: number[]
 }
-export function RulesTable({ applicationRules, rulesState }: { applicationRules: ApplicationRules, rulesState: RulesState }) {
+export function RulesTable({ applicationRules, rulesState, applyShifts, isLoading }: { applicationRules: ApplicationRules, 
+  rulesState: RulesState, applyShifts: () => Promise<void>, isLoading: boolean }) {
   
   const formatDaysObject = (days: Days): string => {
     const capitalizeFirstLetter = (string: string): string => {
@@ -48,6 +49,18 @@ export function RulesTable({ applicationRules, rulesState }: { applicationRules:
     return rows;
   };
 
+  const rows = generateRows()
+
+  const isRulesMet = () => {
+    let isOptionalRuleMet = true
+    for (let i = 0; i < rulesState.optionalShiftsRule.length; i++)
+      if (rulesState.optionalShiftsRule[i] < applicationRules.optionalShifts[i].minChoices) isOptionalRuleMet = false
+
+    if (rulesState.mandatoryShiftsRule && rulesState.minDaysRule >= applicationRules.minDays && isOptionalRuleMet) return false
+    else return true
+  }
+
+
   return (
     <>
     <span className='text-2xl font-serif mt-10 mb-5 '>Shift application rules</span> 
@@ -58,7 +71,7 @@ export function RulesTable({ applicationRules, rulesState }: { applicationRules:
         <TableColumn>Current</TableColumn>
       </TableHeader>
       <TableBody>
-        {generateRows().map((row, index) => (
+        {rows.map((row, index) => (
           <TableRow key={index}>
             <TableCell>{row.rule}</TableCell>
             <TableCell>{row.need}</TableCell>
@@ -69,6 +82,8 @@ export function RulesTable({ applicationRules, rulesState }: { applicationRules:
         ))}
       </TableBody>
     </Table>
+    <Button color='success' isDisabled={isRulesMet()} isLoading={isLoading} onClick={applyShifts}>Click to apply shifts</Button>
+
     </>
   );
 }
