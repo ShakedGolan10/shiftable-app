@@ -15,11 +15,11 @@ export const getUserApplicableShifts = async (uid: string, employerId: string) =
 }
 
 
-export const postUserShiftsRequest = async (employeeId: string, employerId: string, forDate: Date, shifts: TableShifts) => {
+export const postUserShiftsRequest = async (employeeId: string, employerId: string, forDate: string, shifts: TableShifts) => {
     try {
         const employerDocRef = doc(firestore, 'ShiftsReq', employerId);
         const forDateCollectionRef = collection(employerDocRef, 'ForDate');
-        const forDateDocRef = doc(forDateCollectionRef, forDate.toString()); 
+        const forDateDocRef = doc(forDateCollectionRef, forDate); 
         const employeeCollectionRef = collection(forDateDocRef, 'employee');
         const employeeDocRef = doc(employeeCollectionRef, employeeId);
       

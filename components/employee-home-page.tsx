@@ -15,7 +15,7 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     useEffect(() => {
-        if (employeeUser.employer.applicationTime.day === new Date().getDay()) toggleModalAction('Apply shifts today!')
+        if (employeeUser.employer.applicationTime.day === new Date().getDay()) toggleModalAction('Apply shifts today!', false)
     }, [])
 
     return (

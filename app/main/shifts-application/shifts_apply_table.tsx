@@ -6,6 +6,7 @@ import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
 import LoadingElement from '@/components/loading-element';
+import { useSystemActions } from '@/store/actions/system.actions';
 
 const daysOfWeek = [
   { day: 'Sunday', key: '0' },
@@ -60,9 +61,12 @@ export function ShiftsApplyTable() {
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
+  const [forDate, setForDate] = useState<string>(undefined)
+  const { toggleModalAction } = useSystemActions()
 
   useEffect(() => {
+    if (!user) return 
+
     const getShiftsData = async () => {
       const {applicationRules, applicableShifts } = await getUserApplicableShiftsData((user as Employee).employer.id);
       const adJustedShifts = (): TableShifts => {
@@ -77,8 +81,9 @@ export function ShiftsApplyTable() {
       setApplicableShifts(tableShifts);
       setApplyRules(applicationRules);
       setOptionalShiftsRule(applicationRules.optionalShifts.map(() => 0))
+      setForDate(getDateOfApply((user as Employee).employer.applicationTime.day, (user as Employee).employer.applicationTime.time))
     };
-    if (user) getShiftsData();
+      getShiftsData();
   
   }, [user]);
 
@@ -178,15 +183,39 @@ export function ShiftsApplyTable() {
 
   }
 
+  const getDateOfApply = (day: number, time: string): string =>  {
+    const [targetHour, targetMinute] = time.split(':').map(Number);
+      const now = new Date();
+      const nowDay = now.getDay();
+      const nowHour = now.getHours();
+      const nowMinute = now.getMinutes();
+      
+      const isAfterTargetDay = nowDay > day || (nowDay === day && (nowHour > targetHour || (nowHour === targetHour && nowMinute > targetMinute)));
+
+      const nextSunday = new Date();
+      nextSunday.setDate(now.getDate() + (7 - nowDay + (isAfterTargetDay ? 7 : 0)));
+
+      const nextSundayString = nextSunday.toDateString();
+
+      return nextSundayString;
+  }
+
   const applyShifts = async () => {
-    setIsLoading(true)
-    await applyShiftsRequest(applicableShifts, (user as Employee).employer.id, new Date('2024-08-02T18:09:55.865Z'))
-    setIsLoading(false)
+    try {
+      setIsLoading(true)
+      console.log('hi:', forDate)
+      await applyShiftsRequest(applicableShifts, (user as Employee).employer.id, forDate)
+      toggleModalAction('Shifts applied successfuly !', false)
+    } catch (error) {
+      toggleModalAction('Shifts falied to apply', true)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return applicableShifts ? (
     <>
-    <span className='text-5xl font-serif '>Please apply your shifts</span>
+    <span className='text-5xl font-serif '>Please apply your shifts for {forDate}</span>
     <span className='text-2xl '>Pay attention to the rules table</span>
     <Table aria-label="Shifts table" className="w-full">
       <TableHeader columns={daysOfWeek}>

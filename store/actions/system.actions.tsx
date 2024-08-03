@@ -8,8 +8,8 @@ export const useSystemActions = () => {
     const dispatch = useDispatch<AppDispatch>();
 
 
-    const toggleModalAction = (modalMsg?: string): any => {
-        dispatch(toggleModal(modalMsg))
+    const toggleModalAction = (modalMsg?: string, isError?: boolean): any => {
+        dispatch(toggleModal({modalMsg, isError}))
     }
 
     return { toggleModalAction }

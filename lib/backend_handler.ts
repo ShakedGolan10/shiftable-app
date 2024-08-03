@@ -12,5 +12,5 @@ export interface AuthenticatedRequest extends NextRequest {
 }
 
 export interface ApplyShiftsRequest extends AuthenticatedRequest {
-  json: () => Promise<{appliedShifts: TableShifts, forDate: Date}>
+  json: () => Promise<{appliedShifts: TableShifts, forDate: string}>
 }

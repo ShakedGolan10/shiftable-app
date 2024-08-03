@@ -6,7 +6,7 @@ export const getUserApplicableShiftsData = async (employerId: string) => {
     return data
 }
 
-export const applyShiftsRequest  = async (appliedShifts: TableShifts, employerId: string, forDate: Date) => {
+export const applyShiftsRequest  = async (appliedShifts: TableShifts, employerId: string, forDate: string) => {
     const data = await fetchService.POST(`shift_application/${employerId}`, {appliedShifts, forDate})
     return data
 }

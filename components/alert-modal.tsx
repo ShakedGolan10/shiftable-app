@@ -6,20 +6,15 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Image
 import React, { useEffect } from 'react'
 
 export function AlertModal() {
-    // Todo: Change it to Store - It has been decided with chatgpt and thoughts on pereformance
     const { toggleModalAction } = useSystemActions()
     
-    const { isModalOpen, modalMsg } = useAppSelector(state => state.systemReducer.modal)
+    const { isModalOpen, modalMsg, isError } = useAppSelector(state => state.systemReducer.modal)
     
     const toggleAlertModal = (ev: Event) => {
         ev.stopPropagation()
         toggleModalAction()
     }
 
-    // Todo: make this use Effect work
-    // useEffect(() => {
-    //     // if (userShiftToday) setIsModalOpen(true)
-    // }, [])
     return ( <>
         <Modal backdrop={'blur'} isOpen={isModalOpen} onClose={toggleModalAction} className="max-h-90vh max-w-70vw overflow-auto rounded-3xl">
            <ModalContent>
@@ -27,11 +22,9 @@ export function AlertModal() {
                <>
                  <ModalHeader className="text-2xl">Attention Please!</ModalHeader>
                  <ModalBody>
-                
-                                    <div className="mt-2">
-                                        <p className="text-sm">{modalMsg}</p>
-                                    </div>
-                               
+                 <h2 className={`text-xl font-bold ${isError ? 'text-red-600' : 'text-green-600'}`}>
+                      {isError ? `Something didn\'t go right :( \n ${<br />} ${modalMsg}` : modalMsg}
+                  </h2>
                  </ModalBody>
                  <ModalFooter>
                    <Button color="danger" variant="light" onPress={() => toggleAlertModal(event)}>
