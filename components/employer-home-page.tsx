@@ -2,11 +2,10 @@
 
 import { Employee, Employer } from '@/types/class.service'
 import React, { useEffect, useState } from 'react'
-import EmployerMsg from './employer-msg'
-import { useSystemActions } from '@/store/actions/system.actions'
 import { utilService } from '@/services/util.service'
 import { getDateOfApply } from '@/app/main/shifts-application/shifts_apply_table'
 import { Button } from '@nextui-org/react'
+import { getEmployeesByFilter } from '@/services/employer.service'
 
 export default function EmployeeHomePage({ employerUser }: { employerUser: Employer }) {
   // Todo: Modal opens if the employer need to do something urgent like 
@@ -15,6 +14,12 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
   
   useEffect(() => {
     setForDate(getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time))
+
+    const getEmployees = async () => {
+      const data = await getEmployeesByFilter([{field: 'applied', value: true}], employerUser.id)
+      setUsersNotApplied(data)
+    }
+    getEmployees()
   }, [])
 
 
