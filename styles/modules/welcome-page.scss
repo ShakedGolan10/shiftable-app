@@ -55,9 +55,6 @@
     }
 }
 
-.header {
-    background: linear-gradient(rgba(197, 234, 249, 1), rgba(255, 255, 255, 1));
-}
 
 .link-welcome-page-navbar-menu {
     display: block;
@@ -91,24 +88,18 @@ button {
     // display: inline-block;
         padding: 1.625rem 2.75rem 1.625rem 2.75rem;
         border-radius: 32px;
-        color: #ffffff;
         font-weight: 600;
         font-size: 0.875rem;
         margin-right: 0.25rem;
         margin-bottom: 1.25rem;
         margin-left: 0.25rem;
-        &:hover {
-            border: 1px solid green;
-            color: green;
-        }
+      
     &.login-btn {
         border: 1px solid #594cda;
         background-color: #594cda;
         &:hover {
             background-color: transparent;
             color: #594cda;
-            /* needs to stay here because of the color property of a tag */
-            text-decoration: none;
         }
     }
     
@@ -119,17 +110,8 @@ button {
         &:hover {
             background: transparent;
             color: #eb427e;
-            /* needs to stay here because of the color property of a tag */
         }
     }
     
 }
 }
-
-
-// .dropdown.show>a,
-// .link-welcome-page-navbar-menu:hover,
-// .link-welcome-page-navbar-menu.active {
-//     color: #ff6e84;
-//     text-decoration: none;
-// }

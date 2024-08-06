@@ -13,12 +13,12 @@ export default function MainNavBar() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="/main/my-shifts">
             My shifts
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="#" aria-current="page" color="secondary">
+          <Link href="/main/shifts-application" aria-current="page" color="secondary">
             Apply shifts
           </Link>
         </NavbarItem>
