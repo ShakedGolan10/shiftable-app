@@ -6,15 +6,13 @@ import EmployerMsg from './employer-msg'
 import { useSystemActions } from '@/store/actions/system.actions'
 import { utilService } from '@/services/util.service'
 import { getDateOfApply } from '@/app/main/shifts-application/shifts_apply_table'
+import { Button } from '@nextui-org/react'
 
 export default function EmployeeHomePage({ employerUser }: { employerUser: Employer }) {
-  // Todo: Modal opens if the employer need to do somthing urgent
+  // Todo: Modal opens if the employer need to do something urgent like 
   const [forDate, setForDate] = useState<string>(undefined)
-  const { toggleModalAction } = useSystemActions()
-  const toggleAlertModal = () => {
-    toggleModalAction('You have a shift today!')
-  }
-
+  const [usersNotApplied, setUsersNotApplied] = useState<Employee[]>([])
+  
   useEffect(() => {
     setForDate(getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time))
   }, [])
@@ -33,15 +31,17 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
       </div>
       <div className='my-7'>
         <h4 className='text-3xl text-center'>Employees that didnt applied yet for {forDate} : </h4>
-        {/* Todo: Make a dynamic route based on employeeId and a Route*/}
-        <p className='text-xl my-3 font-semibold text-center'>{/* Todo: useEffect that will handle list of employees that didnt Applied yet */}</p>
+          {/* Todo: Make a dynamic route based on employeeId and a Route*/}
+        <p className='text-xl my-3 font-semibold text-center'>
+          {/* Todo: useEffect that will handle list of employees that didnt Applied yet */}
+        </p>
       </div>
 
       <div className='flex flex-col gap-2 my-2'>
-        <button className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Arrange shift schedule</button>
-        <button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Shift schedule</button>
-        <button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>Employees</button>
-        <button onClick={() => toggleAlertModal()} className='open-modal-button flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Toggle Modal</button>
+        <Button className='rounded-md bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
+        <Button className='rounded-md bg-teal-400 hover:bg-teal-600'>Shift schedule</Button>
+        <Button className='rounded-md bg-cyan-500 hover:bg-cyan-700'>Employees</Button>
+        <Button className='rounded-md bg-indigo-500 hover:bg-indigo-700'>Edit employees messages</Button>
       </div>
 
     </main>

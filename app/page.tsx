@@ -14,10 +14,13 @@ export default function HomePage() {
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const router = useRouter()
-  const demoUserCred = {email: process.env.NEXT_PUBLIC_DEMO_USER_EMAIL, password: process.env.NEXT_PUBLIC_DEMO_USER_PASSWORD}
-  const onLoginDemoUser = async () => {
-    await login(demoUserCred)
-  }
+  const demoEmployeeUserCred = {email: process.env.NEXT_PUBLIC_DEMO_USER_EMAIL, password: process.env.NEXT_PUBLIC_DEMO_USER_PASSWORD}
+  const demoEmployerUserCred = {email: process.env.NEXT_PUBLIC_DEMO_EMPLOYER_USER_EMAIL, password: process.env.NEXT_PUBLIC_DEMO_EMPLOYER_USER_PASSWORD}
+  
+  const onLoginDemoUser = async (isEmployee: boolean) => {
+    if (isEmployee) await login(demoEmployeeUserCred)
+      else await login(demoEmployerUserCred)
+    }
   useEffect(() => {
     if (user) router.push('/main')
   }, [user])
