@@ -13,7 +13,8 @@ export default function WelcomeCmp({ onOpen, onLoginDemoUser, isLoadingLogin }) 
                     <h1 className='h1-large mb-5'>Shift management application</h1>
                     <p className='p-large mb-8'>Start getting things done together with your team based on Shiftable's revolutionary shift management features</p>
                     <Button className='login-btn' onClick={onOpen}>Login</Button>
-                    <Button color='success' className='hover:bg-transparent' isLoading={isLoadingLogin} onClick={onLoginDemoUser}>Try with demo user</Button>
+                    <Button color='success' className='hover:bg-transparent' isLoading={isLoadingLogin} onClick={() => onLoginDemoUser(true)}>Try as an Employee demo user</Button>
+                    <Button color='warning' className='hover:bg-transparent' isLoading={isLoadingLogin} onClick={() => onLoginDemoUser(false)}>Try as an Employer demo user</Button>
                     <a target='_blank' href="https://wa.me/972535302345"><Button className='contact-us-btn'>Not a member? Contact us!</Button></a>
                 </div>
                 <div className="xl:text-right">
