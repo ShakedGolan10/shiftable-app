@@ -240,7 +240,7 @@ export function ShiftsApplyTable() {
       </TableBody>
     </Table>
     <Switch isSelected={isCant} onValueChange={setIsCant}>
-        Toggle to choost shifts you cant work
+        Toggle to mark the shifts you cant work
     </Switch> 
   <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} applyShifts={applyShifts} isLoading={isLoading} />
   </>
