@@ -6,10 +6,10 @@ import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import { Falsey } from 'lodash';
 import LoadingElement from '@/components/loading-element';
 
-interface useAuth {
+interface useAuth<T> {
     isLoadingAuth: boolean
     isLoadingLogin: boolean
-    user: Employee | Employer 
+    user: T 
     login: (credentials: Credentials) => Promise<void> 
     logout: () => void 
     
@@ -85,8 +85,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             {children}
         </UserContext.Provider>
     )};
-    
-    export const useAuth = () : useAuth => {
-        return useContext(UserContext);
-        };
         
+        export function useAuth<T>(): useAuth<T> {
+            return useContext(UserContext);
+        }

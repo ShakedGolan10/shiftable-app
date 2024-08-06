@@ -49,9 +49,27 @@ interface RowItem {
   shifts: Shift[] 
 }
 
+export const getDateOfApply = (day: number, time: string): string =>  {
+  const [targetHour, targetMinute] = time.split(':').map(Number);
+    const now = new Date();
+    const nowDay = now.getDay();
+    const nowHour = now.getHours();
+    const nowMinute = now.getMinutes();
+    
+    const isAfterTargetDay = nowDay > day || (nowDay === day && (nowHour > targetHour || (nowHour === targetHour && nowMinute > targetMinute)));
+
+    const nextSunday = new Date();
+    nextSunday.setDate(now.getDate() + (7 - nowDay + (isAfterTargetDay ? 7 : 0)));
+
+    const nextSundayString = nextSunday.toDateString();
+
+    return nextSundayString;
+}
+
+
 export function ShiftsApplyTable() {
 
-  const { user, isLoadingAuth } = useAuth();
+  const { user, isLoadingAuth } = useAuth<Employee>();
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
   const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
   const [applyRules, setApplyRules] = useState<ApplicationRules>(undefined);
@@ -68,7 +86,7 @@ export function ShiftsApplyTable() {
     if (!user) return 
 
     const getShiftsData = async () => {
-      const {applicationRules, applicableShifts } = await getUserApplicableShiftsData((user as Employee).employer.id);
+      const {applicationRules, applicableShifts } = await getUserApplicableShiftsData(user.employer.id);
       const adJustedShifts = (): TableShifts => {
         const dayObj = {}
         daysOfWeek.forEach((day) => {
@@ -81,10 +99,9 @@ export function ShiftsApplyTable() {
       setApplicableShifts(tableShifts);
       setApplyRules(applicationRules);
       setOptionalShiftsRule(applicationRules.optionalShifts.map(() => 0))
-      setForDate(getDateOfApply((user as Employee).employer.applicationTime.day, (user as Employee).employer.applicationTime.time))
+      setForDate(getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time))
     };
       getShiftsData();
-  
   }, [user]);
 
   const createRows = (): RowItem[] => {
@@ -110,7 +127,7 @@ export function ShiftsApplyTable() {
      for (const key in applyRules) {
         switch (key) {
           case "minDays":
-              if (selectedShifts[day].length === 1 && !isRemove) setMinDaysRule(previous=> previous + 1)
+              if (selectedShifts[day].length === 1 && !isRemove && !isCant) setMinDaysRule(previous=> previous + 1)
               else if (selectedShifts[day].length === 0 && isRemove) setMinDaysRule(previous=> previous - 1)
             break;
           case "numOfCant":
@@ -123,6 +140,7 @@ export function ShiftsApplyTable() {
             break;
           case "mandatoryShifts":
             for (const weekDay in applyRules.mandatoryShifts) {
+              // console.log('daa:', selectedShifts, applyRules.mandatoryShifts[weekDay])
               if (selectedShifts[weekDay].includes(applyRules.mandatoryShifts[weekDay])) isAllMandatoryShiftsSelected = true
               else {
                 isAllMandatoryShiftsSelected = false
@@ -151,12 +169,14 @@ export function ShiftsApplyTable() {
   }
 
   const selectShift = (item: RowItem, day: string) => {
-    
+    const { shift } = applicableShifts[day][item.key] as Shift
+    let prevStateOfShift: Shift
+    let shiftIdx: number
+
     if (!applicableShifts[day][item.key]) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
     if (isCant && applicableShifts[day][item.key].isCant) return 
-
-    let prevStateOfShift: Shift
+    
     
     setApplicableShifts(prev => {
       prevStateOfShift ={...prev[day][item.key]}
@@ -169,12 +189,11 @@ export function ShiftsApplyTable() {
       }
       return {...prev}
     })
-    const { shift } = applicableShifts[day][item.key] as Shift
-    let shiftIdx: number
-      setSelectedShifts(prev => { 
+    
+    setSelectedShifts(prev => { 
         shiftIdx = (prev[day]).indexOf(shift)
         if (shiftIdx === (-1) && !isCant) prev[day].push(shift)
-        else prev[day].splice(shiftIdx, 1)
+        else if (shiftIdx > (-1)) prev[day].splice(shiftIdx, 1)
         return {...prev}
       })
       setTimeout(()=> { // needs timeout because the set state of the selectedShifts is async 
@@ -183,28 +202,10 @@ export function ShiftsApplyTable() {
 
   }
 
-  const getDateOfApply = (day: number, time: string): string =>  {
-    const [targetHour, targetMinute] = time.split(':').map(Number);
-      const now = new Date();
-      const nowDay = now.getDay();
-      const nowHour = now.getHours();
-      const nowMinute = now.getMinutes();
-      
-      const isAfterTargetDay = nowDay > day || (nowDay === day && (nowHour > targetHour || (nowHour === targetHour && nowMinute > targetMinute)));
-
-      const nextSunday = new Date();
-      nextSunday.setDate(now.getDate() + (7 - nowDay + (isAfterTargetDay ? 7 : 0)));
-
-      const nextSundayString = nextSunday.toDateString();
-
-      return nextSundayString;
-  }
-
   const applyShifts = async () => {
     try {
       setIsLoading(true)
-      console.log('hi:', forDate)
-      await applyShiftsRequest(applicableShifts, (user as Employee).employer.id, forDate)
+      await applyShiftsRequest(applicableShifts, user.employer.id, forDate)
       toggleModalAction('Shifts applied successfuly !', false)
     } catch (error) {
       toggleModalAction('Shifts falied to apply', true)
@@ -230,7 +231,7 @@ export function ShiftsApplyTable() {
               className={`light:bg-green dark:bg-slate-700 hover:bg-light-green hover:dark:bg-light-green 
               ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`} 
               ${(shift.isCant) ? ` dark:bg-red light:bg-red` : (shift.isSelected) ? ` dark:bg-light-green light:bg-light-green` : ``}
-              text-center p-[3%] text-lg`}>
+              text-center p-[2.6%] text-lg`}>
               {shift.shift || "No Shifts"}
             </TableCell>
           ))}

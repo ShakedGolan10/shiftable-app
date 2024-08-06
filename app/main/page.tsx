@@ -11,7 +11,7 @@ import EmployerHomePage from "@/components/employer-home-page";
 // Move the useAuth to layout? and move the user as a prop?
 // User has a class - it cannot be  
 export default function MainPage() {
-    const { user } = useAuth()
+    const { user } = useAuth<Employee | Employer>()
 
     return (
         user instanceof Employee ? (<EmployeeHomePage employeeUser={user} />) : user instanceof Employer && (

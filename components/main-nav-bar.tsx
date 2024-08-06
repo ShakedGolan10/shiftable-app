@@ -2,9 +2,10 @@
 import React from "react";
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar} from "@nextui-org/react";
 import { useAuth } from "@/providers/UserContextProvider";
+import { Employee, Employer } from "@/types/class.service";
 
 export default function MainNavBar() {
-  const { user, logout } = useAuth()
+  const { user, logout } = useAuth<Employee | Employer>()
   return (
     <Navbar className="full bg-transparent" style={{height: "6vh"}}>
       <NavbarBrand>

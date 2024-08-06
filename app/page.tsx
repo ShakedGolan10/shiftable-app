@@ -7,9 +7,10 @@ import { Navbar, NavbarBrand, useDisclosure } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import logo from '@/assets/imgs/shiftable-logo.png'
 import WelcomeCmp from '@/components/welcome-cmp'
+import { Employee, Employer } from '@/types/class.service'
 
 export default function HomePage() {
-  const { user, login, isLoadingLogin } = useAuth()
+  const { user, login, isLoadingLogin } = useAuth<Employee | Employer>()
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const router = useRouter()

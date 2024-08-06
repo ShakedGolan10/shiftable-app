@@ -14,7 +14,7 @@ export default function AppLayout({
          
             <ReduxProvider>
               <AlertModal />
-              <div className='main-layout '>
+              <div className='flex flex-col justify-center items-center p-[3vw] mobile:p-0'>
               {children}
               <ThemeSwitcher />
               </div>

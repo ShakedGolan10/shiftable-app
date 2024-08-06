@@ -63,7 +63,7 @@ export function RulesTable({ applicationRules, rulesState, applyShifts, isLoadin
 
   return (
     <>
-    <span className='text-2xl font-serif mt-10 mb-5 '>Shift application rules</span> 
+    <span className='text-2xl font-serif'>Shift application rules</span> 
     <Table aria-label="Application Rules Table" className="w-full">
       <TableHeader>
         <TableColumn>Rule</TableColumn>

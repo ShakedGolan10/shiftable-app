@@ -33,9 +33,8 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
             </section>
             <div className='flex flex-col gap-2 my-2'>
                 <button onClick={()=> router.push('/main/shifts-application')} className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</button>
-                <button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Check who's working with you today</button>
+                <button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Who's working with me today?</button>
                 <button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</button>
-                <button onClick={() => toggleModalAction('You have a shift today!')} className='open-modal-button flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Toggle Modal</button>
             </div>
            
 
