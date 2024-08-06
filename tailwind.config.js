@@ -1,14 +1,14 @@
-import type { Config } from 'tailwindcss'
 import { nextui } from '@nextui-org/react'
+/** @type {import('tailwindcss').Config} */
 
-const config: Config = {
+module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
-darkMode: 'class',
+  darkMode: 'class',
   theme: {
     extend: {
       gridTemplateColumns: {
@@ -24,7 +24,7 @@ darkMode: 'class',
       screens: {
         'mobile': { 'max': '640px' },
         'smMobile': { 'max': '420px' },
-        'tablet': {'max': '1025px'}
+        'tablet': { 'max': '1025px' }
         // => @media (max-width: 639px) { ... }
       },
       backgroundImage: {
@@ -39,7 +39,7 @@ darkMode: 'class',
         'red': '#B22222',
         'app-red': '#f2b0bc',
         'app-blue': '#b0d1f2',
-        
+
       },
       keyframes: {
         scrollMessages: {
@@ -53,7 +53,7 @@ darkMode: 'class',
       animation: {
         scrollMsg: 'scrollMessages 10s linear infinite'
       },
-      
+
     },
   },
   plugins: [
@@ -70,8 +70,8 @@ darkMode: 'class',
             foreground: '#FFFFFF', // forground is default text color
           } // dark theme colors,
         },
-        }
-      })
+      }
+    })
   ],
 }
-export default config
+

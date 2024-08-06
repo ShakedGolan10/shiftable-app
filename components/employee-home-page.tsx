@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import EmployerMsg from './employer-msg'
 import { useSystemActions } from '@/store/actions/system.actions'
 import { useRouter } from 'next/navigation'
+import { Button } from '@nextui-org/react'
 
 export default function EmployeeHomePage({ employeeUser }: { employeeUser: Employee }) {
     // Todo: Modal opens if the user has a shift today - Make the shifts database first
@@ -27,14 +28,14 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
             </div>
             <h4 className='font-bold text-orange-700'>Remmeber to apply shifts before {`${daysOfWeek[employeeUser.employer.applicationTime.day]} at ${employeeUser.employer.applicationTime.time}`}!</h4>
             {/* Done: Design the apply shifts alert */}
-            {/* Todo: Design a button for checking whos working with you this week ! (nice feacture) */}
+            {/* Todo: Design a Button for checking whos working with you this week ! (nice feacture) */}
             <section className='my-10 h-fit'>
                 <EmployerMsg employee={ employeeUser } />
             </section>
             <div className='flex flex-col gap-2 my-2'>
-                <button onClick={()=> router.push('/main/shifts-application')} className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</button>
-                <button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Who's working with me today?</button>
-                <button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</button>
+                <Button onClick={()=> router.push('/main/shifts-application')} className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</Button>
+                <Button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Who's working with me today?</Button>
+                <Button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</Button>
             </div>
            
 

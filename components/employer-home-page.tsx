@@ -5,16 +5,18 @@ import React, { useEffect, useState } from 'react'
 import EmployerMsg from './employer-msg'
 import { useSystemActions } from '@/store/actions/system.actions'
 import { utilService } from '@/services/util.service'
+import { getDateOfApply } from '@/app/main/shifts-application/shifts_apply_table'
 
 export default function EmployeeHomePage({ employerUser }: { employerUser: Employer }) {
   // Todo: Modal opens if the employer need to do somthing urgent
+  const [forDate, setForDate] = useState<string>(undefined)
   const { toggleModalAction } = useSystemActions()
   const toggleAlertModal = () => {
     toggleModalAction('You have a shift today!')
   }
 
   useEffect(() => {
-
+    setForDate(getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time))
   }, [])
 
 
@@ -26,15 +28,11 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
       <span className='text-5xl font-serif mt-10 mb-5'>Hi {employerUser.name}, are you ready for another week?</span>
       {/* Todo: Design the header of the name */}
       <div className='my-7'>
-        <h4 className='text-3xl text-center'>Shift application is </h4>
-        <p className='text-xl my-3 font-semibold text-center'>{(employerUser.applicationTime.day >= dayIndex && employerUser.applicationTime.time <= time) ?
-          <span className='text-red font-bold text-xl'> Closed </span>
-          : <span className='text-green font-bold text-xl'> Open </span>
-        }</p>
+        <p className='text-3xl my-3 font-semibold text-center'>Shifts application is available for {forDate}
+        </p>
       </div>
-      {/* Todo: Design the shifts that was applied and who didnt  */}
       <div className='my-7'>
-        <h4 className='text-3xl text-center'>Employees that didnt applied yet : </h4>
+        <h4 className='text-3xl text-center'>Employees that didnt applied yet for {forDate} : </h4>
         {/* Todo: Make a dynamic route based on employeeId and a Route*/}
         <p className='text-xl my-3 font-semibold text-center'>{/* Todo: useEffect that will handle list of employees that didnt Applied yet */}</p>
       </div>
