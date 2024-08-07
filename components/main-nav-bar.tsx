@@ -13,13 +13,13 @@ export default function MainNavBar() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="/main/my-shifts">
-            My shifts
+          <Link color="foreground" href={`/main/${user instanceof Employee ? `my-shifts` : `Weekly Workflow`}`}>
+          {user instanceof Employee ? `My shifts` : `Weekly Workflow` }
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="/main/shifts-application" aria-current="page" color="secondary">
-            Apply shifts
+          <Link href={`/main/${user instanceof Employee ? `shifts-application` : `schedule-shifts`}`} aria-current="page" color="secondary">
+          {user instanceof Employee ? `Shifts application` : `Schedule shifts` }
           </Link>
         </NavbarItem>
       </NavbarContent>

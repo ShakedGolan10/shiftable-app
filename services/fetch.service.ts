@@ -8,8 +8,17 @@ let axios = Axios.create({
     withCredentials: false
 })
 
+const createQueryParams = (filterBy: Params[]) => {
+    const queryParams = new URLSearchParams();
+    for (const entity of filterBy) {
+        const { field, value } = entity;
+        queryParams.append(field, value);
+    }
+    return queryParams.toString();
+}
+
 export const fetchService = {
-    GET<T>(endpoint: string, data?: Params): Promise<T> {
+    GET<T>(endpoint: string, data?: Params[]): Promise<T> {
         return api(endpoint, 'GET', data)
     },
     POST<T>(endpoint: string, data?: string | object): Promise<T> {
@@ -23,14 +32,12 @@ export const fetchService = {
     }
 }
 const api = async (endpoint: string, method: string = 'GET', data: any = null) => {
-    const url = (method === 'GET' && data) ? `${BASE_URL}${endpoint}?${new URLSearchParams(data)}` : `${BASE_URL}${endpoint}`
-   
+    const url = (method === 'GET' && data) ? `${BASE_URL}${endpoint}?${createQueryParams(data)}` : `${BASE_URL}${endpoint}`
     try {
         const res = await axios({
             url,
             method,
             data: (method === 'GET') ? '' : data,
-            
         })
         return await res.data
     } catch (err) {
