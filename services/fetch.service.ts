@@ -32,7 +32,6 @@ export const fetchService = {
     }
 }
 const api = async (endpoint: string, method: string = 'GET', data: any = null) => {
-    if ((method === 'GET' && data)) console.log('queryParams:', createQueryParams(data))
     const url = (method === 'GET' && data) ? `${BASE_URL}${endpoint}?${createQueryParams(data)}` : `${BASE_URL}${endpoint}`
     try {
         const res = await axios({

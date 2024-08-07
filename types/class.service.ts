@@ -11,6 +11,7 @@ export class Employee {
     public id: string
     public name: string
     public email: string
+    public isApplied: boolean
     public employer?: EmployerSummery
     public shifts?: Array<Shift>
     constructor(id: string, email: string, name: string, employer?: EmployerSummery) {

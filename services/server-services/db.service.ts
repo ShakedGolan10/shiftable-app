@@ -1,7 +1,8 @@
 'use server'
 
 import { firestore } from "@/firebaseConfig.mjs"
-import { doc, FieldPath, getDoc,  } from "firebase/firestore"
+import { collection, doc, FieldPath, getDoc, getDocs, query, QueryConstraint, where,  } from "firebase/firestore"
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 
 export const queryOne = async <T>(docPath: string): Promise<T> => {
     try {
@@ -9,7 +10,7 @@ export const queryOne = async <T>(docPath: string): Promise<T> => {
         const docData = await getDoc(docRef)
         return {...docData.data()} as T
     } catch (error) {
-        console.log('DB_SERVICE - couldnt get user from database', error)
+        console.log('DB_SERVICE - couldnt get data from database', error)
         throw error
     }
 }
@@ -21,7 +22,24 @@ export const queryOneField = async <T>(docPath: string, fieldPath: string): Prom
         const value: T = await docData.get(fieldPath)
         return value
     } catch (error) {
-        console.log('DB_SERVICE - couldnt get user from database', error)
+        console.log('DB_SERVICE - couldnt get data from database', error)
+        throw error
+    }
+}
+
+export const queryMany = async <T>(collectionPath: string, filterBy?: Params): Promise<T[]> => { 
+    try {
+        const constraints: QueryConstraint[] = (filterBy) ? Object.entries(filterBy).map(
+            ([field, value]) => where(field, '==', value)
+        ) : []
+        const collectionRef = collection(firestore, collectionPath)
+        const queryRes = query(collectionRef, ...constraints)
+        const querySnapshot = await getDocs(queryRes)
+        
+        const results: T[] = querySnapshot.docs.map(doc => doc.data() as T)
+        return results
+    } catch (error) {
+        console.log('DB_SERVICE - couldn\'t get data from database', error)
         throw error
     }
 }
