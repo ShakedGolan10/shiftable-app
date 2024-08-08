@@ -21,7 +21,7 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
 
     return (
         <main className="flex flex-col items-center pt-16 text-center">
-            <span className='text-5xl font-serif mt-10 mb-5'>Hi {employeeUser.name}, how are you today?</span>
+            <span className='text-desktop-mainHeader tablet:text-tablet-mainHeader mobile:text-mobile-mainHeader font-serif mt-10 mb-5'>Hi {employeeUser.name}, how are you today?</span>
             <div className='my-7'>
                 <h4 className='text-3xl'>Your next shift:</h4>
                 <p className='text-xl my-3 font-semibold'>Sunday - Noon: 15:00-23:00{/* Todo: Design the sift today */}</p>
