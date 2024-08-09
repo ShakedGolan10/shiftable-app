@@ -65,24 +65,8 @@
     transition: all 0.2s ease;
 }
 
-.h1-large {
-    font-size: 2.875rem;
-    line-height: 3.5rem;
-}
 
-.p-large {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-}
 
-@media (min-width: 1280px) {
-
-    .h1-large {
-        font-size: 3.125rem;
-        line-height: 3.75rem;
-    }
-
-}
 .welcome-page-summery {
 button {
     // display: inline-block;

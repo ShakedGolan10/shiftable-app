@@ -9,9 +9,9 @@ export default function WelcomeCmp({ onOpen, onLoginDemoUser, isLoadingLogin }) 
     return (
         <main className={`py-28 text-center md:pt-36 lg:text-left xl:pb-32`}>
             <div className="container mx-auto lg:grid lg:grid-cols-2 lg:gap-x-8">
-                <div className="welcome-page-summery flex flex-col items-start tablet:items-center mb-16 lg:mt-32 xl:mt-40 xl:mr-12">
-                    <h1 className='h1-large mb-5'>Shift management application</h1>
-                    <p className='p-large mb-8'>Start getting things done together with your team based on Shiftable's revolutionary shift management features</p>
+                <div className="welcome-page-summery flex flex-col items-start tablet:items-center mb-16 xl:mr-12">
+                    <h1 className='text-large mb-5'>Shift management application</h1>
+                    <p className='text-base mb-8'>Start getting things done together with your team based on Shiftable's revolutionary shift management features</p>
                     <Button className='login-btn' onClick={onOpen}>Login</Button>
                     <Button color='success' className='hover:bg-transparent hover:text-success-100 border border-success-100' isLoading={isLoadingLogin} onClick={() => onLoginDemoUser(true)}>Try as an Employee demo user</Button>
                     <Button color='warning' className='hover:bg-transparent hover:text-warning-100 border border-warning-100' isLoading={isLoadingLogin} onClick={() => onLoginDemoUser(false)}>Try as an Employer demo user</Button>

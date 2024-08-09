@@ -9,16 +9,16 @@ export default function MainNavBar() {
   return (
     <Navbar className="full bg-transparent" style={{height: "6vh"}}>
       <NavbarBrand>
-        <a href="/main"><p className="font-bold text-inherit">Shiftable</p></a>
+        <a href="/main"><p className="font-bold text-small">Shiftable</p></a>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="mobile:hidden flex flex-row justify-start items-start gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href={`/main/${user instanceof Employee ? `my-shifts` : `Weekly Workflow`}`}>
+          <Link className="text-base" color="foreground" href={`/main/${user instanceof Employee ? `my-shifts` : `Weekly Workflow`}`}>
           {user instanceof Employee ? `My shifts` : `Weekly Workflow` }
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href={`/main/${user instanceof Employee ? `shifts-application` : `schedule-shifts`}`} aria-current="page" color="secondary">
+          <Link className="text-base" href={`/main/${user instanceof Employee ? `shifts-application` : `schedule-shifts`}`} aria-current="page" color="secondary">
           {user instanceof Employee ? `Shifts application` : `Schedule shifts` }
           </Link>
         </NavbarItem>
