@@ -216,11 +216,11 @@ export function ShiftsApplyTable() {
 
   return applicableShifts ? (
     <>
-    <span className='text-5xl font-serif '>Please apply your shifts for {forDate}</span>
-    <span className='text-2xl '>Pay attention to the rules table</span>
+    <h1 className='text-medium font-serif '>Please apply your shifts for {forDate}</h1>
+    <span className='text-small '>Pay attention to the rules table</span>
     <Table aria-label="Shifts table" className="w-full">
       <TableHeader columns={daysOfWeek}>
-      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-lg text-center">{column.day}</TableColumn>}
+      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-base text-center">{column.day}</TableColumn>}
       </TableHeader>
       <TableBody items={createRows()}>
       {(item) => (
@@ -231,7 +231,7 @@ export function ShiftsApplyTable() {
               className={`light:bg-green dark:bg-slate-700 hover:bg-light-green hover:dark:bg-light-green 
               ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`} 
               ${(shift.isCant) ? ` dark:bg-red light:bg-red` : (shift.isSelected) ? ` dark:bg-light-green light:bg-light-green` : ``}
-              text-center p-[2.6%] text-lg`}>
+              text-center p-[2.6%] text-base`}>
               {shift.shift || "No Shifts"}
             </TableCell>
           ))}

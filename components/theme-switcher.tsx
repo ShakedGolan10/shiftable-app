@@ -27,7 +27,7 @@ export default function ThemeSwitcher() {
     <button
       aria-label='Toggle Dark Mode'
       type='button'
-      className='z-50 rounded-lg p-2 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700 fixed top-2/4 left-0 m-4 mobile:top-0 mobile:left-2/4'
+      className='z-50 rounded-lg transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700 fixed top-2/4 left-0 m-4 mobile:top-0 mobile:left-2/4'
       onClick={handleThemeSwitch}
     >
       {resolvedTheme.includes('dark') ? (

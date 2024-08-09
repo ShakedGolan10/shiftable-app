@@ -20,9 +20,9 @@ export function AlertModal() {
            <ModalContent>
              {(onClose) => (
                <>
-                 <ModalHeader className="text-2xl">Attention Please!</ModalHeader>
+                 <ModalHeader className="text-small">Attention Please!</ModalHeader>
                  <ModalBody>
-                 <h2 className={`text-xl font-bold ${isError ? 'text-red-600' : 'text-green-600'}`}>
+                 <h2 className={`text-base font-bold ${isError ? 'text-red-600' : 'text-green-600'}`}>
                       {isError ? `Something didn\'t go right :( \n ${<br />} ${modalMsg}` : modalMsg}
                   </h2>
                  </ModalBody>
@@ -39,12 +39,3 @@ export function AlertModal() {
     )
 }
 
-
-{/* <div onClick={() => { if (isModalOpen) toggleAlertModal(event) }} className={`back-screen ${isModalOpen ? 'fixed opacity-100 z-5' : 'opacity-0'} inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-out duration-300`}></div>
-
-            <div className="fixed flex z-10 inset-0 overflow-y-auto min-h-fit min-w-fit items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ${isModalOpen
-                    ? 'opacity-100 translate-y-0 sm:scale-100'
-                    : 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
-                    } ease-out duration-300`}
-                ></div> */}

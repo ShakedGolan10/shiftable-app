@@ -21,10 +21,10 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
 
     return (
         <main className="flex flex-col items-center pt-16 text-center">
-            <span className='text-desktop-mainHeader tablet:text-tablet-mainHeader mobile:text-mobile-mainHeader font-serif mt-10 mb-5'>Hi {employeeUser.name}, how are you today?</span>
+            <span className='text-medium font-serif mt-10 mb-5'>Hi {employeeUser.name}, how are you today?</span>
             <div className='my-7'>
-                <h4 className='text-3xl'>Your next shift:</h4>
-                <p className='text-xl my-3 font-semibold'>Sunday - Noon: 15:00-23:00{/* Todo: Design the sift today */}</p>
+                <h4 className='text-small'>Your next shift:</h4>
+                <p className='text-base my-3 font-semibold'>Sunday - Noon: 15:00-23:00{/* Todo: Design the sift today */}</p>
             </div>
             <h4 className='font-bold text-orange-700'>Remmeber to apply shifts before {`${daysOfWeek[employeeUser.employer.applicationTime.day]} at ${employeeUser.employer.applicationTime.time}`}!</h4>
             {/* Done: Design the apply shifts alert */}
@@ -33,9 +33,9 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
                 <EmployerMsg employee={ employeeUser } />
             </section>
             <div className='flex flex-col gap-2 my-2'>
-                <Button onClick={()=> router.push('/main/shifts-application')} className='rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</Button>
-                <Button className='rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Who's working with me today?</Button>
-                <Button className='rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</Button>
+                <Button onClick={()=> router.push('/main/shifts-application')} className='text-base rounded-md bg-emerald-400 px-3 py-1.5 hover:bg-emerald-600'>Apply Shifts</Button>
+                <Button className='text-base rounded-md bg-teal-400 px-3 py-1.5 hover:bg-teal-600'>Who's working with me today?</Button>
+                <Button className='text-base rounded-md bg-cyan-500 px-3 py-1.5 hover:bg-cyan-700'>My Shifts</Button>
             </div>
            
 

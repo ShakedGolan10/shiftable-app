@@ -13,16 +13,7 @@ module.exports = {
     extend: {
       fontSize: {
         'base': ['1rem', { lineHeight: '1.5rem' }], 
-        'small': ['0.875rem', { lineHeight: '1.25rem' }], 
-        'desktop-subHeader': ['2.25rem', { lineHeight: '2.5rem' }],
-        'desktop-header': ['2.75rem', { lineHeight: '3rem' }],
-        'desktop-mainHeader': ['3.5rem', { lineHeight: '3.75rem' }],
-        'tablet-subHeader': ['1.5rem', { lineHeight: '1.75rem' }],
-        'tablet-header': ['2rem', { lineHeight: '2.75rem' }],
-        'tablet-mainHeader': ['2.75rem', { lineHeight: '3.15rem' }],
-        'mobile-subHeader': ['1.4rem', { lineHeight: '1.8rem' }],
-        'mobile-header': ['1.8rem', { lineHeight: '2.25rem' }],
-        'mobile-mainHeader': ['2.25rem', { lineHeight: '2.75rem' }],
+        'subHeader': ['1.4rem', {lineHeight: '1.6rem'}]
       },
       gridTemplateColumns: {
         'grid-large': '100px 1fr 100px',
@@ -90,13 +81,10 @@ module.exports = {
             fontSize: {
               large: '3.5rem',
               medium: '2.75rem',
-              small: '2.25rem',
-              tiny: '0.875rem',
             },
             lineHeight: {
               large: '4.5rem',
               medium: '3.25rem',
-              small: '2.75rem',
             }
           },
         },
@@ -107,13 +95,10 @@ module.exports = {
             fontSize: {
               large: '2.75rem',
               medium: '2rem',
-              small: '1.5rem',
-              tiny: '0.875rem',
             },
             lineHeight: {
               large: '3.5rem',
               medium: '2.75rem',
-              small: '2.25rem',
             }
           },
         },
@@ -124,13 +109,10 @@ module.exports = {
             fontSize: {
               large: '2.25rem',
               medium: '1.8rem',
-              small: '1.4rem',
-              tiny: '0.875rem',
             },
             lineHeight: {
               large: '2.75rem',
               medium: '2.25rem',
-              small: '2.0rem',
             }
           },
         },
@@ -141,13 +123,10 @@ module.exports = {
             fontSize: {
               large: '3.5rem',
               medium: '2.75rem',
-              small: '2.25rem',
-              tiny: '0.875rem',
             },
             lineHeight: {
               large: '4.5rem',
               medium: '3.25rem',
-              small: '2.75rem',
             }
           },
         },
@@ -158,13 +137,10 @@ module.exports = {
             fontSize: {
               large: '2.75rem',
               medium: '2rem',
-              small: '1.5rem',
-              tiny: '0.875rem',
             },
             lineHeight: {
               large: '3.5rem',
               medium: '2.75rem',
-              small: '2.25rem',
             }
           },
         },
@@ -175,13 +151,10 @@ module.exports = {
             fontSize: {
               large: '2.25rem',
               medium: '1.8rem',
-              small: '1.4rem',
-              tiny: '0.875rem',
             },
             lineHeight: {
               large: '2.75rem',
               medium: '2.25rem',
-              small: '2.0rem',
             }
           },
         },

@@ -27,7 +27,7 @@ export function LoginForm({ isOpen, onClose }) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="text-desktop-header tablet:text-tablet-header mobile:text-mobile-header">Login to your account</ModalHeader>
+              <ModalHeader className="text-small">Login to your account</ModalHeader>
               <ModalBody>
                 <form onSubmit={onLogin} className="space-y-6">
                             <div>
