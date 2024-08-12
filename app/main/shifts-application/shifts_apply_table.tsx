@@ -89,9 +89,9 @@ export function ShiftsApplyTable() {
       const {applicationRules, applicableShifts } = await getUserApplicableShiftsData(user.employer.id);
       const adJustedShifts = (): TableShifts => {
         const dayObj = {}
-        daysOfWeek.forEach((day) => {
-          if (!applicableShifts[day.day.toLowerCase()].length) dayObj[day.day.toLowerCase()] = []
-          else dayObj[day.day.toLowerCase()] = applicableShifts[day.day.toLowerCase()].map((shift: string)=> {return {shift, isSelected: false, isCant: false}})
+        daysOfWeek.forEach((element) => {
+          if (!applicableShifts[element.day.toLowerCase()].length) dayObj[element.day.toLowerCase()] = []
+          else dayObj[element.day.toLowerCase()] = applicableShifts[element.day.toLowerCase()].map((shift: string)=> {return {shift, isSelected: false, isCant: false}})
         })
         return dayObj as TableShifts
       }
