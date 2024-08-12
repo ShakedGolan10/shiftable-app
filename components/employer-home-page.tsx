@@ -2,16 +2,17 @@
 
 import { Employee, Employer } from '@/types/class.service'
 import React, { useEffect, useState } from 'react'
-import { utilService } from '@/services/util.service'
 import { getDateOfApply } from '@/app/main/shifts-application/shifts_apply_table'
 import { Button } from '@nextui-org/react'
 import { getEmployeesByFilter } from '@/services/employer.service'
+import { useRouter } from 'next/navigation'
 
 export default function EmployeeHomePage({ employerUser }: { employerUser: Employer }) {
   // Todo: Modal opens if the employer need to do something urgent like 
   const [forDate, setForDate] = useState<string>(undefined)
   const [usersNotApplied, setUsersNotApplied] = useState<Employee[]>([])
-  
+  const router = useRouter()
+
   useEffect(() => {
     setForDate(getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time))
 
@@ -22,8 +23,6 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
     getEmployees()
   }, [])
 
-
-  const { dayIndex, time } = utilService.getTodayInfo();
 
 
   return (
@@ -45,7 +44,7 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
       </div>
 
       <div className='flex flex-col gap-2 my-2'>
-        <Button className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
+        <Button onClick={()=> router.push('/main/set-weekly-shifts')} className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
         <Button className='rounded-md bg-teal-400 text-base hover:bg-teal-600'>Shift schedule</Button>
         <Button className='rounded-md bg-cyan-500 text-base hover:bg-cyan-700'>Employees</Button>
         <Button className='rounded-md bg-indigo-500 text-base hover:bg-indigo-700'>Edit employees messages</Button>
