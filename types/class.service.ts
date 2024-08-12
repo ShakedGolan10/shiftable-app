@@ -31,7 +31,6 @@ export class Employee {
 
 }
 
-
 export class Employer {
     public id: string
     public name: string
@@ -39,23 +38,26 @@ export class Employer {
     public email: string
     public employerMsg?: Array<string>
     public employees: Array<string> = []
+    public applicationRules? : ApplicationRules
+    public weeklyWorkflow? : WeeklyWorkflow
 
-    constructor(id: string, name: string, applicationTime: ApplicationTime, employees: Array<string>, email: string, employerMsg: Array<string>) {
-        // super(name, email)
-        this.id = id
-        this.name = name
-        this.applicationTime = applicationTime
-        this.email = email
-        this.employees = [...employees],
-            this.employerMsg = employerMsg
+   
+    constructor(props: Employer) {
+        this.id = props.id
+        this.name = props.name
+        this.applicationTime = props.applicationTime
+        this.email = props.email
+        this.employees = [...props.employees]
+        this.employerMsg = props.employerMsg
+        this.applicationRules = props.applicationRules
+        this.weeklyWorkflow = props.weeklyWorkflow
     }
 
 }
 
 export const CreateUserInstance = <T>(userObject: T) => {
     if (userObject.hasOwnProperty('employees')) {
-        const { id, name, applicationTime, email, employees, employerMsg = null } = userObject as Employer
-        return new Employer(id, name, applicationTime, employees, email, employerMsg)
+        return new Employer(userObject as Employer)
     }
     if (userObject.hasOwnProperty('employer')) {
         const { id, name, email, employer } = userObject as Employee

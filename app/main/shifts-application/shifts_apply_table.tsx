@@ -28,7 +28,7 @@ const emptySelectedShifts = {
   saturday: [],
 }
 
-export interface TableShifts  {
+export interface TableShifts {
     sunday: Shift[]
     monday: Shift[]
     tuesday: Shift[]
@@ -228,10 +228,13 @@ export function ShiftsApplyTable() {
             {item.shifts.map((shift, index) => (
             <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
-              className={`light:bg-green dark:bg-slate-700 hover:bg-light-green hover:dark:bg-light-green 
-              ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent hover:dark:bg-transparent`} 
-              ${(shift.isCant) ? ` dark:bg-red light:bg-red` : (shift.isSelected) ? ` dark:bg-light-green light:bg-light-green` : ``}
-              text-center p-[2.6%] text-base`}>
+              className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700
+              hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green  
+              text-center p-[2.6%] text-base
+              ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent`} 
+              ${(shift.isCant) ? ` bg-red`
+              : (shift.isSelected) ? ` bg-light-green` : ``}
+              `}>
               {shift.shift || "No Shifts"}
             </TableCell>
           ))}

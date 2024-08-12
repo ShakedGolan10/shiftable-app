@@ -36,7 +36,9 @@ export const queryMany = async <T>(collectionPath: string, filterBy?: Params): P
         const queryRes = query(collectionRef, ...constraints)
         const querySnapshot = await getDocs(queryRes)
         
-        const results: T[] = querySnapshot.docs.map(doc => doc.data() as T)
+        const results: T[] = querySnapshot.docs.map(doc => {
+            return {id: doc.id, ...doc.data()} as T
+        })
         return results
     } catch (error) {
         console.log('DB_SERVICE - couldn\'t get data from database', error)

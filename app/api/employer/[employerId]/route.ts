@@ -6,7 +6,6 @@ import { NextResponse } from "next/server"
 
 export async function GET(req: AuthenticatedRequest, { params } : { params: Params }) {
     try {
-        const uid = req.headers.get('uid')
         const { employerId } = params
         const queryParams = getDataFromQueryParams(req.nextUrl.searchParams)
         const data = await getEmployees(queryParams, employerId)
