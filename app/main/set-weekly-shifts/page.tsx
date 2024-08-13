@@ -5,8 +5,8 @@ import { useAuth } from '@/providers/UserContextProvider';
 import { Employer } from '@/types/class.service';
 import { getNextSunday } from '@/lib/server.utils';
 import { getEmployeesShiftsReqs } from '@/services/employer.service';
-import { ShiftReqs } from '@/services/server-services/employer.service';
 import { EmployerTableCell } from './employer_table_cell';
+import { RowItem, Shift, ShiftReqs } from '@/services/shifts.service';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -17,19 +17,43 @@ export default function EmployerTable() {
   const [selectedShifts, setSelectedShifts] = useState<Record<string, Record<number, string[]>>>({});
 
   useEffect(() => {
+    if (!user) return 
     const fetchShifts = async () => {
       try {
         const forDate = getNextSunday();
         const shiftsReqsData = await getEmployeesShiftsReqs(forDate);
-        console.log('shiftsReqs: ', shiftsReqs)
+        console.log('shiftsReqsData: ', shiftsReqsData)
+        // Todo: Set the rows of the table, the num of rows needs to be the longest day (by num of shifts) and handle in case there arnt any shifts at the same row
         setShiftsReqs(shiftsReqsData);
       } catch (error) {
         console.error('Failed to fetch shifts:', error);
       }
     };
     
-    if (user) fetchShifts();
+    fetchShifts()
+
+    
+
   }, [user]);
+
+  const maxRows = (items: WeeklyWorkflow) => {
+    const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
+      return Math.max(acc, element.length);
+    }, 0);
+    console.log('maxRowsPerColumn', maxRowsPerColumn)
+    if (maxRowsPerColumn) return [...Array(maxRowsPerColumn)].map(() => '')
+      else return []
+    // const rows = [];
+  
+    // for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
+    //   const shifts: Shift[] = daysOfWeek.map(day => applicableShifts[day.day.toLowerCase()]?.[rowIndex] || "");
+    //   rows.push({
+    //     key: rowIndex.toString(),
+    //     shifts
+    //   });
+    // }
+    // return rows;
+  };
 
   const handleSelectChange = (day: string, shiftIndex: number, updatedShifts: string[]) => {
     setSelectedShifts((prev) => ({
@@ -50,7 +74,7 @@ export default function EmployerTable() {
           ))}
         </TableHeader>
         <TableBody>
-          {Object.keys(shiftsReqs[0].shifts.friday).map((_, shiftIndex) => (
+          {maxRows(user.weeklyWorkflow).map((_, shiftIndex) => (
               <TableRow key={shiftIndex}>
                 {daysOfWeek.map((day) => (
                   <TableCell key={day}>

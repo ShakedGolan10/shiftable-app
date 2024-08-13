@@ -2,11 +2,8 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 import { queryMany } from "./db.service"
 import { Employee } from "@/types/class.service"
 import { TableShifts } from "@/types/user/types.server"
+import { ShiftReqs } from "../shifts.service"
 
-export interface ShiftReqs {
-    id: string
-    shifts: TableShifts
-}
 
 export const getEmployees = async (filterBy: Params, employerId: string) => {
     filterBy = {...filterBy, employerId}

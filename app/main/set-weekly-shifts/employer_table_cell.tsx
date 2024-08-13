@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import { Select, SelectItem, Chip } from '@nextui-org/react';
 
 interface EmployerTableCellProps {
   day: string;
   shiftIndex: number;
-  availableShifts: string[];
+  availableShifts: { isSelected: boolean; shift: string; isCant: boolean; shiftId: string }[];
   selectedShifts: string[];
   onSelectChange: (updatedShifts: string[]) => void;
 }
@@ -17,6 +18,13 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
   onSelectChange,
 }) => {
   const [localSelectedShifts, setLocalSelectedShifts] = useState<string[]>(selectedShifts);
+
+  useEffect(() => {
+    console.log('day', day);
+    console.log('shiftIndex', shiftIndex);
+    console.log('availableShifts', availableShifts);
+    console.log('selectedShifts', selectedShifts);
+  }, []);
 
   const handleSelect = ({ value }) => {
     const updatedShifts = [...localSelectedShifts, value];
@@ -39,13 +47,18 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
         onChange={(ev) => handleSelect(ev.target)}
         className="w-full text-xs"
       >
-        {availableShifts && availableShifts
-          .filter((shift) => !localSelectedShifts.includes(shift))
-          .map((shift) => (
-            <SelectItem key={shift} value={shift}>
-              {shift}
-            </SelectItem>
-          ))}
+        {availableShifts &&
+          availableShifts
+            .filter((shiftObj) => !localSelectedShifts.includes(shiftObj.shift))
+            .map((shiftObj) => (
+              <SelectItem
+                key={shiftObj.shiftId}
+                value={shiftObj.shift}
+                textValue={shiftObj.shift} // Ensures accessibility with plain text
+              >
+                {shiftObj.shift}
+              </SelectItem>
+            ))}
       </Select>
       <div className="mt-2 flex flex-wrap gap-1">
         {localSelectedShifts.map((shift) => (
