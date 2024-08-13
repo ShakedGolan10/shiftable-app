@@ -5,6 +5,8 @@ export interface Employee {
     employerId: string
     shifts?: Array<Shift>
     employer: EmployerSummery
+    blockedShifts:string[]
+    isApplied: boolean
 }
 
 interface Credentials {
@@ -30,6 +32,7 @@ export interface Employer {
     weeklyWorkflow: WeeklyWorkflow
 }
 
+
 interface Days {
     sunday?: string
     monday?: string
@@ -40,14 +43,19 @@ interface Days {
     saturday?: string
 }
 
+interface ShiftSlot {
+    shift: string
+    shiftId: string
+}
+
 interface WeeklyWorkflow {
-    sunday: string[]
-    monday: string[]
-    tuesday: string[]
-    wednesday: string[]
-    thursday: string[]
-    friday: string[]
-    saturday: string[]
+    sunday: ShiftSlot[]
+    monday: ShiftSlot[]
+    tuesday: ShiftSlot[]
+    wednesday: ShiftSlot[]
+    thursday: ShiftSlot[]
+    friday: ShiftSlot[]
+    saturday: ShiftSlot[]
 }
 
 export interface TableShifts  {

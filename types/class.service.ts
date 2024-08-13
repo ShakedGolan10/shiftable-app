@@ -2,32 +2,21 @@
 
 import { userService } from "@/services/user.service"
 
-export class Shift {
-
-}
-
-
 export class Employee {
     public id: string
     public name: string
     public email: string
     public isApplied: boolean
     public employer?: EmployerSummery
-    public shifts?: Array<Shift>
-    constructor(id: string, email: string, name: string, employer?: EmployerSummery) {
-        this.id = id
-        this.name = name
-        this.email = email
-        this.employer = employer
+    public blockedShifts: string[]
+    constructor(props: Employee) {
+        this.id = props.id
+        this.name = props.name
+        this.email = props.email
+        this.employer = props.employer
+        this.isApplied = props.isApplied
+        this.blockedShifts = props.blockedShifts
     }
-    // Todo: methods for shifts
-    public async setEmployeeShifts() {
-        // const employeeShifts = await userService
-    }
-
-
-
-    // Todo: Shift Class
 
 }
 
@@ -60,8 +49,7 @@ export const CreateUserInstance = <T>(userObject: T) => {
         return new Employer(userObject as Employer)
     }
     if (userObject.hasOwnProperty('employer')) {
-        const { id, name, email, employer } = userObject as Employee
-        return new Employee(id, email, name, employer)
+        return new Employee(userObject as Employee)
     }
 }
 
