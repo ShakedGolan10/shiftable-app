@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Switch } from "@nextui-org/react";
-import { applyShiftsRequest, getUserApplicableShiftsData } from '@/services/shifts.service';
+import { applyShiftsRequest, getWeeklyWorkflow } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
@@ -40,6 +40,7 @@ export interface TableShifts {
 
 interface Shift {
   shift: string
+  shiftId: string
   isSelected: boolean
   isCant: boolean
 }
@@ -86,13 +87,21 @@ export function ShiftsApplyTable() {
     if (!user) return 
 
     const getShiftsData = async () => {
-      const {applicationRules, applicableShifts } = await getUserApplicableShiftsData(user.employer.id);
+      const { applicationRules, weeklyWorkflow } = await getWeeklyWorkflow(user.employer.id);
       const adJustedShifts = (): TableShifts => {
         const dayObj = {}
         daysOfWeek.forEach((element) => {
-          if (!applicableShifts[element.day.toLowerCase()].length) dayObj[element.day.toLowerCase()] = []
-          else dayObj[element.day.toLowerCase()] = applicableShifts[element.day.toLowerCase()].map((shift: string)=> {return {shift, isSelected: false, isCant: false}})
+          if (!weeklyWorkflow[element.day.toLowerCase()].length) dayObj[element.day.toLowerCase()] = []
+          else {
+            dayObj[element.day.toLowerCase()] = weeklyWorkflow[element.day.toLowerCase()]
+            .map(({ shift, shiftId }) => {
+              if (user.blockedShifts.includes(shiftId)) return {shift: '', shiftId}
+              else return {shift, shiftId, isSelected: false, isCant: false}
+            })
+            
+          }
         })
+        
         return dayObj as TableShifts
       }
       const tableShifts = adJustedShifts()
@@ -169,14 +178,15 @@ export function ShiftsApplyTable() {
   }
 
   const selectShift = (item: RowItem, day: string) => {
-    const { shift } = applicableShifts[day][item.key] as Shift
-    let prevStateOfShift: Shift
-    let shiftIdx: number
-
-    if (!applicableShifts[day][item.key]) return 
+    
+    if (!applicableShifts[day][item.key] || !applicableShifts[day][item.key].shift) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
     if (isCant && applicableShifts[day][item.key].isCant) return 
     
+    
+    let prevStateOfShift: Shift
+    let shiftIdx: number
+    const { shift } = applicableShifts[day][item.key] as Shift
     
     setApplicableShifts(prev => {
       prevStateOfShift ={...prev[day][item.key]}
@@ -228,10 +238,10 @@ export function ShiftsApplyTable() {
             {item.shifts.map((shift, index) => (
             <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
-              className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700
-              hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green  
+              className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
+                dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  
               text-center p-[2.6%] text-base
-              ${shift ? ` cursor-pointer` : ` cursor-not-allowed hover:bg-transparent`} 
+              ${shift && shift.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
               ${(shift.isCant) ? ` bg-red`
               : (shift.isSelected) ? ` bg-light-green` : ``}
               `}>

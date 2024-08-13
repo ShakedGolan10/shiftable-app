@@ -17,14 +17,19 @@ interface ApplicationTime {
     time: string
 }
 
+interface ShiftSlot {
+    shift: string
+    shiftId: string
+}
+
 interface WeeklyWorkflow {
-    sunday: string[]
-    monday: string[]
-    tuesday: string[]
-    wednesday: string[]
-    thursday: string[]
-    friday: string[]
-    saturday: string[]
+    sunday: ShiftSlot[]
+    monday: ShiftSlot[]
+    tuesday: ShiftSlot[]
+    wednesday: ShiftSlot[]
+    thursday: ShiftSlot[]
+    friday: ShiftSlot[]
+    saturday: ShiftSlot[]
 }
 
 interface ApplicationRules {
