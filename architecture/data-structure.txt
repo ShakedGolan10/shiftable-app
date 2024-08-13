@@ -4,7 +4,8 @@ userEmployee: {
 		id: string,
 		email: string,
 		fullName: string,
-		employerId: string	
+		employerId: string,
+        blockedShifts: shiftIds[]
 	
 }	
 	userEmployer: {
@@ -17,7 +18,7 @@ userEmployee: {
             },
         employerMsg : string[],
 		employees: string[],
-        weeklyWorkflow: {day: string[]}[],
+        weeklyWorkflow: ShiftSlot[],
         application_rules {
             minDays: number,
             numOfCant: 2
@@ -33,6 +34,11 @@ userEmployee: {
                 },
             }]
         }
+    }
+
+    ShiftSlot {
+        shiftId: string
+        shift: string
     }
     
     shiftsRequests { 
@@ -62,10 +68,11 @@ userEmployee: {
 Firebase structure :
 
     Users collection {
-        documantId - employeeUID / employerUID {
+        documantId - employeeUID || employerUID {
             name/fullName = string,
             email = string,
-            if (employee) employerUID = string  
+            blockedShifts: shiftIds[],
+            employerId = string  
             /* employee structure ends here */ 
             ********************************************
             else { /* employer structure continue */
@@ -77,9 +84,9 @@ Firebase structure :
             employerMsg = string[],
             weeklyWorkflow = map {
                 sunday = array [
-                            0 = string (shift hours in hh:mm-hh:mm) \
-                            1 = string (shift hours in hh:mm-hh:mm)  ---> if no shift -> no value in the map (no certain day key)
-                            2 = string (shift hours in hh:mm-hh:mm) /
+                            0 = {shiftId: string, shift: string (shift hours in hh:mm-hh:mm)} \
+                            1 = {shiftId: string, shift: string (shift hours in hh:mm-hh:mm)}  ---> if no shift -> no value in the map (no certain day key)
+                            2 = {shiftId: string, shift: string (shift hours in hh:mm-hh:mm)} /
                         ],  
                  }
             }
@@ -95,18 +102,10 @@ Firebase structure :
                 friday: 08-13
                 },
             ]
+            numOfCant: number
+
         }
-            applicable_shifts subCollection {
-                 documantId - employeeUID
-                 docValue: {
-                    sunday = array [
-                            0 = string (shift hours in hh:mm-hh:mm) \
-                            1 = string (shift hours in hh:mm-hh:mm)  ---> if no shift -> no value in the map (no certain day key)
-                            2 = string (shift hours in hh:mm-hh:mm) /
-                        ], 
-                        Tuesday = array... and so on.
-                 }
-            }
+           
         }
     }
     
@@ -150,6 +149,7 @@ Firebase structure :
     }
 
     Shift {
+    shiftId: string
     shift: string
     isSelected: boolean
     isCant: boolean
