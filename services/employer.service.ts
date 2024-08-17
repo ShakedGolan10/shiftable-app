@@ -2,7 +2,7 @@
 
 import { Employee } from "@/types/class.service"
 import { fetchService } from "./fetch.service"
-import { ShiftReqs } from "./server-services/employer.service"
+import { ShiftReqs } from "./shifts.service"
 
 
 export const getEmployeesByFilter = async (filterBy: {field: string, value: number | string | boolean}[], userId: string, ) => {

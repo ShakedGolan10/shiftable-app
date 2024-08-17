@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Switch } from "@nextui-org/react";
-import { applyShiftsRequest, getWeeklyWorkflow } from '@/services/shifts.service';
+import { applyShiftsRequest, getWeeklyWorkflow, RowItem, Shift, TableShifts } from '@/services/shifts.service';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
@@ -26,28 +26,6 @@ const emptySelectedShifts = {
   thursday: [],
   friday: [],
   saturday: [],
-}
-
-export interface TableShifts {
-    sunday: Shift[]
-    monday: Shift[]
-    tuesday: Shift[]
-    wednesday: Shift[]
-    thursday: Shift[]
-    friday: Shift[]
-    saturday: Shift[]
-}
-
-interface Shift {
-  shift: string
-  shiftId: string
-  isSelected: boolean
-  isCant: boolean
-}
-
-interface RowItem {
-  key: string 
-  shifts: Shift[] 
 }
 
 export const getDateOfApply = (day: number, time: string): string =>  {
@@ -114,15 +92,15 @@ export function ShiftsApplyTable() {
   }, [user]);
 
   const createRows = (): RowItem[] => {
-    const maxShiftsPerDay = daysOfWeek.reduce((max, day) => {
-      const shifts = applicableShifts[day.day.toLowerCase()] || [];
-      return Math.max(max, shifts.length);
+    
+    const maxShiftsPerDay = Object.values(applicableShifts).reduce((acc, element) => {
+      return Math.max(acc, element.length);
     }, 0);
   
     const rows = [];
   
     for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-      const shifts: Shift[] = daysOfWeek.map(day => applicableShifts[day.day.toLowerCase()]?.[rowIndex] || "");
+      const shifts: Shift[] = daysOfWeek.map(element => applicableShifts[element.day.toLowerCase()]?.[rowIndex] || "");
       rows.push({
         key: rowIndex.toString(),
         shifts
