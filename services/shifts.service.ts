@@ -15,6 +15,7 @@ export interface Shift {
   shiftId: string
   isSelected: boolean
   isCant: boolean
+  name?: string
 }
 
 export interface RowItem {
@@ -24,6 +25,7 @@ export interface RowItem {
 
 export interface ShiftReqs {
     id: string
+    name: string
     shifts: TableShifts
 }
 

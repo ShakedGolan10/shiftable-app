@@ -10,27 +10,26 @@ import { RowItem, Shift, ShiftReqs } from '@/services/shifts.service';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+
 export default function EmployerTable() {
   const { user } = useAuth<Employer>();
   
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqs[] | null>(null);
-  const [selectedShifts, setSelectedShifts] = useState<Record<string, Record<number, string[]>>>({});
+  const [selectedShifts, setSelectedShifts] = useState<Shift[]>([]);
 
   useEffect(() => {
     if (!user) return 
-    const fetchShifts = async () => {
+    const fetchAndArrangeShifts = async () => {
       try {
         const forDate = getNextSunday();
-        const shiftsReqsData = await getEmployeesShiftsReqs(forDate);
-        console.log('shiftsReqsData: ', shiftsReqsData)
-        // Todo: Set the rows of the table, the num of rows needs to be the longest day (by num of shifts) and handle in case there arnt any shifts at the same row
+        let shiftsReqsData = await getEmployeesShiftsReqs('Sun Aug 18 2024');
         setShiftsReqs(shiftsReqsData);
       } catch (error) {
         console.error('Failed to fetch shifts:', error);
       }
     };
     
-    fetchShifts()
+    fetchAndArrangeShifts()
 
     
 
@@ -43,19 +42,10 @@ export default function EmployerTable() {
     console.log('maxRowsPerColumn', maxRowsPerColumn)
     if (maxRowsPerColumn) return [...Array(maxRowsPerColumn)].map(() => '')
       else return []
-    // const rows = [];
   
-    // for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-    //   const shifts: Shift[] = daysOfWeek.map(day => applicableShifts[day.day.toLowerCase()]?.[rowIndex] || "");
-    //   rows.push({
-    //     key: rowIndex.toString(),
-    //     shifts
-    //   });
-    // }
-    // return rows;
   };
 
-  const handleSelectChange = (day: string, shiftIndex: number, updatedShifts: string[]) => {
+  const handleSelectChange = (day: string, shiftIndex: number, updatedShifts: Shift[]) => {
     setSelectedShifts((prev) => ({
       ...prev,
       [day]: {
@@ -65,7 +55,7 @@ export default function EmployerTable() {
     }));
   };
 
-  return ( (shiftsReqs && shiftsReqs.length) ?  
+  return ( (shiftsReqs && shiftsReqs.length && user) &&
     <div className="w-full overflow-x-auto">
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader>
@@ -81,7 +71,9 @@ export default function EmployerTable() {
                     <EmployerTableCell
                       day={day.toLowerCase()}
                       shiftIndex={shiftIndex}
-                      availableShifts={shiftsReqs.flatMap(req => req.shifts[day.toLowerCase()])}
+                      availableShifts={shiftsReqs.flatMap(req => {return {
+                        name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
+                      }})}
                       selectedShifts={selectedShifts[day]?.[shiftIndex] || []}
                       onSelectChange={(updatedShifts) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts)}
                     />
@@ -93,5 +85,5 @@ export default function EmployerTable() {
       </Table>
       <Button className="mt-4" onPress={() => console.log('Apply shifts')}>Apply Shifts</Button>
     </div>
-  : <h1>There are no requests yet!</h1>) 
+  ) 
 }
