@@ -35,22 +35,26 @@ export default function EmployerTable() {
 
   }, [user]);
 
+  useEffect(() => {  
+    console.log({selectedShifts})
+  }, [selectedShifts]);
+
   const maxRows = (items: WeeklyWorkflow) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
       return Math.max(acc, element.length);
     }, 0);
-    console.log('maxRowsPerColumn', maxRowsPerColumn)
     if (maxRowsPerColumn) return [...Array(maxRowsPerColumn)].map(() => '')
       else return []
   
   };
 
-  const handleSelectChange = (day: string, shiftIndex: number, updatedShifts: Shift[]) => {
+  const handleSelectChange = (day: string, shiftIdx: number, updatedShifts: Shift[]) => {
+    const { shiftId } = user.weeklyWorkflow[day][shiftIdx]
     setSelectedShifts((prev) => ({
       ...prev,
       [day]: {
         ...prev[day],
-        [shiftIndex]: updatedShifts,
+        [shiftId]: updatedShifts,
       },
     }));
   };

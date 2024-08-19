@@ -27,7 +27,7 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <span className='text-large font-serif mt-10 mb-5'>Hi {employerUser.name}, are you ready for another week?</span>
+      <span className='text-large font-serif mt-10 mb-5 text-center'>Hi {employerUser.name}, are you ready for another week?</span>
       {/* Todo: Design the header of the name */}
       <div className='my-7'>
         <p className='text-subHeader my-3 font-semibold text-center'>Shifts application is available for {forDate}

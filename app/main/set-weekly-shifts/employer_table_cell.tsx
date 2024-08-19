@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Select, SelectItem, Chip } from '@nextui-org/react';
+import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
 import { Shift } from '@/services/shifts.service';
 
 interface EmployerTableCellProps {
@@ -20,37 +20,36 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
 }) => {
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>(selectedShifts);
 
-  useEffect(() => {
-    console.log('availableShifts', availableShifts);
-  }, []);
-
-  const handleSelect = ({ value }) => {
-    const parsedValue = JSON.parse(value)
-    const updatedShifts = [...localSelectedShifts, parsedValue];
-    setLocalSelectedShifts(updatedShifts);
-    onSelectChange(updatedShifts);
+  const handleSelect = (keys: SharedSelection) => {
+    const selectedArray: Shift[] = [...keys].map((key) => JSON.parse(key as string))
+    setLocalSelectedShifts(selectedArray);
+    onSelectChange(selectedArray);
   };
 
   const handleRemove = (value: Shift) => {
-    // const parsedValue = JSON.parse(value)
-    const updatedShifts = localSelectedShifts.filter((shift) => ((shift.name !== value.name) && (shift.shiftId !== value.shiftId) && (shift.name !== value.name)));
+    const updatedShifts = localSelectedShifts.filter((shift) => ((value.name !== shift.name)));
     setLocalSelectedShifts(updatedShifts);
     onSelectChange(updatedShifts);
   };
+
+  const filteredAvailableShifts = availableShifts.filter(
+    (shiftObj) => !localSelectedShifts.some((selectedShift) => selectedShift.shiftId === shiftObj.shiftId)
+  );
 
   return (
     <div className="flex flex-col items-center">
       <Select
         aria-label={`Select employee for ${day} shift ${shiftIndex + 1}`}
-        placeholder={availableShifts[0].shiftId ? availableShifts[0].shift : 'No shifts'}
-        value=""
+        placeholder={availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'}
+        renderValue={() => availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'} // Prevents displaying selected values in the text area
+        selectionMode="multiple"
         label={availableShifts[0].shiftId ? availableShifts[0].shift : 'No shifts'}
-        onChange={(ev) => handleSelect(ev.target)}
+        onSelectionChange={handleSelect}
         className="w-full text-xs"
-      >
+        >
         {availableShifts &&
           availableShifts
-            // .filter((shiftObj) => !localSelectedShifts.includes(shiftObj?.shift))
+            .filter((shiftObj, idx) => shiftObj.name !== localSelectedShifts[idx]?.name)
             .map((shiftObj) => (
               shiftObj.shiftId && 
               <SelectItem
@@ -58,7 +57,8 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
                 style={{backgroundColor: (shiftObj?.isSelected) ? 'lightgreen' : (shiftObj?.isCant) ? 'red' : 'blueviolet'}}
                 key={JSON.stringify(shiftObj)}
                 value={JSON.stringify(shiftObj)}
-                textValue={shiftObj?.shift} // Ensures accessibility with plain text
+                textValue={shiftObj?.name} // Ensures accessibility with plain text
+                // onClick={() => handleSelect(shiftObj)}
               >
                 {shiftObj.name}
               </SelectItem>
