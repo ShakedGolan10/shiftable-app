@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    webpack: (config, { isServer }) => {
+        // Modify stats to filter out specific warnings
+        config.stats = {
+            ...config.stats,
+            warningsFilter: (warning) => warning.includes('selectedKeys'),
+        };
+        return config;
+    },
     output: 'standalone',
     reactStrictMode: false,
     experimental: {
