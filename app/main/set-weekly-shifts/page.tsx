@@ -7,12 +7,13 @@ import { getNextSunday } from '@/lib/server.utils';
 import { getEmployeesShiftsReqs } from '@/services/employer.service';
 import { EmployerTableCell } from './employer_table_cell';
 import { RowItem, Shift, ShiftReqs } from '@/services/shifts.service';
+import LoadingElement from '@/components/loading-element';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 
 export default function EmployerTable() {
-  const { user } = useAuth<Employer>();
+  const { user, isLoadingAuth } = useAuth<Employer>();
   
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqs[] | null>(null);
   const [selectedShifts, setSelectedShifts] = useState<Shift[]>([]);
@@ -35,27 +36,31 @@ export default function EmployerTable() {
 
   }, [user]);
 
+  useEffect(() => {  
+    console.log({selectedShifts})
+  }, [selectedShifts]);
+
   const maxRows = (items: WeeklyWorkflow) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
       return Math.max(acc, element.length);
     }, 0);
-    console.log('maxRowsPerColumn', maxRowsPerColumn)
     if (maxRowsPerColumn) return [...Array(maxRowsPerColumn)].map(() => '')
       else return []
   
   };
 
-  const handleSelectChange = (day: string, shiftIndex: number, updatedShifts: Shift[]) => {
+  const handleSelectChange = (day: string, shiftIdx: number, updatedShifts: Shift[]) => {
+    const { shiftId } = user.weeklyWorkflow[day][shiftIdx]
     setSelectedShifts((prev) => ({
       ...prev,
       [day]: {
         ...prev[day],
-        [shiftIndex]: updatedShifts,
+        [shiftId]: updatedShifts,
       },
     }));
   };
 
-  return ( (shiftsReqs && shiftsReqs.length && user) &&
+  return ( (shiftsReqs && shiftsReqs.length && user) ? 
     <div className="w-full overflow-x-auto">
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader>
@@ -74,7 +79,7 @@ export default function EmployerTable() {
                       availableShifts={shiftsReqs.flatMap(req => {return {
                         name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
                       }})}
-                      selectedShifts={selectedShifts[day]?.[shiftIndex] || []}
+                      // selectedShifts={selectedShifts[day]?.[shiftIndex] || []}
                       onSelectChange={(updatedShifts) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts)}
                     />
                   </TableCell>
@@ -85,5 +90,5 @@ export default function EmployerTable() {
       </Table>
       <Button className="mt-4" onPress={() => console.log('Apply shifts')}>Apply Shifts</Button>
     </div>
-  ) 
+  : !isLoadingAuth && <LoadingElement msg="Loading employees shifts..." />) 
 }
