@@ -22,13 +22,14 @@ const logout = async () : Promise<void> => {
 }
 
 const getLoggedInUser = async () => {
-
+    try {
         let loggedInUser = await fetchService.GET<Employee | Employer>('user')
         if (loggedInUser) {
             return CreateUserInstance<Employee | Employer>(loggedInUser)
         } else throw new Error('USER_SERVICE: unabled to verify if user logged in')
-
-
+    } catch (error) {
+        throw new Error('USER_SERVICE: unabled to verify if user logged in')
+    }
 }
 
 
