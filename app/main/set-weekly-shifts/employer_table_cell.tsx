@@ -7,7 +7,7 @@ interface EmployerTableCellProps {
   day: string;
   shiftIndex: number;
   availableShifts: { isSelected: boolean; shift: string; isCant: boolean; shiftId: string, name: string }[];
-  onSelectChange: (updatedShifts: Shift[]) => void;
+  onSelectChange: (updatedShifts: Shift[]) => boolean;
 }
 
 export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
@@ -18,21 +18,23 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
 }) => {
 
   useEffect(()=> {
-    console.log({availableShifts})
+    // console.log({availableShifts})
   },[])
  
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
   
   const handleSelect = (keys: SharedSelection) => {
-  const selectedArray: Shift[] = [...keys].map((key) => JSON.parse(key as string))
-  setLocalSelectedShifts(selectedArray);
-  onSelectChange(selectedArray);
-  };
+  const updatedShifts: Shift[] = [...keys].map((key) => JSON.parse(key as string))
+  const isPossible = onSelectChange(updatedShifts);
+  if (isPossible) setLocalSelectedShifts(updatedShifts);
+  else {}
+};
 
   const handleRemove = (value: Shift) => {
     const updatedShifts = localSelectedShifts.filter((shift) => ((shift.name !== value.name)));
-    setLocalSelectedShifts(updatedShifts);
-    onSelectChange(updatedShifts);
+    const isPossible = onSelectChange(updatedShifts);
+    if (isPossible) setLocalSelectedShifts(updatedShifts);
+    else {}
   };
 
   return (

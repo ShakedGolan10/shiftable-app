@@ -1,6 +1,5 @@
 'use client'
 
-import { queryClient } from "@/providers/TanstackProvider"
 import { fetchService } from "./fetch.service"
 import { CreateUserInstance, Employee, Employer } from "@/types/class.service"
 
@@ -23,7 +22,7 @@ const logout = async () : Promise<void> => {
 
 const getLoggedInUser = async () => {
     try {
-        let loggedInUser = await fetchService.GET<Employee | Employer>('user')
+        let loggedInUser = await fetchService.GET<Employee | Employer>('auth')
         if (loggedInUser) {
             return CreateUserInstance<Employee | Employer>(loggedInUser)
         } else throw new Error('USER_SERVICE: unabled to verify if user logged in')

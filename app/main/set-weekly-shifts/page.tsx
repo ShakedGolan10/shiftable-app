@@ -6,17 +6,51 @@ import { Employer } from '@/types/class.service';
 import { getNextSunday } from '@/lib/server.utils';
 import { getEmployeesShiftsReqs } from '@/services/employer.service';
 import { EmployerTableCell } from './employer_table_cell';
-import { RowItem, Shift, ShiftReqs } from '@/services/shifts.service';
+import { Shift, ShiftReqs } from '@/services/shifts.service';
 import LoadingElement from '@/components/loading-element';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+const emptyDayOrientedObject = {
+    sunday: {},
+    monday: {},
+    tuesday: {},
+    wednesday: {},
+    thursday: {},
+    friday: {},
+    saturday: {}
+}
+
+interface DayOrientedObject<T> {
+  sunday: {
+    [key: string]: T
+  }
+  monday: {
+    [key: string]: T
+  }
+  tuesday: {
+    [key: string]: T
+  }
+  wednesday: {
+    [key: string]: T
+  }
+  thursday: {
+    [key: string]: T
+  }
+  friday: {
+    [key: string]: T
+  }
+  saturday: {
+    [key: string]: T
+  }
+}
 
 export default function EmployerTable() {
   const { user, isLoadingAuth } = useAuth<Employer>();
   
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqs[] | null>(null);
-  const [selectedShifts, setSelectedShifts] = useState<Shift[]>([]);
+  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<string>>(emptyDayOrientedObject);
+  const [emoloyeesShiftCount, setEmoloyeesShiftCount] = useState<DayOrientedObject<number>>(emptyDayOrientedObject)
 
   useEffect(() => {
     if (!user) return 
@@ -37,7 +71,7 @@ export default function EmployerTable() {
   }, [user]);
 
   useEffect(() => {  
-    console.log({selectedShifts})
+    console.log('selectedShifts :', selectedShifts)
   }, [selectedShifts]);
 
   const maxRows = (items: WeeklyWorkflow) => {
@@ -49,15 +83,23 @@ export default function EmployerTable() {
   
   };
 
-  const handleSelectChange = (day: string, shiftIdx: number, updatedShifts: Shift[]) => {
+  const checkRules = (day: string, shiftIdx: number, updatedShifts: Shift[]) :boolean => {
+    // const existIdx = emoloyeesShiftCount[day].findIndex((shiftObj) => shiftObj.name === updatedShifts)
+    return true
+  }
+
+  const handleSelectChange = (day: string, shiftIdx: number, updatedShifts: Shift[]): boolean => {
+    const isPossible = checkRules(day, shiftIdx, updatedShifts)
+    if (!isPossible) return false
     const { shiftId } = user.weeklyWorkflow[day][shiftIdx]
     setSelectedShifts((prev) => ({
       ...prev,
       [day]: {
-        ...prev[day],
+        ...prev?.[day],
         [shiftId]: updatedShifts,
       },
     }));
+    return true
   };
 
   return ( (shiftsReqs && shiftsReqs.length && user) ? 
@@ -73,15 +115,17 @@ export default function EmployerTable() {
               <TableRow key={shiftIndex}>
                 {daysOfWeek.map((day) => (
                   <TableCell key={day}>
+                    {(user.weeklyWorkflow[day.toLowerCase()][shiftIndex]) ? 
                     <EmployerTableCell
                       day={day.toLowerCase()}
                       shiftIndex={shiftIndex}
-                      availableShifts={shiftsReqs.flatMap(req => {return {
+                      availableShifts={shiftsReqs.flatMap(req => ({
                         name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
-                      }})}
+                      }))}
                       // selectedShifts={selectedShifts[day]?.[shiftIndex] || []}
                       onSelectChange={(updatedShifts) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts)}
-                    />
+                    /> :
+                      <div><p>No Shifts</p></div>}
                   </TableCell>
                 ))}
               </TableRow>
