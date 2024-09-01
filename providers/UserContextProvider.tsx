@@ -25,7 +25,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
     const [isLoadingLogin, setLoadingLogin] = useState(null)
     const router = useRouter()
     
-    useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage and 
+    useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage.
         setLoadingAuth(true)
         const authUser = async () => {
             try {
@@ -37,12 +37,8 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                     setLoadingAuth(false)
                 }
             }
-            if (user) {
-                setLoadingAuth(false)
-                return
-    
-            } else authUser()
-    }, [user])
+          authUser()
+    }, [])
                         
             const login = async (credentials: Credentials) : Promise<void> => {
                 try {

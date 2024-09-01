@@ -7,7 +7,7 @@ interface EmployerTableCellProps {
   day: string;
   shiftIndex: number;
   availableShifts: { isSelected: boolean; shift: string; isCant: boolean; shiftId: string, name: string }[];
-  onSelectChange: (updatedShifts: Shift[]) => void;
+  onSelectChange: (updatedShifts: Shift[]) => boolean;
 }
 
 export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
@@ -17,26 +17,30 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
   onSelectChange,
 }) => {
 
+  useEffect(()=> {
+    // console.log({availableShifts})
+  },[])
  
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
-  const [localShifts] = useState<Shift[]>(availableShifts)
   
   const handleSelect = (keys: SharedSelection) => {
-  const selectedArray: Shift[] = [...keys].map((key) => JSON.parse(key as string))
-  setLocalSelectedShifts(selectedArray);
-  onSelectChange(selectedArray);
-  };
+  const updatedShifts: Shift[] = [...keys].map((key) => JSON.parse(key as string))
+  const isPossible = onSelectChange(updatedShifts);
+  if (isPossible) setLocalSelectedShifts(updatedShifts);
+  else {}
+};
 
   const handleRemove = (value: Shift) => {
     const updatedShifts = localSelectedShifts.filter((shift) => ((shift.name !== value.name)));
-    setLocalSelectedShifts(updatedShifts);
-    onSelectChange(updatedShifts);
+    const isPossible = onSelectChange(updatedShifts);
+    if (isPossible) setLocalSelectedShifts(updatedShifts);
+    else {}
   };
 
   return (
     <div className="flex flex-col items-center">
       <Select
-        items={localShifts}
+        items={availableShifts}
         aria-label={`Select employee for ${day} shift ${shiftIndex + 1}`}
         placeholder={availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'}
         renderValue={() => availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'} // Prevents displaying selected values in the text area
@@ -48,7 +52,7 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
         aria-hidden='false'
         >
         {(shiftObj) => (
-              shiftObj.name && 
+              shiftObj.shiftId && 
               <SelectItem
               selectedIcon
                 className='my-1'
