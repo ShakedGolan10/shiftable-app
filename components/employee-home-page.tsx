@@ -27,8 +27,6 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
                 <p className='text-base my-3 font-semibold'>Sunday - Noon: 15:00-23:00{/* Todo: Design the sift today */}</p>
             </div>
             <h4 className='font-bold text-orange-700'>Remmeber to apply shifts before {`${daysOfWeek[employeeUser.employer.applicationTime.day]} at ${employeeUser.employer.applicationTime.time}`}!</h4>
-            {/* Done: Design the apply shifts alert */}
-            {/* Todo: Design a Button for checking whos working with you this week ! (nice feacture) */}
             <section className='my-10 h-fit'>
                 <EmployerMsg employee={ employeeUser } />
             </section>

@@ -4,11 +4,11 @@ import { Employee, Employer } from '@/types/class.service'
 import React, { useEffect, useState } from 'react'
 import { getDateOfApply } from '@/app/main/shifts-application/shifts_apply_table'
 import { Button } from '@nextui-org/react'
-import { getEmployeesByFilter } from '@/services/employer.service'
 import { useRouter } from 'next/navigation'
+import { getEmployeesByFilter } from '@/services/server-services/employer.service'
 
 export default function EmployeeHomePage({ employerUser }: { employerUser: Employer }) {
-  // Todo: Modal opens if the employer need to do something urgent like 
+  // Todo: Modal opens if the employer need to do something urgent 
   const [forDate, setForDate] = useState<string>(undefined)
   const [usersNotApplied, setUsersNotApplied] = useState<Employee[]>([])
   const router = useRouter()
@@ -17,7 +17,7 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
     setForDate(getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time))
 
     const getEmployees = async () => {
-      const data = await getEmployeesByFilter([{field: 'isApplied', value: false}], employerUser.id)
+      const data = await getEmployeesByFilter({field: 'isApplied', value: false}, employerUser.id)
       setUsersNotApplied(data)
     }
     getEmployees()

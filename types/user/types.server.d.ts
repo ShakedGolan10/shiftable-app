@@ -84,8 +84,20 @@ interface ApplicationTime {
     time: string
 }
 
-interface Shift {
+export interface Shift {
     shift: string
+    shiftId: string
     isSelected: boolean
     isCant: boolean
+    name?: string
   }
+
+  export interface RowItem {
+    key: string 
+    shifts: Shift[] 
+  }
+  export interface ShiftReqs {
+    id: string
+    name: string
+    shifts: TableShifts
+}
