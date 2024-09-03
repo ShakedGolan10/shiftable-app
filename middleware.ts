@@ -19,7 +19,7 @@ export async function middleware(req: NextRequest) {
                 throw new Error('at middleware, cant validate user!');
             }
     } catch (error) {
-        return NextResponse.json(`${error}`, { status: 401 })
+        return NextResponse.redirect('/')
     }
 }
 

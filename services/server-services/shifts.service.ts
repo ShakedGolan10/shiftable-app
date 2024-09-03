@@ -1,4 +1,4 @@
-
+'use server'
 import { ApplicationRules, Employer, TableShifts, WeeklyWorkflow } from "@/types/user/types.server"
 import { queryOne, queryOneField } from "./db.service"
 import { firestore } from "@/firebaseConfig.mjs"

@@ -1,12 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Switch } from "@nextui-org/react";
-import { applyShiftsRequest, getWeeklyWorkflow, RowItem, Shift, TableShifts } from '@/services/shifts.service';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Switch } from "@nextui-org/react";
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
 import LoadingElement from '@/components/loading-element';
 import { useSystemActions } from '@/store/actions/system.actions';
+import { createUserShiftsRequest, getEmployerWeeklyWorkflow } from '@/services/server-services/shifts.service';
+import { RowItem, Shift, TableShifts } from '@/types/user/types.server';
 
 const daysOfWeek = [
   { day: 'Sunday', key: '0' },
@@ -65,7 +66,7 @@ export function ShiftsApplyTable() {
     if (!user) return 
 
     const getShiftsData = async () => {
-      const { applicationRules, weeklyWorkflow } = await getWeeklyWorkflow(user.employer.id);
+      const { applicationRules, weeklyWorkflow } = await getEmployerWeeklyWorkflow(user.employer.id)
       const adJustedShifts = (): TableShifts => {
         const dayObj = {}
         daysOfWeek.forEach((element) => {
@@ -193,7 +194,7 @@ export function ShiftsApplyTable() {
   const applyShifts = async () => {
     try {
       setIsLoading(true)
-      await applyShiftsRequest(applicableShifts, user.employer.id, forDate)
+      await createUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts)
       toggleModalAction('Shifts applied successfuly !', false)
     } catch (error) {
       toggleModalAction('Shifts falied to apply', true)

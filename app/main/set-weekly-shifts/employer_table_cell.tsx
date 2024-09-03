@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
-import { Shift } from '@/services/shifts.service';
+import { Shift } from '@/types/user/types.server';
 
 interface EmployerTableCellProps {
   day: string;
