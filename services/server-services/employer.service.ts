@@ -1,10 +1,11 @@
+'use server'
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 import { queryMany, queryOne } from "./db.service"
 import { Employee } from "@/types/class.service"
-import { ShiftReqs } from "../shifts.service"
+import { ShiftReqs } from "@/types/user/types.server"
 
 
-export const getEmployees = async (filterBy: Params, employerId: string) => {
+export const getEmployeesByFilter = async (filterBy: Params, employerId: string) => {
     filterBy = {...filterBy, employerId}
     const data = await queryMany<Employee>('users', filterBy)
     return data

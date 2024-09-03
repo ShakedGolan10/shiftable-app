@@ -4,10 +4,10 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employer } from '@/types/class.service';
 import { getNextSunday } from '@/lib/server.utils';
-import { getEmployeesShiftsReqs } from '@/services/employer.service';
 import { EmployerTableCell } from './employer_table_cell';
-import { Shift, ShiftReqs } from '@/services/shifts.service';
 import LoadingElement from '@/components/loading-element';
+import { getEmployeesShiftsReqs } from '@/services/server-services/employer.service';
+import { Shift, ShiftReqs } from '@/types/user/types.server';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -57,7 +57,7 @@ export default function EmployerTable() {
     const fetchAndArrangeShifts = async () => {
       try {
         const forDate = getNextSunday();
-        let shiftsReqsData = await getEmployeesShiftsReqs('Sun Aug 18 2024');
+        let shiftsReqsData = await getEmployeesShiftsReqs(user.id, 'Sun Aug 18 2024');
         setShiftsReqs(shiftsReqsData);
       } catch (error) {
         console.error('Failed to fetch shifts:', error);

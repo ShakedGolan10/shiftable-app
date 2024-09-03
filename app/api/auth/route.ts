@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     const uid = req.headers.get('uid')
-    console.log('uid:', uid)
     if (!uid) return NextResponse.json(false)
     try {
         const user = await getUser(uid)
