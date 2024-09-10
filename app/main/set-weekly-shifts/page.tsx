@@ -5,7 +5,7 @@ import { useAuth } from '@/providers/UserContextProvider';
 import { Employer } from '@/types/class.service';
 import { getNextSunday } from '@/lib/server.utils';
 import { EmployerTableCell } from './employer_table_cell';
-import LoadingElement from '@/components/loading-element';
+import LoadingElement from '@/components/helpers/loading-element';
 import { getEmployeesShiftsReqs } from '@/services/server-services/employer.service';
 import { Shift, ShiftReqs } from '@/types/user/types.server';
 

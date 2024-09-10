@@ -4,10 +4,11 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Switch
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
-import LoadingElement from '@/components/loading-element';
+import LoadingElement from '@/components/helpers/loading-element';
 import { useSystemActions } from '@/store/actions/system.actions';
 import { createUserShiftsRequest, getEmployerWeeklyWorkflow } from '@/services/server-services/shifts.service';
 import { RowItem, Shift, TableShifts } from '@/types/user/types.server';
+import { useAppSelector } from '@/store/store';
 
 const daysOfWeek = [
   { day: 'Sunday', key: '0' },
@@ -58,9 +59,8 @@ export function ShiftsApplyTable() {
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [forDate, setForDate] = useState<string>(undefined)
-  const { toggleModalAction } = useSystemActions()
+  const { toggleModalAction, toggleLoaderAction } = useSystemActions()
 
   useEffect(() => {
     if (!user) return 
@@ -193,13 +193,13 @@ export function ShiftsApplyTable() {
 
   const applyShifts = async () => {
     try {
-      setIsLoading(true)
+      toggleLoaderAction()
       await createUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts)
       toggleModalAction('Shifts applied successfuly !', false)
     } catch (error) {
       toggleModalAction('Shifts falied to apply', true)
     } finally {
-      setIsLoading(false)
+      toggleLoaderAction()
     }
   }
 
@@ -234,7 +234,7 @@ export function ShiftsApplyTable() {
     <Switch isSelected={isCant} onValueChange={setIsCant}>
         Toggle to mark the shifts you cant work
     </Switch> 
-  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} applyShifts={applyShifts} isLoading={isLoading} />
+  <RulesTable applicationRules={applyRules} rulesState={{numOfCantRule, minDaysRule, mandatoryShiftsRule, optionalShiftsRule}} applyShifts={applyShifts} />
   </>
   ) : !isLoadingAuth && <LoadingElement msg="Loading your shifts..." />
 }

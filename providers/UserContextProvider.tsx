@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import { Falsey } from 'lodash';
-import LoadingElement from '@/components/loading-element';
+import LoadingElement from '@/components/helpers/loading-element';
 
 interface useAuth<T> {
     isLoadingAuth: boolean
