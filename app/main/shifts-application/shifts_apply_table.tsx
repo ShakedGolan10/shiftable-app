@@ -176,7 +176,7 @@ export function ShiftsApplyTable() {
   }
 
   const applyShifts = async () => {
-      excuteAsyncFunc({
+      await excuteAsyncFunc({
         asyncOperation: () => createUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
         errorMsg: 'Couldnt apply shifts',
         successMsg: 'Shifts applied successfuly' 

@@ -1,5 +1,4 @@
 'use client'
-
 import { Employee, Employer } from '@/types/class.service'
 import React, { useEffect, useState } from 'react'
 import { Button } from '@nextui-org/react'

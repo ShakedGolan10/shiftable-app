@@ -7,7 +7,6 @@ import EmployerHomePage from "@/components/employer-home-page";
 
 export default function MainPage() {
     const { user } = useAuth<Employee | Employer>()
-
     return (
         user instanceof Employee ? (<EmployeeHomePage employeeUser={user} />) : user instanceof Employer && (
         (<EmployerHomePage employerUser={user} />)

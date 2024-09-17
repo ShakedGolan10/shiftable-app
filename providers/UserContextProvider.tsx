@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import { Falsey } from 'lodash';
 import LoadingElement from '@/components/helpers/loading-element';
+import { useAsync } from '@/hooks/useAsync';
 
 interface useAuth<T> {
     isLoadingAuth: boolean
@@ -24,6 +25,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
     const [isLoadingAuth, setLoadingAuth] = useState(null)
     const [isLoadingLogin, setLoadingLogin] = useState(null)
     const router = useRouter()
+    const [excuteAsyncFunc] = useAsync()
     
     useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage.
         setLoadingAuth(true)
@@ -43,29 +45,26 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             const login = async (credentials: Credentials) : Promise<void> => {
                 try {
                     setLoadingLogin(true)
-                    let user = await userService.login(credentials)
+                    let user = await excuteAsyncFunc({
+                        asyncOperation: () => userService.login(credentials), 
+                        errorMsg: 'Couldnt login, please try again',
+                        isLoaderDisabled: true
+                    }) 
                     user = CreateUserInstance(user)
                     setUser(user)
                     router.push('/main')
                 } catch (error) {
-                    console.error('Login error:', error);
-                    } finally {
-                        setLoadingLogin(false)
-                    }
+                    throw new Error(error)
+                } finally {
+                    setLoadingLogin(false)
                 }
+            }
                 
             const logout = async () : Promise<void> => {
-                try {
-                    setLoadingAuth(true)
-                    await userService.logout()
-                    setUser(null)
-                    router.push('/')
-                } catch (error) {
-                    console.error('Logout error:', error);
-                } finally {
-                    setLoadingAuth(false)
-                }
+                setUser(null)
+                await excuteAsyncFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
                 };
+                router.push('/')
 
                 const value = useMemo(() => ({
                     isLoadingAuth,

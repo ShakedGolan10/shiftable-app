@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ['latin'] })
 import { AppLayout } from '@/services/exports'
 import { UserProvider } from '@/providers/UserContextProvider'
 import NextUiProvider from '@/providers/NextUIProvider'
+import { ReduxProvider } from '@/store/provider'
 
 export const metadata: Metadata = {
   title: 'Shiftable App',
@@ -26,11 +27,13 @@ export default function RootLayout({
 
     <html lang="en" className=' min-h-screen max-h-max bg-bgc-light dark:bg-bgc-dark dark-mobile:bg-bgc-dark dark-tablet:bg-bgc-dark dark-desktop:bg-bgc-dark' suppressHydrationWarning>
       <body className={inter.className}>
+      <ReduxProvider> 
       <UserProvider>
         <NextUiProvider>
           <AppLayout children={children} />
         </NextUiProvider>
       </UserProvider>
+      </ReduxProvider>
       </body>
     </html>
 

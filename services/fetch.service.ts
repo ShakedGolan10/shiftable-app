@@ -42,9 +42,8 @@ const api = async (endpoint: string, method: string = 'GET', data: any = null) =
         })
         return await res.data
     } catch (err) {
-        console.log('arrived error', err)
-        console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
-               throw err
+        if (err.response && err.response.status === 401) window.location.assign('/')
+        throw err
     }
 }
 
