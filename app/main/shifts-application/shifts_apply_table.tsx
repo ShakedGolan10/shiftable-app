@@ -5,10 +5,10 @@ import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
 import LoadingElement from '@/components/helpers/loading-element';
-import { useSystemActions } from '@/store/actions/system.actions';
 import { createUserShiftsRequest, getEmployerWeeklyWorkflow } from '@/services/server-services/shifts.service';
 import { RowItem, Shift, TableShifts } from '@/types/user/types.server';
-import { useAppSelector } from '@/store/store';
+import { useAsync } from '@/hooks/useAsync';
+import { getDateOfApply } from '@/lib/server.utils';
 
 const daysOfWeek = [
   { day: 'Sunday', key: '0' },
@@ -30,22 +30,6 @@ const emptySelectedShifts = {
   saturday: [],
 }
 
-export const getDateOfApply = (day: number, time: string): string =>  {
-  const [targetHour, targetMinute] = time.split(':').map(Number);
-    const now = new Date();
-    const nowDay = now.getDay();
-    const nowHour = now.getHours();
-    const nowMinute = now.getMinutes();
-    
-    const isAfterTargetDay = nowDay > day || (nowDay === day && (nowHour > targetHour || (nowHour === targetHour && nowMinute > targetMinute)));
-
-    const nextSunday = new Date();
-    nextSunday.setDate(now.getDate() + (7 - nowDay + (isAfterTargetDay ? 7 : 0)));
-
-    const nextSundayString = nextSunday.toDateString();
-
-    return nextSundayString;
-}
 
 
 export function ShiftsApplyTable() {
@@ -60,7 +44,7 @@ export function ShiftsApplyTable() {
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
   const [forDate, setForDate] = useState<string>(undefined)
-  const { toggleModalAction, toggleLoaderAction } = useSystemActions()
+  const [excuteAsyncFunc] = useAsync()
 
   useEffect(() => {
     if (!user) return 
@@ -192,15 +176,12 @@ export function ShiftsApplyTable() {
   }
 
   const applyShifts = async () => {
-    try {
-      toggleLoaderAction()
-      await createUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts)
-      toggleModalAction('Shifts applied successfuly !', false)
-    } catch (error) {
-      toggleModalAction('Shifts falied to apply', true)
-    } finally {
-      toggleLoaderAction()
-    }
+      excuteAsyncFunc({
+        asyncOperation: () => createUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
+        errorMsg: 'Couldnt apply shifts',
+        successMsg: 'Shifts applied successfuly' 
+      })
+      
   }
 
   return applicableShifts ? (

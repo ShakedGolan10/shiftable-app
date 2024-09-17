@@ -1,27 +1,28 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import LoadingElement from '@/components/helpers/loading-element';
 import { useSystemActions } from '@/store/actions/system.actions';
 
-interface AsyncOpArgs {
-  asyncOperation: (<T>() => Promise<T>); // Array of async functions to execute
-  successMsg?: string; // Optional success handler
-  errorMsg?: string; // Optional failure handler
+interface AsyncOpArgs<T> {
+  asyncOperation: () => Promise<T>
+  successMsg?: string
+  errorMsg?: string
 }
 
-  export async function WithAsyncWrapper(args: AsyncOpArgs) {
+export const useAsync = () => {
+  const { toggleModalAction, toggleLoaderAction } = useSystemActions()
+  
+  const executeAsyncFunction = async <T>(args: AsyncOpArgs<T>): Promise<T> => {
     const { asyncOperation, successMsg, errorMsg } = args;
-    const [isLoading, setIsLoading] = useState(false);
-    const { toggleModalAction, toggleLoaderAction } = useSystemActions(); // Redux modal actions
+    toggleLoaderAction();
+    try {
+      const res = await asyncOperation()
+      toggleModalAction(successMsg)
+      return res
+    } catch (error) {
+      toggleModalAction(errorMsg, true)
+    } finally {
+      toggleLoaderAction();
+    }
+  };
 
-        setIsLoading(true);
-        try {
-          const res = await asyncOperation()
-        } catch (error) {
-          console.error('Async operation failed:', error);
-          toggleModalAction('An error occurred while processing the request.', true); // Show error modal
-        } finally {
-          setIsLoading(false);
-        }
-    
-}
+  return [executeAsyncFunction]
+};
