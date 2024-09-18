@@ -30,3 +30,14 @@ export const getDateOfApply = (day: number, time: string): string =>  {
         return nextSundayString;
     }
     
+
+    export const daysOfWeek = [
+      { day: 'Sunday', key: '0' },
+      { day: 'Monday', key: '1' },
+      { day: 'Tuesday', key: '2' },
+      { day: 'Wednesday', key: '3' },
+      { day: 'Thursday', key: '4' },
+      { day: 'Friday', key: '5' },
+      { day: 'Saturday', key: '6' }
+    ];
+    

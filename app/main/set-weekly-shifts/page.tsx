@@ -7,7 +7,7 @@ import { getNextSunday } from '@/lib/server.utils';
 import { EmployerTableCell } from './employer_table_cell';
 import LoadingElement from '@/components/helpers/loading-element';
 import { getEmployeesShiftsReqs } from '@/services/server-services/employer.service';
-import { Shift, ShiftReqs } from '@/types/user/types.server';
+import { DayOrientedObject, Shift, ShiftReqs } from '@/types/user/types.server';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -21,29 +21,19 @@ const emptyDayOrientedObject = {
     saturday: {}
 }
 
-interface DayOrientedObject<T> {
-  sunday: {
-    [key: string]: T
-  }
-  monday: {
-    [key: string]: T
-  }
-  tuesday: {
-    [key: string]: T
-  }
-  wednesday: {
-    [key: string]: T
-  }
-  thursday: {
-    [key: string]: T
-  }
-  friday: {
-    [key: string]: T
-  }
-  saturday: {
-    [key: string]: T
-  }
-}
+// 'use client'
+// 
+// export default function ShiftsApplyTable() {
+    
+//   const ShiftsTableWithData = WithDataWrapper({
+//     dataPromise: () => getEmployerWeeklyWorkflow(user.employer.id),
+//     Component: (props) => <ShiftsTable {...props} user={user}  />, // Passing user prop
+//     errorMsg: 'Couldnt load shifts',
+//     loadingMsg: 'Loading Shifts...'
+//   });
+
+//   return <ShiftsTableWithData />;
+// }
 
 export default function EmployerTable() {
   const { user, isLoadingAuth } = useAuth<Employer>();
@@ -51,12 +41,12 @@ export default function EmployerTable() {
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqs[] | null>(null);
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<string>>(emptyDayOrientedObject);
   const [emoloyeesShiftCount, setEmoloyeesShiftCount] = useState<DayOrientedObject<number>>(emptyDayOrientedObject)
+  const forDate = getNextSunday();
 
   useEffect(() => {
     if (!user) return 
     const fetchAndArrangeShifts = async () => {
       try {
-        const forDate = getNextSunday();
         let shiftsReqsData = await getEmployeesShiftsReqs(user.id, 'Sun Aug 18 2024');
         setShiftsReqs(shiftsReqsData);
       } catch (error) {

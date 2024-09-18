@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { getEmployeesByFilter } from '@/services/server-services/employer.service'
 import { getDateOfApply } from '@/lib/server.utils'
 
+
 export default function EmployeeHomePage({ employerUser }: { employerUser: Employer }) {
 
   const [usersNotApplied, setUsersNotApplied] = useState<Employee[]>([])

@@ -42,7 +42,7 @@ const api = async (endpoint: string, method: string = 'GET', data: any = null) =
         })
         return await res.data
     } catch (err) {
-        if (err.response && err.response.status === 401) window.location.assign('/')
+        // if (err.response && err.response.status === 401) window.location.assign('/')
         throw err
     }
 }

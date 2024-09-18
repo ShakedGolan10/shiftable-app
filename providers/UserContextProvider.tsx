@@ -62,10 +62,14 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                 
             const logout = async () : Promise<void> => {
                 setUser(null)
-                await excuteAsyncFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
+                try {
+                    await excuteAsyncFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
+                } catch (error) {
+                    router.push('/')
+                } finally {
+                    router.push('/')
+                }
                 };
-                router.push('/')
-
                 const value = useMemo(() => ({
                     isLoadingAuth,
                     user,
