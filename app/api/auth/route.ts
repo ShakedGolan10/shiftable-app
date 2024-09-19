@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { app } from '@/firebaseConfig.mjs'
 import { Auth, UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { clearCookie, setCookie } from '@/services/server-services/cookie.service'
-import { generateJwtToken } from '@/services/server-services/token.service'
+import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
 import { NextURL } from 'next/dist/server/web/next-url'
 
 export async function POST(req: NextRequest) {
     const auth = getAuth(app)
-    let UserCredentials: Credentials 
     try {
-        UserCredentials = await req.json()
+        const token = await req.json() // If there isnt body value (aka logout) req.json will throw an error which will cause logout.
+        let UserCredentials = await validateJwtToken<Credentials>(token)
         return await login(auth, UserCredentials)
     } catch (error) {
         return await logout()

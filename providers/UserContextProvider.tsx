@@ -32,6 +32,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         const authUser = async () => {
             try {
                 let loggedInUser = await userService.getLoggedInUser()
+                console.log({loggedInUser})
                 setUser(loggedInUser)
                 } catch (error) {
                     router.push('/')
@@ -50,6 +51,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                         errorMsg: 'Couldnt login, please try again',
                         isLoaderDisabled: true
                     }) 
+                    if (!user) throw new Error('error')
                     user = CreateUserInstance(user)
                     setUser(user)
                     router.push('/main')
