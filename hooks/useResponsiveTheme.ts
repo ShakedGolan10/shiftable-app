@@ -4,11 +4,9 @@ import { useTheme } from 'next-themes';
 
 const useResponsiveTheme = () => {
   const { resolvedTheme, setTheme, theme } = useTheme();
-  
-  
+
   useEffect(() => {
     if (!resolvedTheme) return
-    console.log('currentTheme:', theme, resolvedTheme)
     const handleResize = () => {
       const width = window.innerWidth;
       if (resolvedTheme.includes('dark')) {

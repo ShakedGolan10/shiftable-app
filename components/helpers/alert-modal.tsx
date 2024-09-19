@@ -23,7 +23,7 @@ export function AlertModal() {
                  <ModalHeader className="text-small">Attention Please!</ModalHeader>
                  <ModalBody>
                  <h2 className={`text-base font-bold ${isError ? 'text-red-600' : 'text-green-600'}`}>
-                      {isError ? `Something didn\'t go right :( \n ${<br />} ${modalMsg}` : modalMsg}
+                      {isError ? `Something didn\'t go right :( \n ${modalMsg}` : modalMsg}
                   </h2>
                  </ModalBody>
                  <ModalFooter>

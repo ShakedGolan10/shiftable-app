@@ -68,6 +68,30 @@ export interface TableShifts  {
     saturday: Shift[]
 }
 
+export interface DayOrientedObject<T> {
+    sunday: {
+      [key: string]: T
+    }
+    monday: {
+      [key: string]: T
+    }
+    tuesday: {
+      [key: string]: T
+    }
+    wednesday: {
+      [key: string]: T
+    }
+    thursday: {
+      [key: string]: T
+    }
+    friday: {
+      [key: string]: T
+    }
+    saturday: {
+      [key: string]: T
+    }
+  }
+
 interface ApplicationRules {
     mandatoryShifts: Days | undefined
     minDays: number

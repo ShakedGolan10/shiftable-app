@@ -8,8 +8,8 @@ interface RulesState {
   numOfCantRule: number
   optionalShiftsRule: number[]
 }
-export function RulesTable({ applicationRules, rulesState, applyShifts, isLoading }: { applicationRules: ApplicationRules, 
-  rulesState: RulesState, applyShifts: () => Promise<void>, isLoading: boolean }) {
+export function RulesTable({ applicationRules, rulesState, applyShifts,  }: { applicationRules: ApplicationRules, 
+  rulesState: RulesState, applyShifts: () => Promise<void>,}) {
   
   const formatDaysObject = (days: Days): string => {
     const capitalizeFirstLetter = (string: string): string => {
@@ -82,7 +82,7 @@ export function RulesTable({ applicationRules, rulesState, applyShifts, isLoadin
         ))}
       </TableBody>
     </Table>
-    <Button color='success' isDisabled={isRulesMet()} isLoading={isLoading} onClick={applyShifts}>Click to apply shifts</Button>
+    <Button color='success' isDisabled={isRulesMet()} onClick={applyShifts}>Click to apply shifts</Button>
 
     </>
   );
