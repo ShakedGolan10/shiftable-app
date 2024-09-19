@@ -19,15 +19,13 @@ export async function middleware(req: NextRequest) {
                 throw new Error('at middleware, cant validate user!');
             }
     } catch (error) {
-        const url = req.nextUrl.clone()
-        url.pathname = '/'
-        return NextResponse.redirect(url)
+        return NextResponse.json('couldnt validate user', {status: 500})
     }
 }
 
 async function setUidHeaders(headers: Headers, jwtToken: string | true) {
     try {
-        const uid = await validateJwtToken(jwtToken)
+        const uid = await validateJwtToken(jwtToken) as string
         headers.set('uid', uid)
         return NextResponse.next({
             request: {
