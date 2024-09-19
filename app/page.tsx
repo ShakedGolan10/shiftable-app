@@ -21,7 +21,6 @@ export default function HomePage() {
     if (isEmployee) await login(demoEmployeeUserCred)
       else await login(demoEmployerUserCred)
     }
-    
   useEffect(() => {
     if (user) router.push('/main')
   }, [user])

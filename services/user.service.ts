@@ -2,13 +2,15 @@
 
 import { fetchService } from "./fetch.service"
 import { CreateUserInstance, Employee, Employer } from "@/types/class.service"
+import { generateJwtToken } from "./server-services/token.service"
 
 // Todo: Change everywhere there is a Employee type and replace it with Class Employee
 
 
 const login = async (credentials: Credentials): Promise<Employee | Employer> => {
+    const encryptedCredentials = await generateJwtToken(credentials)
     try {
-        const user = await fetchService.POST<Employee | Employer>('auth', credentials)
+        const user = await fetchService.POST<Employee | Employer>('auth', JSON.stringify(encryptedCredentials))
         return user
     } catch (error) {
         throw new Error('USER_SERVICE: unable to login', error)
