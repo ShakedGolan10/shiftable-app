@@ -19,7 +19,9 @@ export async function middleware(req: NextRequest) {
                 throw new Error('at middleware, cant validate user!');
             }
     } catch (error) {
-        return NextResponse.redirect('/')
+        const url = req.nextUrl.clone()
+        url.pathname = '/'
+        return NextResponse.redirect(url)
     }
 }
 

@@ -2,7 +2,7 @@
 import { useForm } from '@/hooks/useForm'
 import { useAuth } from '../providers/UserContextProvider';
 import { useState } from 'react';
-import ErrorElement from './error-element';
+import ErrorElement from './helpers/error-element';
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Image} from "@nextui-org/react";
 
 

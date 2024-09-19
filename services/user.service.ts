@@ -17,7 +17,11 @@ const login = async (credentials: Credentials): Promise<Employee | Employer> => 
 }
 
 const logout = async () : Promise<void> => {
-    await fetchService.POST('auth')
+    try {
+        await fetchService.POST('auth')
+    } catch (error) {
+        throw new Error('USER_SERVICE: unable to logout', error)
+    }
 }
 
 const getLoggedInUser = async () => {
