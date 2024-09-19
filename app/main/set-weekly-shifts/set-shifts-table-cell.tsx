@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
 import { Shift } from '@/types/user/types.server';
 
@@ -16,10 +16,6 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
   availableShifts,
   onSelectChange,
 }) => {
-
-  useEffect(()=> {
-    // console.log({availableShifts})
-  },[])
  
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
   

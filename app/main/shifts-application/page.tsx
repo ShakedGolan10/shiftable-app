@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import ShiftsApplyTable from './shifts_apply_table';
+import ShiftsApplyTable from './shifts_apply_page';
 import { useAuth } from '@/providers/UserContextProvider';
 import { Employee } from '@/types/class.service';
 
