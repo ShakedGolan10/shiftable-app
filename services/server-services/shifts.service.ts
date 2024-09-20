@@ -22,8 +22,8 @@ export const createUserShiftsRequest = async (employeeId: string, employerId: st
         const forDateDocRef = doc(forDateCollectionRef, forDate); 
         const employeeCollectionRef = collection(forDateDocRef, 'employee');
         const employeeDocRef = doc(employeeCollectionRef, employeeId);
-      
         const employeeDoc = await getDoc(employeeDocRef);
+        const employeeUserRef = doc(firestore, 'users', employeeId)
     
       if (employeeDoc.exists()) {
         await updateDoc(employeeDocRef, {
@@ -34,6 +34,9 @@ export const createUserShiftsRequest = async (employeeId: string, employerId: st
           shifts,
         });
       }
+
+      await updateDoc(employeeUserRef, {isApplied: true})
+
     } catch (error) {
         throw new Error(`Error catched while trying to save shift req data at firebase: ${error}`)
     }
