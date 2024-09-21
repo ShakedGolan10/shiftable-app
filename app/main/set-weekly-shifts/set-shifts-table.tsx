@@ -5,6 +5,7 @@ import { Employer } from '@/types/class.service';
 import { getNextSunday } from '@/lib/server.utils';
 import { EmployerTableCell } from './set-shifts-table-cell';
 import { DayOrientedObject, Shift, ShiftReqs } from '@/types/user/types.server';
+import { useSystemActions } from '@/store/actions/system.actions';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -25,8 +26,9 @@ interface ShiftsTableProps {
 
 export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
   const shiftsReqs = data
+  const { toggleModalAction } = useSystemActions()
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(emptyDayOrientedObject);
-  const [emoloyeesShiftCount, setEmoloyeesShiftCount] = useState<DayOrientedObject<number>>(emptyDayOrientedObject)
+  const [emoloyeeDailyShiftCount, setEmoloyeeDailyShiftCount] = useState<DayOrientedObject<number>>(emptyDayOrientedObject)
   const forDate = getNextSunday();
 
   useEffect(() => {  
@@ -42,15 +44,16 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
   
   };
 
-  const checkRules = (day: string, shiftIdx: number, updatedShifts: Shift[]) :boolean => {
-    // const existIdx = emoloyeesShiftCount[day].findIndex((shiftObj) => shiftObj.name === updatedShifts)
+  const checkRules = (day: string, shiftIdx: number, shiftSelected: Shift) :boolean => {
+    // const existIdx = emoloyeeDailyShiftCount[day].findIndex((shiftObj) => shiftObj.name === updatedShifts)
     return true
   }
 
-  const handleSelectChange = (day: string, shiftIdx: number, updatedShifts: Shift[]): boolean => {
-    const isPossible = checkRules(day, shiftIdx, updatedShifts)
-    if (!isPossible) return false
+  const handleSelectChange = (day: string, shiftIdx: number, updatedShifts: Shift[], shiftUnselected?: Shift): boolean => {
     const { shiftId } = user.weeklyWorkflow[day][shiftIdx]
+    const shiftSelected = (shiftUnselected) ? shiftUnselected : updatedShifts[updatedShifts.length-1]
+    const isPossible = checkRules(day, shiftIdx, shiftSelected)
+    if (!isPossible) return false
     setSelectedShifts((prev) => ({
       ...prev,
       [day]: {
@@ -58,6 +61,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
         [shiftId]: updatedShifts,
       },
     }));
+    
     return true
   };
 
@@ -82,7 +86,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
                         name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
                       }))}
                       // selectedShifts={selectedShifts[day]?.[shiftIndex] || []}
-                      onSelectChange={(updatedShifts) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts)}
+                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div>}
                   </TableCell>
