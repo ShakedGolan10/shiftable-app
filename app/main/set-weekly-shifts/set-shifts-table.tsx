@@ -25,7 +25,7 @@ interface ShiftsTableProps {
 
 export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
   const shiftsReqs = data
-  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<string>>(emptyDayOrientedObject);
+  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(emptyDayOrientedObject);
   const [emoloyeesShiftCount, setEmoloyeesShiftCount] = useState<DayOrientedObject<number>>(emptyDayOrientedObject)
   const forDate = getNextSunday();
 
