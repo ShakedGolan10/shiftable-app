@@ -64,7 +64,6 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
         })
       )
       else {
-        console.log('in right place')
         const isPossible = await askConfirmation()
         if (isPossible) {
           setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
@@ -98,7 +97,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
 
   return (shiftsReqs && shiftsReqs.length) &&
   <>
-    <ConfirmationModal message='Are you sure?' onClose={handleModalClose} open={isModalOpen} />
+    <ConfirmationModal message='Youre about to add an employee to a shift that contredict the rules' onClose={handleModalClose} open={isModalOpen} />
     <div className="w-full overflow-x-auto">
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader>

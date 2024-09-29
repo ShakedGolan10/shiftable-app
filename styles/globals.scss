@@ -7,7 +7,11 @@ body {
   background: linear-gradient(to bottom,
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-}
+      
+      div[data-slot="popover"] {
+        z-index: 40 !important;  
+      }
+    }
 
 p.error-msg {
   animation: dance 0.5s infinite;

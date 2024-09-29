@@ -35,7 +35,7 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ">
       <Select
         items={availableShifts}
         aria-label={`Select employee for ${day} shift ${shiftIndex + 1}`}
@@ -52,7 +52,7 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
               shiftObj.shiftId && 
               <SelectItem
               selectedIcon
-                className='my-1'
+                className='my-1 '
                 style={{backgroundColor: (shiftObj?.isSelected) ? 'lightgreen' : (shiftObj?.isCant) ? 'red' : 'blueviolet'}}
                 key={JSON.stringify(shiftObj)}
                 textValue={shiftObj?.name} 

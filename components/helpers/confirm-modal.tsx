@@ -10,9 +10,9 @@ type ConfirmationModalProps = {
 const ConfirmationModal: FC<ConfirmationModalProps> = ({ open, onClose, message }) => {
 
     return ( 
-        <Modal backdrop={'blur'} isOpen={open} onClose={() => onClose(false)} className="max-h-90vh max-w-70vw overflow-auto rounded-3xl">
+        <Modal backdrop={'blur'} isOpen={open} onClose={() => onClose(false)} className="z-[1000000000000] max-h-90vh max-w-70vw overflow-auto rounded-3xl">
            <ModalContent>
-                 <ModalHeader className="text-small">Attentionkivbgfu Please!</ModalHeader>
+                 <ModalHeader className="text-small">Attention Please!</ModalHeader>
                  <ModalBody>
                  <h2 className='text-medium font-bold'>
                  {message}
