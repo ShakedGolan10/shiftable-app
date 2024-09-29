@@ -18,10 +18,12 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
 }) => {
  
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
-  
+  const [isSelectOpen, setIsSelectOpen] = React.useState(false);
+
   const handleSelect = async (keys: SharedSelection) => {
     const updatedShifts: Shift[] = [...keys].map((key) => JSON.parse(key as string))
     if (localSelectedShifts.length > updatedShifts.length) return
+    setIsSelectOpen(false)
     const isPossible = await onSelectChange(updatedShifts);
     if (isPossible) setLocalSelectedShifts(updatedShifts);
     else {}
@@ -37,6 +39,8 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
   return (
     <div className="flex flex-col items-center ">
       <Select
+        isOpen={isSelectOpen}
+        onOpenChange={(open) => open !== isSelectOpen && setIsSelectOpen(open)}
         items={availableShifts}
         aria-label={`Select employee for ${day} shift ${shiftIndex + 1}`}
         placeholder={availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'}
@@ -50,8 +54,8 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
         >
         {(shiftObj) => (
               shiftObj.shiftId && 
-              <SelectItem
-              selectedIcon
+              <SelectItem    
+                selectedIcon
                 className='my-1 '
                 style={{backgroundColor: (shiftObj?.isSelected) ? 'lightgreen' : (shiftObj?.isCant) ? 'red' : 'blueviolet'}}
                 key={JSON.stringify(shiftObj)}
