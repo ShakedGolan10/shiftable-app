@@ -34,8 +34,9 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
   const forDate = getNextSunday();
 
   useEffect(() => {  
-    console.log('selectedShifts :', selectedShifts)
-  }, [selectedShifts]);
+    // console.log('selectedShifts :', selectedShifts)
+    console.log('emoloyeeDailyShiftCount :', emoloyeeDailyShiftCount)
+  }, [ emoloyeeDailyShiftCount]);
 
   const maxRows = (items: WeeklyWorkflow) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
@@ -46,7 +47,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
   
   };
 
-  const checkRules = async (day: string, shiftIdx: number, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
+  const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     const isExist = (emoloyeeDailyShiftCount[day][shiftSelected.name]?.length >= 1)
     if (!isExist) {
       setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
@@ -59,7 +60,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
     } else {
       if (isRemove) setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
             ...prev[day],
-            [shiftSelected.name]: [prev[day][shiftSelected.name]].filter(shiftId => shiftId !== shiftSelected.shiftId)
+            [shiftSelected.name]: prev[day][shiftSelected.name].filter(shiftId => shiftId !== shiftSelected.shiftId)
           }
         })
       )
@@ -68,14 +69,35 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
         if (isPossible) {
           setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
             ...prev[day],
-            [shiftSelected.name]: [prev[day][shiftSelected.name]].filter(shiftId => shiftId !== shiftSelected.shiftId)
+            [shiftSelected.name]: [...prev[day][shiftSelected.name],  shiftSelected.shiftId]
           }
-         })
-        ) 
+         })) 
         return true
+      } else throw new Error('')
       }
-        else return false
-      }
+    }
+  }
+
+
+  const confirmOveridePreference = async (shiftSelected: Shift, isRemove: boolean) => {
+    let isPossible:boolean
+    if (!shiftSelected.isCant) return true
+    if (shiftSelected.isCant && !isRemove) {
+        isPossible = await askConfirmation()
+        if (isPossible) return true
+        else throw new Error('')
+      }      
+    }
+
+  const checkRules = async (day: string, shiftIdx: number, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
+    try {
+      // await Promise.all([
+        await confirmOveridePreference(shiftSelected, isRemove)
+        await confirmDailyLimit(day, shiftSelected, isRemove)
+      // ]) 
+      return true 
+    } catch (error) {
+      return false
     }
   }
 
@@ -117,7 +139,6 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
                       availableShifts={shiftsReqs.flatMap(req => ({
                         name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
                       }))}
-                      // selectedShifts={selectedShifts[day]?.[shiftIndex] || []}
                       onSelectChange={async (updatedShifts, shiftUnselected) => await handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div>}
@@ -131,3 +152,6 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
     </div>
     </>
 }
+
+
+
