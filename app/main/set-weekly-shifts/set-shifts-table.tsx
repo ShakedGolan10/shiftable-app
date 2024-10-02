@@ -30,13 +30,12 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
   const shiftsReqs = data
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(emptyDayOrientedObject);
   const [emoloyeeDailyShiftCount, setEmoloyeeDailyShiftCount] = useState<DayOrientedObject<string[]>>(emptyDayOrientedObject)
-  const {isModalOpen, askConfirmation, handleModalClose} = useConfirm()
+  const {isModalOpen, askConfirmation, handleModalClose, msg} = useConfirm()
   const forDate = getNextSunday();
 
   useEffect(() => {  
-    // console.log('selectedShifts :', selectedShifts)
-    console.log('emoloyeeDailyShiftCount :', emoloyeeDailyShiftCount)
-  }, [ emoloyeeDailyShiftCount]);
+    console.log('selectedShifts :', selectedShifts)
+  }, [ selectedShifts]);
 
   const maxRows = (items: WeeklyWorkflow) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
@@ -65,7 +64,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
         })
       )
       else {
-        const isPossible = await askConfirmation()
+        const isPossible = await askConfirmation(`Youre about to asign ${shiftSelected.name} for more then 1 shift this day`)
         if (isPossible) {
           setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
             ...prev[day],
@@ -83,7 +82,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
     let isPossible:boolean
     if (!shiftSelected.isCant) return true
     if (shiftSelected.isCant && !isRemove) {
-        isPossible = await askConfirmation()
+        isPossible = await askConfirmation(`${shiftSelected.name} marked he preffer not to work this day`)
         if (isPossible) return true
         else throw new Error('')
       }      
@@ -91,10 +90,10 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
 
   const checkRules = async (day: string, shiftIdx: number, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     try {
-      // await Promise.all([
-        await confirmOveridePreference(shiftSelected, isRemove)
+      await Promise.all([
+        await confirmOveridePreference(shiftSelected, isRemove),
         await confirmDailyLimit(day, shiftSelected, isRemove)
-      // ]) 
+      ]) 
       return true 
     } catch (error) {
       return false
@@ -119,7 +118,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
 
   return (shiftsReqs && shiftsReqs.length) &&
   <>
-    <ConfirmationModal message='Youre about to add an employee to a shift that contredict the rules' onClose={handleModalClose} open={isModalOpen} />
+    <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
     <div className="w-full overflow-x-auto">
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader>

@@ -3,14 +3,15 @@ import { useState } from 'react';
 export const useConfirm = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-    
+  const [msg, setMsg] = useState('')  
   const [confirmPromise, setConfirmPromise] = useState<{
     resolve: (value: boolean) => void;
     reject: (reason?: any) => void;
   }>(undefined)
 
-  const askConfirmation = (): Promise<boolean> => {
+  const askConfirmation = (confirmMsg: string): Promise<boolean> => {
     setIsModalOpen(true)
+    setMsg(confirmMsg)
     return new Promise((resolve, reject) => {
       setConfirmPromise({ resolve, reject });
     });
@@ -23,6 +24,6 @@ export const useConfirm = () => {
     }
   };
 
-  return {isModalOpen, handleModalClose, askConfirmation}
+  return {isModalOpen, handleModalClose, askConfirmation, msg}
 };
 
