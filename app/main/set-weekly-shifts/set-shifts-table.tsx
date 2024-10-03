@@ -97,7 +97,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
       return true 
     } catch (error) {
       return false
-    }
+    } 
   }
 
   const handleSelectChange = async (day: string, shiftIdx: number, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
