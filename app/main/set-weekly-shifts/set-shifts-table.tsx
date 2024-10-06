@@ -88,7 +88,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
       }      
     }
 
-  const checkRules = async (day: string, shiftIdx: number, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
+  const checkRules = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     try {
       await Promise.all([
         await confirmOveridePreference(shiftSelected, isRemove),
@@ -103,7 +103,7 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
   const handleSelectChange = async (day: string, shiftIdx: number, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
     const { shiftId } = user.weeklyWorkflow[day][shiftIdx]
     const shiftSelected = (shiftUnselected) ? shiftUnselected : updatedShifts[updatedShifts.length-1]
-    const isPossible = await checkRules(day, shiftIdx, shiftSelected, (shiftUnselected) ? true : false)
+    const isPossible = await checkRules(day, shiftSelected, (shiftUnselected) ? true : false)
     if (!isPossible) return false
     setSelectedShifts((prev) => ({
       ...prev,
@@ -115,6 +115,11 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
     
     return true
   };
+
+
+  const applyShifts = async () => {
+    
+  }
 
   return (shiftsReqs && shiftsReqs.length) &&
   <>
@@ -140,16 +145,17 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
                       }))}
                       onSelectChange={async (updatedShifts, shiftUnselected) => await handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
                     /> :
-                      <div><p>No Shifts</p></div>}
+                      <div><p>No Shifts</p></div>
+                      }
                   </TableCell>
                 ))}
               </TableRow>
             ))}
         </TableBody>
       </Table>
-      <Button className="mt-4" onPress={() => console.log('Apply shifts')}>Apply Shifts</Button>
+      <Button className="mt-4" onPress={applyShifts}>Apply Shifts</Button>
     </div>
-    </>
+  </>
 }
 
 
