@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
 import { Shift } from '@/types/user/types.server';
 
-interface EmployerTableCellProps {
+interface SetShiftsTableCell {
   day: string;
   shiftIndex: number;
   availableShifts: { isSelected: boolean; shift: string; isCant: boolean; shiftId: string, name: string }[];
-  onSelectChange: (updatedShifts: Shift[]) => boolean;
+  onSelectChange: (updatedShifts: Shift[], shiftUnselected?: Shift) => Promise<boolean>;
 }
 
-export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
+export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
   day,
   shiftIndex,
   availableShifts,
@@ -18,28 +18,33 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
 }) => {
  
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
-  
-  const handleSelect = (keys: SharedSelection) => {
-  const updatedShifts: Shift[] = [...keys].map((key) => JSON.parse(key as string))
-  const isPossible = onSelectChange(updatedShifts);
-  if (isPossible) setLocalSelectedShifts(updatedShifts);
-  else {}
+  const [isSelectOpen, setIsSelectOpen] = React.useState(false);
+
+  const handleSelect = async (keys: SharedSelection) => {
+    const updatedShifts: Shift[] = [...keys].map((key) => JSON.parse(key as string))
+    if (localSelectedShifts.length > updatedShifts.length) return
+    setIsSelectOpen(false)
+    const isPossible = await onSelectChange(updatedShifts);
+    if (isPossible) setLocalSelectedShifts(updatedShifts);
+    else {}
 };
 
   const handleRemove = (value: Shift) => {
     const updatedShifts = localSelectedShifts.filter((shift) => ((shift.name !== value.name)));
-    const isPossible = onSelectChange(updatedShifts);
-    if (isPossible) setLocalSelectedShifts(updatedShifts);
+    const isPossible = onSelectChange(updatedShifts, value);
+    if (isPossible) setLocalSelectedShifts(updatedShifts,);
     else {}
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ">
       <Select
+        isOpen={isSelectOpen}
+        onOpenChange={(open) => open !== isSelectOpen && setIsSelectOpen(open)}
         items={availableShifts}
         aria-label={`Select employee for ${day} shift ${shiftIndex + 1}`}
         placeholder={availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'}
-        renderValue={() => availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'} // Prevents displaying selected values in the text area
+        renderValue={() => availableShifts[0].shiftId ? 'Select Employees' : 'No shifts'} 
         selectionMode="multiple"
         label={availableShifts[0].shiftId ? availableShifts[0].shift : 'No shifts'}
         onSelectionChange={(keys) => handleSelect(keys)}
@@ -49,12 +54,12 @@ export const EmployerTableCell: React.FC<EmployerTableCellProps> = ({
         >
         {(shiftObj) => (
               shiftObj.shiftId && 
-              <SelectItem
-              selectedIcon
-                className='my-1'
+              <SelectItem    
+                selectedIcon
+                className='my-1 '
                 style={{backgroundColor: (shiftObj?.isSelected) ? 'lightgreen' : (shiftObj?.isCant) ? 'red' : 'blueviolet'}}
                 key={JSON.stringify(shiftObj)}
-                textValue={shiftObj?.name} // Ensures accessibility with plain text
+                textValue={shiftObj?.name} 
               >
                 {shiftObj.name}
               </SelectItem>

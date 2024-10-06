@@ -8,7 +8,7 @@ export default function SetShiftsPage({ user }: { user: Employer }) {
     const forDate = getDateOfApply(user.applicationTime.day, user.applicationTime.time);
 
     const ShiftsTableWithData = WithDataWrapper({
-      dataPromise: () => getEmployeesShiftsReqs(user.id, forDate),
+      dataPromise: () => getEmployeesShiftsReqs(user.id, 'Sun Sep 29 2024'),
       Component: (props) => <SetShiftsTable {...props} user={user}  />, 
       errorMsg: 'Couldnt load shifts',
       loadingMsg: 'Loading Shifts...'

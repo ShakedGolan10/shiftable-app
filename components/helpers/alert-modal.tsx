@@ -10,16 +10,13 @@ export function AlertModal() {
     
     const { isModalOpen, modalMsg, isError } = useAppSelector(state => state.systemReducer.modal)
     
-    const toggleAlertModal = (ev: Event) => {
-        ev.stopPropagation()
+    const toggleAlertModal = () => {
         toggleModalAction()
     }
 
     return ( <>
         <Modal backdrop={'blur'} isOpen={isModalOpen} onClose={toggleModalAction} className="max-h-90vh max-w-70vw overflow-auto rounded-3xl">
            <ModalContent>
-             {(onClose) => (
-               <>
                  <ModalHeader className="text-small">Attention Please!</ModalHeader>
                  <ModalBody>
                  <h2 className={`text-base font-bold ${isError ? 'text-red-600' : 'text-green-600'}`}>
@@ -27,12 +24,10 @@ export function AlertModal() {
                   </h2>
                  </ModalBody>
                  <ModalFooter>
-                   <Button color="danger" variant="light" onPress={() => toggleAlertModal(event)}>
+                   <Button color="danger" variant="light" onPress={toggleAlertModal}>
                      close
                    </Button>
                  </ModalFooter>
-               </>
-             )}
            </ModalContent>
          </Modal>
        </>
