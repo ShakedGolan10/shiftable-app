@@ -1,13 +1,13 @@
 'use server'
-import { ApplicationRules, Employer, TableShifts, WeeklyWorkflow } from "@/types/user/types.server"
+import { ApplicationRules, Employer, TableShifts, WeeklyShifts } from "@/types/user/types.server"
 import { queryOne, queryOneField } from "./db.service"
 import { firestore } from "@/firebaseConfig.mjs"
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 
-export const getEmployerWeeklyWorkflow = async (employerId: string) => {
+export const getEmployerWeeklyShifts = async (employerId: string) => {
   try {
     const applicationRules = await queryOneField<ApplicationRules>(`users/${employerId}`, 'application_rules')
-    const weeklyWorkflow = await queryOneField<WeeklyWorkflow>(`users/${employerId}`, 'weeklyWorkflow')
+    const weeklyWorkflow = await queryOneField<WeeklyShifts>(`users/${employerId}`, 'weeklyWorkflow')
     return { applicationRules, weeklyWorkflow }
   } catch (error) {
     throw new Error(`Error catched while trying to get shifts data at firebase: ${error}`)    
@@ -34,13 +34,12 @@ export const createUserShiftsRequest = async (employeeId: string, employerId: st
 }
 
 export const saveEmployeeShifts = async (
-  employeeId: string,
   employerId: string,
   forDate: string,
   scheduleData: any
 ) => {
   try {
-    const employeeDocRef = doc(firestore, 'weeklySchedule', employerId, forDate, employeeId);
+    const employeeDocRef = doc(firestore, 'weeklySchedule', employerId, 'forDate', forDate);
     const employeeDoc = await getDoc(employeeDocRef);
 
     if (employeeDoc.exists()) {

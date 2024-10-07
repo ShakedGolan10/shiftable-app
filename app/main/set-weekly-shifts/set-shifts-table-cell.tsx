@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
 import { Shift } from '@/types/user/types.server';
 
@@ -18,7 +18,7 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
 }) => {
  
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
-  const [isSelectOpen, setIsSelectOpen] = React.useState(false);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   const handleSelect = async (keys: SharedSelection) => {
     const updatedShifts: Shift[] = [...keys].map((key) => JSON.parse(key as string))
@@ -27,7 +27,7 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
     const isPossible = await onSelectChange(updatedShifts);
     if (isPossible) setLocalSelectedShifts(updatedShifts);
     else {}
-};
+  };
 
   const handleRemove = (value: Shift) => {
     const updatedShifts = localSelectedShifts.filter((shift) => ((shift.name !== value.name)));

@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
 import { Employer } from '@/types/class.service';
-import { getNextSunday } from '@/lib/server.utils';
 import { SetShiftsTableCell } from './set-shifts-table-cell';
 import { DayOrientedObject, Shift, ShiftReqs } from '@/types/user/types.server';
-import { useSystemActions } from '@/store/actions/system.actions';
 import { useConfirm } from '@/hooks/useConfirm';
 import ConfirmationModal from '@/components/helpers/confirm-modal';
+import { saveEmployeeShifts } from '@/services/server-services/shifts.service';
+import { useAsync } from '@/hooks/useAsync';
+import GeneralTitle from '@/components/helpers/general-title';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -22,22 +23,19 @@ const emptyDayOrientedObject = {
 }
 
 interface ShiftsTableProps {
-    data:  ShiftReqs[]
-    user: Employer;
+    data: ShiftReqs[]
+    user: Employer
+    forDate: string
   }
 
-export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
+export default function SetShiftsTable({ data, user, forDate }: ShiftsTableProps) {
   const shiftsReqs = data
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(emptyDayOrientedObject);
   const [emoloyeeDailyShiftCount, setEmoloyeeDailyShiftCount] = useState<DayOrientedObject<string[]>>(emptyDayOrientedObject)
   const {isModalOpen, askConfirmation, handleModalClose, msg} = useConfirm()
-  const forDate = getNextSunday();
-
-  useEffect(() => {  
-    console.log('selectedShifts :', selectedShifts)
-  }, [ selectedShifts]);
-
-  const maxRows = (items: WeeklyWorkflow) => {
+  const [ excuteAsyncFunc ] = useAsync()
+  
+  const maxRows = (items: WeeklyShifts) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
       return Math.max(acc, element.length);
     }, 0);
@@ -109,22 +107,39 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
       ...prev,
       [day]: {
         ...prev?.[day],
-        [shiftId]: updatedShifts,
+        [shiftId]: {
+          ...prev[day][shiftId],
+          [shiftSelected.name]: (shiftUnselected) ? false : true
+        },
       },
     }));
     
     return true
   };
 
-
-  const applyShifts = async () => {
+  const checkEmptyShifts = async () => {
     
   }
 
-  return (shiftsReqs && shiftsReqs.length) &&
+  // Todo: add a check empty shifts and warning feature
+  // Todo: add an option to mark a shift as cancelled / not working
+  // Todo make the ShiftsReqs be a / work with the selectedShifts type (DayOrientedObject<Shift[]>)
+
+  const applyShifts = async () => {
+    await checkEmptyShifts()
+    await excuteAsyncFunc({
+      asyncOperation: () => saveEmployeeShifts(user.id, forDate, selectedShifts), 
+      errorMsg: 'Couldnt apply shifts, please try again',
+      successMsg: 'Weekly shifts applied successfuly',
+      isLoaderDisabled: false
+    }) 
+  }
+
+  return (
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
-    <div className="w-full overflow-x-auto">
+    <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
+      <GeneralTitle title={`Set the shifts for the ${forDate}`} />
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader>
           {daysOfWeek.map((day) => (
@@ -153,9 +168,10 @@ export default function SetShiftsTable({ data, user }: ShiftsTableProps) {
             ))}
         </TableBody>
       </Table>
-      <Button className="mt-4" onPress={applyShifts}>Apply Shifts</Button>
-    </div>
+      <Button color='success' onPress={applyShifts}>Apply Shifts</Button>
+    </section>
   </>
+  )
 }
 
 
