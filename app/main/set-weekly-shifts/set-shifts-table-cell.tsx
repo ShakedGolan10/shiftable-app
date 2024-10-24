@@ -24,7 +24,6 @@ export const SetShiftsTableCell = ({
     setLocalSelectedShifts((prev) => {
       return [...Object.keys(selectedShifts).map((employeeName) => availableShifts.find((shift)=> shift.name === employeeName))]
     })
-    // Now based on the shifts selected I need to find the shift from availableShifts (based on name only) and insert it to the local shifts.
 
   },[selectedShifts])
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);

@@ -32,8 +32,7 @@ interface IShiftsTableProps {
 export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProps) {
   const shiftsReqs: ShiftReqs[] = data
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(undefined);
-  const [emoloyeeDailyShiftCount, setEmoloyeeDailyShiftCount] = useState<DayOrientedObject<string[]>>(emptyDayOrientedObject)
-  const {isModalOpen, askConfirmation, handleModalClose, msg} = useConfirm()
+  const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
 
   useEffect(()=> {
@@ -49,34 +48,17 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
   
   };
 
+  // Todo: Check if the type of selectedShifts is really DayOrientedObject<Shift[]>
+  // Todo: Problem with siftIdx and the selectedShifts that passed on to EmployerTableCell
+
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
-    const isExist = (emoloyeeDailyShiftCount[day][shiftSelected.name]?.length >= 1)
-    if (!isExist) {
-      setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
-              ...prev[day],
-              [shiftSelected.name]: [shiftSelected.shiftId]
-            }
-          })
-        )
-        return true
-    } else {
-      if (isRemove) setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
-            ...prev[day],
-            [shiftSelected.name]: prev[day][shiftSelected.name].filter(shiftId => shiftId !== shiftSelected.shiftId)
-          }
-        })
-      )
-      else {
+    if (isRemove) return
+    const isEmployeeWorkingToday = Object.keys(selectedShifts[day]).find(key => selectedShifts[day][key][shiftSelected.name] === true)
+    if (!isEmployeeWorkingToday) return true
+    else {
         const isPossible = await askConfirmation(`Youre about to asign ${shiftSelected.name} for more then 1 shift this day`)
-        if (isPossible) {
-          setEmoloyeeDailyShiftCount(prev => ({...prev, [day]: {
-            ...prev[day],
-            [shiftSelected.name]: [...prev[day][shiftSelected.name],  shiftSelected.shiftId]
-          }
-         })) 
-        return true
-      } else throw new Error('')
-      }
+        if (isPossible) return true
+        else throw new Error('')
     }
   }
 
@@ -108,16 +90,20 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     const shiftSelected = (shiftUnselected) ? shiftUnselected : updatedShifts[updatedShifts.length-1]
     const isPossible = await checkRules(day, shiftSelected, (shiftUnselected) ? true : false)
     if (!isPossible) return false
-    setSelectedShifts((prev) => ({
-      ...prev,
+    setSelectedShifts((prev) => {
+      console.log({prev})
+      const newObj = {...prev,
       [day]: {
         ...prev?.[day],
         [shiftId]: {
           ...prev[day][shiftId],
-          [shiftSelected.name]: (shiftUnselected) ? false : true
+          [shiftSelected.name]: true
         },
       },
-    }));
+    }
+    if (shiftUnselected) delete newObj[day][shiftId][shiftSelected.name]
+    return newObj
+  });
     
     return true
   };
