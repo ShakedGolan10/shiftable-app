@@ -22,7 +22,7 @@ interface ShiftSlot {
     shiftId: string
 }
 
-interface WeeklyWorkflow {
+interface WeeklyShifts {
     sunday: ShiftSlot[]
     monday: ShiftSlot[]
     tuesday: ShiftSlot[]

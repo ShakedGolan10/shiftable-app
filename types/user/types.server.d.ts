@@ -29,7 +29,7 @@ export interface Employer {
     employerMsg?: Array<string>
     employees: Array<string> = []
     application_rules: ApplicationRules
-    weeklyWorkflow: WeeklyWorkflow
+    weeklyWorkflow: WeeklyShifts
 }
 
 
@@ -48,7 +48,7 @@ interface ShiftSlot {
     shiftId: string
 }
 
-interface WeeklyWorkflow {
+interface WeeklyShifts {
     sunday: ShiftSlot[]
     monday: ShiftSlot[]
     tuesday: ShiftSlot[]
@@ -58,7 +58,7 @@ interface WeeklyWorkflow {
     saturday: ShiftSlot[]
 }
 
-export interface TableShifts  {
+export interface TableShifts {
     sunday: Shift[]
     monday: Shift[]
     tuesday: Shift[]

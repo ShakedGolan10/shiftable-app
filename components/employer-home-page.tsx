@@ -36,7 +36,12 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
         <h4 className='text-subHeader text-center'>Employees that didnt applied yet for {forDate} : </h4>
           {(usersNotApplied.length) ? 
           <section>
-            {usersNotApplied.map((user, idx)=> <span key={idx} className='text-base'>{user.name}</span>)}
+            {usersNotApplied.map((user, idx)=> (
+              <>
+              <span key={idx} className='text-base'>{user.name}</span> 
+              <br/>
+              </>
+              ))}
           </section> : 
           <span className='text-base'>All the employees applied !</span>}
         

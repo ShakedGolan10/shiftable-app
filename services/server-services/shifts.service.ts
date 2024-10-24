@@ -1,13 +1,13 @@
 'use server'
-import { ApplicationRules, Employer, TableShifts, WeeklyWorkflow } from "@/types/user/types.server"
+import { ApplicationRules, DayOrientedObject, Employer, Shift, TableShifts, WeeklyShifts } from "@/types/user/types.server"
 import { queryOne, queryOneField } from "./db.service"
 import { firestore } from "@/firebaseConfig.mjs"
-import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 
-export const getEmployerWeeklyWorkflow = async (employerId: string) => {
+export const getEmployerWeeklyShifts = async (employerId: string) => {
   try {
     const applicationRules = await queryOneField<ApplicationRules>(`users/${employerId}`, 'application_rules')
-    const { weeklyWorkflow } = await queryOne<Employer>(`users/${employerId}`)
+    const weeklyWorkflow = await queryOneField<WeeklyShifts>(`users/${employerId}`, 'weeklyWorkflow')
     return { applicationRules, weeklyWorkflow }
   } catch (error) {
     throw new Error(`Error catched while trying to get shifts data at firebase: ${error}`)    
@@ -15,26 +15,54 @@ export const getEmployerWeeklyWorkflow = async (employerId: string) => {
 }
 
 
-export const createUserShiftsRequest = async (employeeId: string, employerId: string, forDate: string, shifts: TableShifts) => {
+export const saveUserShiftsRequest = async (employeeId: string, employerId: string, forDate: string, shifts: TableShifts) => {
     try {
-        const employerDocRef = doc(firestore, 'ShiftsReq', employerId);
-        const forDateCollectionRef = collection(employerDocRef, 'ForDate');
-        const forDateDocRef = doc(forDateCollectionRef, forDate); 
-        const employeeCollectionRef = collection(forDateDocRef, 'employee');
-        const employeeDocRef = doc(employeeCollectionRef, employeeId);
+      const employeeDocRef = doc(firestore, 'ShiftsReq', employerId, 'ForDate', forDate, 'employee', employeeId);
+      const employeeDoc = await getDoc(employeeDocRef);
+      const employeeUserRef = doc(firestore, 'users', employeeId);
       
-        const employeeDoc = await getDoc(employeeDocRef);
-    
       if (employeeDoc.exists()) {
-        await updateDoc(employeeDocRef, {
-          shifts,
-        });
+        await updateDoc(employeeDocRef, { shifts });
       } else {
-        await setDoc(employeeDocRef, {
-          shifts,
-        });
+        await setDoc(employeeDocRef, { shifts });
       }
+  
+      await updateDoc(employeeUserRef, { isApplied: true });
     } catch (error) {
         throw new Error(`Error catched while trying to save shift req data at firebase: ${error}`)
     }
 }
+
+export const saveWeeklySchedule = async (
+  employerId: string,
+  forDate: string,
+  scheduleData: any
+) => {
+  try {
+    const weeklyScheduleDocRef = doc(firestore, 'weeklySchedule', employerId, 'forDate', forDate);
+    const weeklyScheduleDoc = await getDoc(weeklyScheduleDocRef);
+
+    if (weeklyScheduleDoc.exists()) {
+      await updateDoc(weeklyScheduleDocRef, scheduleData);
+    } else {
+      await setDoc(weeklyScheduleDocRef, scheduleData);
+    }
+  } catch (error) {
+    throw new Error(`Error updating employee schedule: ${error}`);
+  }
+};
+
+export const getWeeklySchedule = async (
+  employerId: string,
+  forDate: string,
+) => {
+  try {
+    const existedSchedule = await queryOne<DayOrientedObject<Shift[]>>(`weeklySchedule/${employerId}/forDate/${forDate}`)
+    return existedSchedule
+  } catch (error) {
+    throw new Error(`Error updating employee schedule: ${error}`);
+  }
+};
+
+
+

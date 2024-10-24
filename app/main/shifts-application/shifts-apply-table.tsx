@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Switch } from "@nextui-org/react";
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
-import { createUserShiftsRequest } from '@/services/server-services/shifts.service';
+import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import { getDateOfApply } from '@/lib/server.utils';
-import { RowItem, Shift, TableShifts, WeeklyWorkflow } from '@/types/user/types.server';
+import { RowItem, Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
+import GeneralTitle from '@/components/helpers/general-title';
 
 const daysOfWeek = [
   { day: 'Sunday', key: '0' },
@@ -20,7 +21,7 @@ const daysOfWeek = [
 
 interface ShiftsTableProps {
   data: {
-    weeklyWorkflow: WeeklyWorkflow;
+    weeklyWorkflow: WeeklyShifts;
     applicationRules: ApplicationRules;
   };
   user: Employee;
@@ -172,7 +173,7 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
   
   const applyShifts = async () => {
     await excuteAsyncFunc({
-      asyncOperation: () => createUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
+      asyncOperation: () => saveUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
       errorMsg: 'Couldnt apply shifts',
       successMsg: 'Shifts applied successfuly' 
     })
@@ -181,30 +182,30 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
 
 return applicableShifts &&
   <>
-  <h1 className='text-medium font-serif '>Please apply your shifts for {forDate}</h1>
+  <GeneralTitle title={`Please apply your shifts for ${forDate}`} />
   <span className='text-small '>Pay attention to the rules table</span>
   <Table aria-label="Shifts table" className="w-full">
     <TableHeader columns={daysOfWeek}>
-    {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-base text-center">{column.day}</TableColumn>}
+      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-base text-center">{column.day}</TableColumn>}
     </TableHeader>
     <TableBody items={createRows()}>
-    {(item) => (
-      <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
-          {item.shifts.map((shift, index) => (
-          <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
-            aria-labelledby={`shift-${item.key}-${index}`} 
-            className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
-              dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  
-            text-center p-[2.6%] text-base
-            ${shift && shift.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
-            ${(shift.isCant) ? ` bg-red`
-            : (shift.isSelected) ? ` bg-light-green` : ``}
-            `}>
-            {shift.shift || "No Shifts"}
-          </TableCell>
-        ))}
-      </TableRow>
-    )}
+      {(item) => (
+        <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
+            {item.shifts.map((shift, index) => (
+            <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
+              aria-labelledby={`shift-${item.key}-${index}`} 
+              className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
+                dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  
+              text-center p-[2.6%] text-base
+              ${shift && shift.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
+              ${(shift.isCant) ? ` bg-red`
+              : (shift.isSelected) ? ` bg-light-green` : ``}
+              `}>
+              {shift.shift || "No Shifts"}
+            </TableCell>
+          ))}
+        </TableRow>
+      )}
     </TableBody>
   </Table>
   <Switch isSelected={isCant} onValueChange={setIsCant}>

@@ -28,7 +28,7 @@ export class Employer {
     public employerMsg?: Array<string>
     public employees: Array<string> = []
     public applicationRules? : ApplicationRules
-    public weeklyWorkflow? : WeeklyWorkflow
+    public weeklyWorkflow? : WeeklyShifts
 
    
     constructor(props: Employer) {

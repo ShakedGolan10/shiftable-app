@@ -12,7 +12,6 @@ export const getEmployeesByFilter = async (filterBy: Params, employerId: string)
 }
 export const getEmployeesShiftsReqs = async (employerId: string, forDate: string) => {
     let data = await queryMany<ShiftReqs>(`ShiftsReq/${employerId}/ForDate/${forDate}/employee`)
-    
     await Promise.all(data.map(async (item, idx) => {
         const user = await queryOne<Employee>(`users/${item.id}`)
         data[idx] = {...data[idx], name: user.name}

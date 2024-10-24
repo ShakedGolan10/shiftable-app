@@ -21,7 +21,7 @@ const UserContext = createContext(null);
 
 export const UserProvider = ({ children } : {children: React.ReactNode}) => {
 
-    const [user, setUser] = useState<Employee | Employer | Falsey>(null)
+    const [user, setUser] = useState<Employee | Employer>(null)
     const [isLoadingAuth, setLoadingAuth] = useState(null)
     const [isLoadingLogin, setLoadingLogin] = useState(null)
     const router = useRouter()
@@ -32,7 +32,6 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         const authUser = async () => {
             try {
                 let loggedInUser = await userService.getLoggedInUser()
-                console.log({loggedInUser})
                 setUser(loggedInUser)
                 } catch (error) {
                     router.push('/')
