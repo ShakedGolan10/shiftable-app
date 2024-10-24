@@ -3,7 +3,7 @@
 import { useSystemActions } from '@/store/actions/system.actions'
 import { useAppSelector } from '@/store/store'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Image} from "@nextui-org/react";
-import React, { useEffect } from 'react'
+import React from 'react'
 
 export function AlertModal() {
     const { toggleModalAction } = useSystemActions()

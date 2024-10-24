@@ -1,28 +1,38 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
 import { Shift } from '@/types/user/types.server';
 
-interface SetShiftsTableCell {
-  day: string;
-  shiftIndex: number;
-  availableShifts: { isSelected: boolean; shift: string; isCant: boolean; shiftId: string, name: string }[];
-  onSelectChange: (updatedShifts: Shift[], shiftUnselected?: Shift) => Promise<boolean>;
+interface ISetShiftsTableCellProps {
+  day: string
+  shiftIndex: number
+  availableShifts: Shift[]
+  onSelectChange: (updatedShifts: Shift[], shiftUnselected?: Shift) => Promise<boolean>
+  selectedShifts?
 }
-
-export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
+export const SetShiftsTableCell = ({
   day,
   shiftIndex,
   availableShifts,
   onSelectChange,
-}) => {
+  selectedShifts
+}: ISetShiftsTableCellProps) => {
  
+  useEffect(()=> {
+    console.log({selectedShifts}, {availableShifts})
+    if (!selectedShifts) return 
+    setLocalSelectedShifts((prev) => {
+      return [...Object.keys(selectedShifts).map((employeeName) => availableShifts.find((shift)=> shift.name === employeeName))]
+    })
+    // Now based on the shifts selected I need to find the shift from availableShifts (based on name only) and insert it to the local shifts.
+
+  },[selectedShifts])
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   const handleSelect = async (keys: SharedSelection) => {
     const updatedShifts: Shift[] = [...keys].map((key) => JSON.parse(key as string))
-    if (localSelectedShifts.length > updatedShifts.length) return
+    if (localSelectedShifts.length > updatedShifts.length) return // Disable the removel of selection using the select downdrop. 
     setIsSelectOpen(false)
     const isPossible = await onSelectChange(updatedShifts);
     if (isPossible) setLocalSelectedShifts(updatedShifts);
@@ -37,7 +47,7 @@ export const SetShiftsTableCell: React.FC<SetShiftsTableCell> = ({
   };
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col items-center">
       <Select
         isOpen={isSelectOpen}
         onOpenChange={(open) => open !== isSelectOpen && setIsSelectOpen(open)}

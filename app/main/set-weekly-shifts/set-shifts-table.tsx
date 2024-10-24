@@ -6,7 +6,7 @@ import { SetShiftsTableCell } from './set-shifts-table-cell';
 import { DayOrientedObject, Shift, ShiftReqs } from '@/types/user/types.server';
 import { useConfirm } from '@/hooks/useConfirm';
 import ConfirmationModal from '@/components/helpers/confirm-modal';
-import { saveEmployeeShifts } from '@/services/server-services/shifts.service';
+import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
 
@@ -22,18 +22,23 @@ const emptyDayOrientedObject = {
     saturday: {}
 }
 
-interface ShiftsTableProps {
+interface IShiftsTableProps {
     data: ShiftReqs[]
     user: Employer
     forDate: string
   }
 
-export default function SetShiftsTable({ data, user, forDate }: ShiftsTableProps) {
-  const shiftsReqs = data
-  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(emptyDayOrientedObject);
+
+export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProps) {
+  const shiftsReqs: ShiftReqs[] = data
+  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(undefined);
   const [emoloyeeDailyShiftCount, setEmoloyeeDailyShiftCount] = useState<DayOrientedObject<string[]>>(emptyDayOrientedObject)
   const {isModalOpen, askConfirmation, handleModalClose, msg} = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
+
+  useEffect(()=> {
+    getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
+  },[])
   
   const maxRows = (items: WeeklyShifts) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
@@ -123,12 +128,12 @@ export default function SetShiftsTable({ data, user, forDate }: ShiftsTableProps
 
   // Todo: add a check empty shifts and warning feature
   // Todo: add an option to mark a shift as cancelled / not working
-  // Todo make the ShiftsReqs be a / work with the selectedShifts type (DayOrientedObject<Shift[]>)
+  // Todo make the ShiftsReqs be a / work with the selectedShifts type (DayOrientedObject<Shift[]>) for updating shift apply, and continue from where stopped
 
   const applyShifts = async () => {
     await checkEmptyShifts()
     await excuteAsyncFunc({
-      asyncOperation: () => saveEmployeeShifts(user.id, forDate, selectedShifts), 
+      asyncOperation: () => saveWeeklySchedule(user.id, forDate, selectedShifts), 
       errorMsg: 'Couldnt apply shifts, please try again',
       successMsg: 'Weekly shifts applied successfuly',
       isLoaderDisabled: false
@@ -157,10 +162,12 @@ export default function SetShiftsTable({ data, user, forDate }: ShiftsTableProps
                       shiftIndex={shiftIndex}
                       availableShifts={shiftsReqs.flatMap(req => ({
                         name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
+                      
                       }))}
+                      selectedShifts={selectedShifts && selectedShifts[day.toLowerCase()][user.weeklyWorkflow[day.toLowerCase()][shiftIndex].shiftId]}
                       onSelectChange={async (updatedShifts, shiftUnselected) => await handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
                     /> :
-                      <div><p>No Shifts</p></div>
+                      <div><p>No Shifts</p></div> // remove the div?
                       }
                   </TableCell>
                 ))}

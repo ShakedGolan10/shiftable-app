@@ -1,5 +1,5 @@
 'use server'
-import { ApplicationRules, Employer, TableShifts, WeeklyShifts } from "@/types/user/types.server"
+import { ApplicationRules, DayOrientedObject, Employer, Shift, TableShifts, WeeklyShifts } from "@/types/user/types.server"
 import { queryOne, queryOneField } from "./db.service"
 import { firestore } from "@/firebaseConfig.mjs"
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
@@ -15,7 +15,7 @@ export const getEmployerWeeklyShifts = async (employerId: string) => {
 }
 
 
-export const createUserShiftsRequest = async (employeeId: string, employerId: string, forDate: string, shifts: TableShifts) => {
+export const saveUserShiftsRequest = async (employeeId: string, employerId: string, forDate: string, shifts: TableShifts) => {
     try {
       const employeeDocRef = doc(firestore, 'ShiftsReq', employerId, 'ForDate', forDate, 'employee', employeeId);
       const employeeDoc = await getDoc(employeeDocRef);
@@ -33,20 +33,32 @@ export const createUserShiftsRequest = async (employeeId: string, employerId: st
     }
 }
 
-export const saveEmployeeShifts = async (
+export const saveWeeklySchedule = async (
   employerId: string,
   forDate: string,
   scheduleData: any
 ) => {
   try {
-    const employeeDocRef = doc(firestore, 'weeklySchedule', employerId, 'forDate', forDate);
-    const employeeDoc = await getDoc(employeeDocRef);
+    const weeklyScheduleDocRef = doc(firestore, 'weeklySchedule', employerId, 'forDate', forDate);
+    const weeklyScheduleDoc = await getDoc(weeklyScheduleDocRef);
 
-    if (employeeDoc.exists()) {
-      await updateDoc(employeeDocRef, scheduleData);
+    if (weeklyScheduleDoc.exists()) {
+      await updateDoc(weeklyScheduleDocRef, scheduleData);
     } else {
-      await setDoc(employeeDocRef, scheduleData);
+      await setDoc(weeklyScheduleDocRef, scheduleData);
     }
+  } catch (error) {
+    throw new Error(`Error updating employee schedule: ${error}`);
+  }
+};
+
+export const getWeeklySchedule = async (
+  employerId: string,
+  forDate: string,
+) => {
+  try {
+    const existedSchedule = await queryOne<DayOrientedObject<Shift[]>>(`weeklySchedule/${employerId}/forDate/${forDate}`)
+    return existedSchedule
   } catch (error) {
     throw new Error(`Error updating employee schedule: ${error}`);
   }

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Switch } from "@nextui-org/react";
 import { Employee } from '@/types/class.service'; // Assuming your types
 import { RulesTable } from '@/components/application_rules';
-import { createUserShiftsRequest } from '@/services/server-services/shifts.service';
+import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import { getDateOfApply } from '@/lib/server.utils';
 import { RowItem, Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
@@ -173,7 +173,7 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
   
   const applyShifts = async () => {
     await excuteAsyncFunc({
-      asyncOperation: () => createUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
+      asyncOperation: () => saveUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
       errorMsg: 'Couldnt apply shifts',
       successMsg: 'Shifts applied successfuly' 
     })
