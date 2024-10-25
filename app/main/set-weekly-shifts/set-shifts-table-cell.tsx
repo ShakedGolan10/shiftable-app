@@ -19,13 +19,12 @@ export const SetShiftsTableCell = ({
 }: ISetShiftsTableCellProps) => {
  
   useEffect(()=> {
-    console.log({selectedShifts}, {availableShifts})
     if (!selectedShifts) return 
     setLocalSelectedShifts((prev) => {
       return [...Object.keys(selectedShifts).map((employeeName) => availableShifts.find((shift)=> shift.name === employeeName))]
     })
 
-  },[selectedShifts])
+  },[])
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
@@ -35,14 +34,12 @@ export const SetShiftsTableCell = ({
     setIsSelectOpen(false)
     const isPossible = await onSelectChange(updatedShifts);
     if (isPossible) setLocalSelectedShifts(updatedShifts);
-    else {}
   };
 
   const handleRemove = (value: Shift) => {
     const updatedShifts = localSelectedShifts.filter((shift) => ((shift.name !== value.name)));
     const isPossible = onSelectChange(updatedShifts, value);
-    if (isPossible) setLocalSelectedShifts(updatedShifts,);
-    else {}
+    if (isPossible) setLocalSelectedShifts(updatedShifts);
   };
 
   return (
@@ -59,12 +56,10 @@ export const SetShiftsTableCell = ({
         onSelectionChange={(keys) => handleSelect(keys)}
         selectedKeys={[...localSelectedShifts].map((shift) => JSON.stringify(shift))}
         className="w-full text-xs"
-        aria-hidden='false'
         >
         {(shiftObj) => (
               shiftObj.shiftId && 
               <SelectItem    
-                selectedIcon
                 className='my-1 '
                 style={{backgroundColor: (shiftObj?.isSelected) ? 'lightgreen' : (shiftObj?.isCant) ? 'red' : 'blueviolet'}}
                 key={JSON.stringify(shiftObj)}

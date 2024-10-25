@@ -31,7 +31,7 @@ interface IShiftsTableProps {
 
 export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProps) {
   const shiftsReqs: ShiftReqs[] = data
-  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(undefined);
+  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
   const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
 
@@ -41,15 +41,11 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
   
   const maxRows = (items: WeeklyShifts) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
-      return Math.max(acc, element.length);
+      return Math.max(acc, element.length)
     }, 0);
-    if (maxRowsPerColumn) return [...Array(maxRowsPerColumn)].map(() => '')
-      else return []
+    return [...Array(maxRowsPerColumn)].map(() => '')
   
   };
-
-  // Todo: Check if the type of selectedShifts is really DayOrientedObject<Shift[]>
-  // Todo: Problem with siftIdx and the selectedShifts that passed on to EmployerTableCell
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     if (isRemove) return
@@ -91,7 +87,6 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     const isPossible = await checkRules(day, shiftSelected, (shiftUnselected) ? true : false)
     if (!isPossible) return false
     setSelectedShifts((prev) => {
-      console.log({prev})
       const newObj = {...prev,
       [day]: {
         ...prev?.[day],
@@ -114,7 +109,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
 
   // Todo: add a check empty shifts and warning feature
   // Todo: add an option to mark a shift as cancelled / not working
-  // Todo make the ShiftsReqs be a / work with the selectedShifts type (DayOrientedObject<Shift[]>) for updating shift apply, and continue from where stopped
+  // Done: make the ShiftsReqs be a / work with the selectedShifts type (DayOrientedObject<Shift[]>) for updating shift apply, and continue from where stopped
 
   const applyShifts = async () => {
     await checkEmptyShifts()
@@ -126,7 +121,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     }) 
   }
 
-  return (
+  return selectedShifts && (
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">

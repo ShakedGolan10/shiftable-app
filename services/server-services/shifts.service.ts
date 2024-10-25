@@ -57,7 +57,7 @@ export const getWeeklySchedule = async (
   forDate: string,
 ) => {
   try {
-    const existedSchedule = await queryOne<DayOrientedObject<Shift[]>>(`weeklySchedule/${employerId}/forDate/${forDate}`)
+    const existedSchedule = await queryOne<DayOrientedObject<{[key: string]: boolean}>>(`weeklySchedule/${employerId}/forDate/${forDate}`)
     return existedSchedule
   } catch (error) {
     throw new Error(`Error updating employee schedule: ${error}`);
