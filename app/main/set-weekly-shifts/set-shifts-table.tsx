@@ -73,7 +73,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     try {
       await Promise.all([
         await confirmOveridePreference(shiftSelected, isRemove),
-        await confirmDailyLimit(day, shiftSelected, isRemove)
+        await confirmDailyLimit(day, shiftSelected, isRemove),
       ]) 
       return true 
     } catch (error) {
@@ -102,23 +102,35 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     
     return true
   };
-
+  
   const checkEmptyShifts = async () => {
-    
-  }
-
-  // Todo: add a check empty shifts and warning feature
-  // Todo: add an option to mark a shift as cancelled / not working
-  // Done: make the ShiftsReqs be a / work with the selectedShifts type (DayOrientedObject<Shift[]>) for updating shift apply, and continue from where stopped
+    let isPossible = true
+    for (const dayKey in selectedShifts) {
+        for (const shiftKey in selectedShifts[dayKey]) {
+            if (!Object.keys(selectedShifts[dayKey][shiftKey]).length) {
+                const isConfirm = await askConfirmation('There are shifts that are empty')
+                if (isConfirm) {
+                    isPossible = true
+                } else {
+                    isPossible = false
+                    return isPossible
+                }
+            } else {
+                isPossible = true
+            }
+        }
+    }
+    return isPossible;
+};
 
   const applyShifts = async () => {
-    await checkEmptyShifts()
-    await excuteAsyncFunc({
-      asyncOperation: () => saveWeeklySchedule(user.id, forDate, selectedShifts), 
-      errorMsg: 'Couldnt apply shifts, please try again',
-      successMsg: 'Weekly shifts applied successfuly',
-      isLoaderDisabled: false
-    }) 
+    const isPossible = await checkEmptyShifts()
+    if (isPossible) await excuteAsyncFunc({
+        asyncOperation: () => saveWeeklySchedule(user.id, forDate, selectedShifts), 
+        errorMsg: 'Couldnt apply shifts, please try again',
+        successMsg: 'Weekly shifts applied successfuly',
+        isLoaderDisabled: false
+      }) 
   }
 
   return selectedShifts && (
