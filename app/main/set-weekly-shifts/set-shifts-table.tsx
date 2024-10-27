@@ -31,7 +31,7 @@ interface IShiftsTableProps {
 
 export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProps) {
   const shiftsReqs: ShiftReqs[] = data
-  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<Shift[]>>(undefined);
+  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
   const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
 
@@ -41,15 +41,11 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
   
   const maxRows = (items: WeeklyShifts) => {
     const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
-      return Math.max(acc, element.length);
+      return Math.max(acc, element.length)
     }, 0);
-    if (maxRowsPerColumn) return [...Array(maxRowsPerColumn)].map(() => '')
-      else return []
+    return [...Array(maxRowsPerColumn)].map(() => '')
   
   };
-
-  // Todo: Check if the type of selectedShifts is really DayOrientedObject<Shift[]>
-  // Todo: Problem with siftIdx and the selectedShifts that passed on to EmployerTableCell
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     if (isRemove) return
@@ -77,7 +73,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     try {
       await Promise.all([
         await confirmOveridePreference(shiftSelected, isRemove),
-        await confirmDailyLimit(day, shiftSelected, isRemove)
+        await confirmDailyLimit(day, shiftSelected, isRemove),
       ]) 
       return true 
     } catch (error) {
@@ -91,7 +87,6 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     const isPossible = await checkRules(day, shiftSelected, (shiftUnselected) ? true : false)
     if (!isPossible) return false
     setSelectedShifts((prev) => {
-      console.log({prev})
       const newObj = {...prev,
       [day]: {
         ...prev?.[day],
@@ -107,26 +102,38 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     
     return true
   };
-
+  
   const checkEmptyShifts = async () => {
-    
-  }
-
-  // Todo: add a check empty shifts and warning feature
-  // Todo: add an option to mark a shift as cancelled / not working
-  // Todo make the ShiftsReqs be a / work with the selectedShifts type (DayOrientedObject<Shift[]>) for updating shift apply, and continue from where stopped
+    let isPossible = true
+    for (const dayKey in selectedShifts) {
+        for (const shiftKey in selectedShifts[dayKey]) {
+            if (!Object.keys(selectedShifts[dayKey][shiftKey]).length) {
+                const isConfirm = await askConfirmation('There are shifts that are empty')
+                if (isConfirm) {
+                    isPossible = true
+                } else {
+                    isPossible = false
+                    return isPossible
+                }
+            } else {
+                isPossible = true
+            }
+        }
+    }
+    return isPossible;
+};
 
   const applyShifts = async () => {
-    await checkEmptyShifts()
-    await excuteAsyncFunc({
-      asyncOperation: () => saveWeeklySchedule(user.id, forDate, selectedShifts), 
-      errorMsg: 'Couldnt apply shifts, please try again',
-      successMsg: 'Weekly shifts applied successfuly',
-      isLoaderDisabled: false
-    }) 
+    const isPossible = await checkEmptyShifts()
+    if (isPossible) await excuteAsyncFunc({
+        asyncOperation: () => saveWeeklySchedule(user.id, forDate, selectedShifts), 
+        errorMsg: 'Couldnt apply shifts, please try again',
+        successMsg: 'Weekly shifts applied successfuly',
+        isLoaderDisabled: false
+      }) 
   }
 
-  return (
+  return selectedShifts && (
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
@@ -151,7 +158,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
                       
                       }))}
                       selectedShifts={selectedShifts && selectedShifts[day.toLowerCase()][user.weeklyWorkflow[day.toLowerCase()][shiftIndex].shiftId]}
-                      onSelectChange={async (updatedShifts, shiftUnselected) => await handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
+                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div> // remove the div?
                       }
