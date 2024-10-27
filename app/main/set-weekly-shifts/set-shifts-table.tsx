@@ -158,7 +158,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
                       
                       }))}
                       selectedShifts={selectedShifts && selectedShifts[day.toLowerCase()][user.weeklyWorkflow[day.toLowerCase()][shiftIndex].shiftId]}
-                      onSelectChange={async (updatedShifts, shiftUnselected) => await handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
+                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div> // remove the div?
                       }
