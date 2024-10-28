@@ -11,18 +11,6 @@ export default function MainNavBar() {
       <NavbarBrand>
         <a href="/main"><p className="font-bold text-base">Shiftable</p></a>
       </NavbarBrand>
-      <NavbarContent className="mobile:hidden flex flex-row justify-center items-center gap-4">
-        <NavbarItem className="text-base">
-          <Link className="text-base" color="foreground" href={`/main/${user instanceof Employee ? `my-shifts` : `Weekly Workflow`}`}>
-          {user instanceof Employee ? `My shifts` : `Weekly Workflow` }
-          </Link>
-        </NavbarItem>
-        <NavbarItem className="text-base" isActive>
-          <Link className="text-base" href={`/main/${user instanceof Employee ? `shifts-application` : `schedule-shifts`}`} aria-current="page" color="secondary">
-          {user instanceof Employee ? `Shifts application` : `Schedule shifts` }
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
 
       <NavbarContent as="div" justify="end">
         <Dropdown placement="bottom-end">
