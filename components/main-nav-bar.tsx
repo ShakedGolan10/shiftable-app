@@ -30,10 +30,7 @@ export default function MainNavBar() {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">{user?.email}</p>
             </DropdownItem>
-            <DropdownItem textValue='settings' key="settings">My Settings</DropdownItem>
-            <DropdownItem textValue='congigurations' key="configurations">About us</DropdownItem>
             {/* <DropdownItem key="configurations">Contact {user?.employer.name}</DropdownItem> */}
-            <DropdownItem textValue='help_and_feedbek' key="help_and_feedback">Help & Feedback</DropdownItem>
             <DropdownItem textValue='logout' onClick={logout} key="logout" color="danger">
               Log Out
             </DropdownItem>
