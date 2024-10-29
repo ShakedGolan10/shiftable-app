@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Switch } from "@nextui-org/react";
-import { Employee } from '@/types/class.service'; // Assuming your types
+import { Employee } from '@/types/class.service';
 import { RulesTable } from '@/components/application_rules';
 import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
@@ -17,7 +17,7 @@ const daysOfWeek = [
   { day: 'Thursday', key: '4' },
   { day: 'Friday', key: '5' },
   { day: 'Saturday', key: '6' }
-];
+]
 
 interface ShiftsTableProps {
   data: {
@@ -35,9 +35,10 @@ const emptySelectedShifts = {
   thursday: [],
   friday: [],
   saturday: [],
-};
+}
 
 export function ShiftsTable({ data, user }: ShiftsTableProps) {
+
   const { weeklyWorkflow, applicationRules } = data;
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
   const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
@@ -60,12 +61,8 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
           .map(({ shift, shiftId }) => {
             if (user.blockedShifts.includes(shiftId)) return {shift: '', shiftId}
             else return {shift, shiftId, isSelected: false, isCant: false}
-          })
-          
-        }
-      })
-      
-      return dayObj as TableShifts
+          })}})
+          return dayObj as TableShifts
     }
     const tableShifts = adJustedShifts()
     setApplicableShifts(tableShifts);
@@ -178,12 +175,12 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
       successMsg: 'Shifts applied successfuly' 
     })
     
-}
+  }
 
 return applicableShifts &&
   <>
   <GeneralTitle title={`Please apply your shifts for ${forDate}`} />
-  <span className='text-small '>Pay attention to the rules table</span>
+  <span className='text-small'>Pay attention to the rules table</span>
   <Table aria-label="Shifts table" className="w-full">
     <TableHeader columns={daysOfWeek}>
       {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-base text-center">{column.day}</TableColumn>}
