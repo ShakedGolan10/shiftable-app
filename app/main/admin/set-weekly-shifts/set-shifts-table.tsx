@@ -9,9 +9,8 @@ import ConfirmationModal from '@/components/helpers/confirm-modal';
 import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
-import { getDateOfApply } from '@/lib/server.utils';
+import { daysOfWeek, getDateOfApply, maxRows } from '@/lib/server.utils';
 
-const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const emptyDayOrientedObject = {
     sunday: {},
@@ -41,13 +40,6 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
     getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
   },[])
   
-  const maxRows = (items: WeeklyShifts) => {
-    const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
-      return Math.max(acc, element.length)
-    }, 0);
-    return [...Array(maxRowsPerColumn)].map(() => '')
-  
-  };
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     if (isRemove) return
@@ -141,10 +133,8 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
       <GeneralTitle title={`Set the shifts for the ${forDate}`} />
       <Table aria-label="Employer Shifts Table" className="text-xs">
-        <TableHeader>
-          {daysOfWeek.map((day) => (
-            <TableColumn key={day} className="text-center">{day}</TableColumn>
-          ))}
+        <TableHeader columns={daysOfWeek}>
+          {(day) => <TableColumn aria-label={day} key={day} className="text-base text-center">{day}</TableColumn>}
         </TableHeader>
         <TableBody>
           {maxRows(user.weeklyWorkflow).map((_, shiftIndex) => (
@@ -157,7 +147,6 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
                       shiftIndex={shiftIndex}
                       availableShifts={shiftsReqs.flatMap(req => ({
                         name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
-                      
                       }))}
                       selectedShifts={selectedShifts && selectedShifts[day.toLowerCase()][user.weeklyWorkflow[day.toLowerCase()][shiftIndex].shiftId]}
                       onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}

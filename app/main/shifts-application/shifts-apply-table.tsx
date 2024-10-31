@@ -5,19 +5,9 @@ import { Employee } from '@/types/class.service';
 import { RulesTable } from '@/components/application_rules';
 import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
-import { getDateOfApply } from '@/lib/server.utils';
+import { daysOfWeek, getDateOfApply } from '@/lib/server.utils';
 import { RowItem, Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
-
-const daysOfWeek = [
-  { day: 'Sunday', key: '0' },
-  { day: 'Monday', key: '1' },
-  { day: 'Tuesday', key: '2' },
-  { day: 'Wednesday', key: '3' },
-  { day: 'Thursday', key: '4' },
-  { day: 'Friday', key: '5' },
-  { day: 'Saturday', key: '6' }
-]
 
 interface ShiftsTableProps {
   data: {
@@ -54,10 +44,10 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   useEffect(() => {
     const adJustedShifts = (): TableShifts => {
       const dayObj = {}
-      daysOfWeek.forEach((element) => {
-        if (!weeklyWorkflow[element.day.toLowerCase()].length) dayObj[element.day.toLowerCase()] = []
+      daysOfWeek.forEach((day) => {
+        if (!weeklyWorkflow[day.toLowerCase()].length) dayObj[day.toLowerCase()] = []
         else {
-          dayObj[element.day.toLowerCase()] = weeklyWorkflow[element.day.toLowerCase()]
+          dayObj[day.toLowerCase()] = weeklyWorkflow[day.toLowerCase()]
           .map(({ shift, shiftId }) => {
             if (user.blockedShifts.includes(shiftId)) return {shift: '', shiftId}
             else return {shift, shiftId, isSelected: false, isCant: false}
@@ -79,12 +69,14 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     const rows = [];
   
     for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-      const shifts: Shift[] = daysOfWeek.map(element => applicableShifts[element.day.toLowerCase()]?.[rowIndex] || "");
+      const shifts: Shift[] = daysOfWeek.map(day => applicableShifts[day.toLowerCase()]?.[rowIndex] || "");
       rows.push({
         key: rowIndex.toString(),
         shifts
       });
     }
+
+    console.log({rows})
     return rows;
   };
 
@@ -183,13 +175,13 @@ return applicableShifts &&
   <span className='text-small'>Pay attention to the rules table</span>
   <Table aria-label="Shifts table" className="w-full">
     <TableHeader columns={daysOfWeek}>
-      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-base text-center">{column.day}</TableColumn>}
+      {(day) => <TableColumn aria-label={day} key={day} className="text-base text-center">{day}</TableColumn>}
     </TableHeader>
     <TableBody items={createRows()}>
       {(item) => (
         <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
             {item.shifts.map((shift, index) => (
-            <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
+            <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
                 dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  
