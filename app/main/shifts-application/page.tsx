@@ -1,16 +1,17 @@
 'use client'
-import React from 'react';
-import ShiftsApplyTable from './shifts_apply_page';
-import { useAuth } from '@/providers/UserContextProvider';
+import { getEmployerWeeklyShifts } from '@/services/server-services/shifts.service';
+import WithDataWrapper from '@/components/helpers/cmp-wrapper';
+import { ShiftsApplyTable } from './shifts-apply-table';
 import { Employee } from '@/types/class.service';
 
+export default function ShiftsApplyPage() {
+  
+  const ShiftsTableWithData = WithDataWrapper({
+    dataPromise: (user: Employee) => getEmployerWeeklyShifts(user.employer.id),
+    Component: (props) => <ShiftsApplyTable {...props}  />, 
+    errorMsg: 'Couldnt load employees applications',
+    loadingMsg: 'Loading Shifts requests...'
+  });
 
-export default function Page() {
-
-  const { user } = useAuth<Employee>();
-  return user && (
-    <>
-      <ShiftsApplyTable user={user} />
-    </>
-  );
+  return <ShiftsTableWithData />;
 }

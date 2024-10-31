@@ -37,7 +37,7 @@ const emptySelectedShifts = {
   saturday: [],
 }
 
-export function ShiftsTable({ data, user }: ShiftsTableProps) {
+export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
 
   const { weeklyWorkflow, applicationRules } = data;
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);

@@ -9,6 +9,7 @@ import ConfirmationModal from '@/components/helpers/confirm-modal';
 import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
+import { getDateOfApply } from '@/lib/server.utils';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -25,12 +26,13 @@ const emptyDayOrientedObject = {
 interface IShiftsTableProps {
     data: ShiftReqs[]
     user: Employer
-    forDate: string
   }
 
 
-export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProps) {
+export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
   const shiftsReqs: ShiftReqs[] = data
+  const forDate = 'Sun Sep 29 2024'
+  // getDateOfApply(user.applicationTime.day, user.applicationTime.time);
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
   const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
