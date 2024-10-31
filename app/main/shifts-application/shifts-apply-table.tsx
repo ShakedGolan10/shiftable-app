@@ -44,10 +44,10 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   useEffect(() => {
     const adJustedShifts = (): TableShifts => {
       const dayObj = {}
-      daysOfWeek.forEach((day) => {
-        if (!weeklyWorkflow[day.toLowerCase()].length) dayObj[day.toLowerCase()] = []
+      daysOfWeek.forEach((dayElement) => {
+        if (!weeklyWorkflow[dayElement.day.toLowerCase()].length) dayObj[dayElement.day.toLowerCase()] = []
         else {
-          dayObj[day.toLowerCase()] = weeklyWorkflow[day.toLowerCase()]
+          dayObj[dayElement.day.toLowerCase()] = weeklyWorkflow[dayElement.day.toLowerCase()]
           .map(({ shift, shiftId }) => {
             if (user.blockedShifts.includes(shiftId)) return {shift: '', shiftId}
             else return {shift, shiftId, isSelected: false, isCant: false}
@@ -69,7 +69,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     const rows = [];
   
     for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-      const shifts: Shift[] = daysOfWeek.map(day => applicableShifts[day.toLowerCase()]?.[rowIndex] || "");
+      const shifts: Shift[] = daysOfWeek.map(dayElement => applicableShifts[dayElement.day.toLowerCase()]?.[rowIndex] || "");
       rows.push({
         key: rowIndex.toString(),
         shifts
@@ -175,13 +175,13 @@ return applicableShifts &&
   <span className='text-small'>Pay attention to the rules table</span>
   <Table aria-label="Shifts table" className="w-full">
     <TableHeader columns={daysOfWeek}>
-      {(day) => <TableColumn aria-label={day} key={day} className="text-base text-center">{day}</TableColumn>}
+      {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
     </TableHeader>
     <TableBody items={createRows()}>
       {(item) => (
         <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
             {item.shifts.map((shift, index) => (
-            <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].toLowerCase())} 
+            <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
                 dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  

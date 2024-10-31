@@ -29,13 +29,13 @@ export const getDateOfApply = (day: number, time: string): string =>  {
     
 
     export const daysOfWeek = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
+      { day: 'Sunday', key: '0' },
+      { day: 'Monday', key: '1' },
+      { day: 'Tuesday', key: '2' },
+      { day: 'Wednesday', key: '3' },
+      { day: 'Thursday', key: '4' },
+      { day: 'Friday', key: '5' },
+      { day: 'Saturday', key: '6' }
     ];
     
 
@@ -43,6 +43,5 @@ export const getDateOfApply = (day: number, time: string): string =>  {
       const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
         return Math.max(acc, element.length)
       }, 0);
-      
       return [...Array(maxRowsPerColumn)].map(() => '')
     };

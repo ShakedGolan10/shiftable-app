@@ -134,22 +134,22 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
       <GeneralTitle title={`Set the shifts for the ${forDate}`} />
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader columns={daysOfWeek}>
-          {(day) => <TableColumn aria-label={day} key={day} className="text-base text-center">{day}</TableColumn>}
+          {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
         </TableHeader>
         <TableBody>
           {maxRows(user.weeklyWorkflow).map((_, shiftIndex) => (
               <TableRow key={shiftIndex}>
-                {daysOfWeek.map((day) => (
-                  <TableCell key={day}>
-                    {(user.weeklyWorkflow[day.toLowerCase()][shiftIndex]) ? 
+                {daysOfWeek.map((dayElement) => (
+                  <TableCell key={dayElement.key}>
+                    {(user.weeklyWorkflow[dayElement.day.toLowerCase()][shiftIndex]) ? 
                     <SetShiftsTableCell
-                      day={day.toLowerCase()}
+                      day={dayElement.day.toLowerCase()}
                       shiftIndex={shiftIndex}
                       availableShifts={shiftsReqs.flatMap(req => ({
-                        name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
+                        name: req.name, ...req.shifts[dayElement.day.toLowerCase()][shiftIndex]
                       }))}
-                      selectedShifts={selectedShifts && selectedShifts[day.toLowerCase()][user.weeklyWorkflow[day.toLowerCase()][shiftIndex].shiftId]}
-                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
+                      selectedShifts={selectedShifts && selectedShifts[dayElement.day.toLowerCase()][user.weeklyWorkflow[dayElement.day.toLowerCase()][shiftIndex].shiftId]}
+                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(dayElement.day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div> // remove the div?
                       }
