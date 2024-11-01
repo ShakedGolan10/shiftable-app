@@ -2,10 +2,12 @@
 import { useState, useEffect } from 'react';
 import LoadingElement from './loading-element';
 import ErrorElement from './error-element';
+import { useAuth } from '@/providers/UserContextProvider';
+import { Employee, Employer } from '@/types/class.service';
 
 interface WrapperProps<T> {
-  dataPromise: () => Promise<T>;
-  Component: React.ComponentType<{ data: T }>;
+  dataPromise: (user: Employee | Employer) => Promise<T>;
+  Component: React.ComponentType<{ user: any, data: T }>;
   loadingMsg: string
   errorMsg: string
 }
@@ -19,23 +21,25 @@ export default function WithDataWrapper<T>({
   return function WrappedComponent() {
     const [data, setData] = useState<T>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<any>(null);
-
-    useEffect(() => {
+    const [error, setError] = useState<string>(null);
+    const { user, isLoadingAuth } = useAuth<any>();
+    
+    useEffect(() => { 
+      if (user) {
       setLoading(true);
-      dataPromise()
+      dataPromise(user)
         .then((result) => {
-          console.log({result})
           setData(result);
           setLoading(false);
         })
         .catch((err) => {
           setError(err);
           setLoading(false);
-        });
-    }, [dataPromise]);
+        })
+      }
+    }, [user]);
 
-    if (loading) {
+    if (loading && !isLoadingAuth) {
       return <LoadingElement msg={loadingMsg} />;
     }
 
@@ -43,8 +47,8 @@ export default function WithDataWrapper<T>({
       return <ErrorElement message={errorMsg} />;
     }
 
-    if (data) {
-      return <Component data={data} />;
+    if (data && user) {
+      return <Component user={user} data={data} />;
     }
 
     return null; // In case there's no data, just return null (optional safeguard)

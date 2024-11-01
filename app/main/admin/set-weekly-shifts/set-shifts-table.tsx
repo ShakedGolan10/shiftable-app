@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
 import { Employer } from '@/types/class.service';
 import { SetShiftsTableCell } from './set-shifts-table-cell';
-import { DayOrientedObject, Shift, ShiftReqs } from '@/types/user/types.server';
+import { DayOrientedObject, RowItem, Shift, ShiftReqs } from '@/types/user/types.server';
 import { useConfirm } from '@/hooks/useConfirm';
 import ConfirmationModal from '@/components/helpers/confirm-modal';
 import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
+import { createTableRows, daysOfWeek, getDateOfApply, maxRows } from '@/lib/server.utils';
 
-const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const emptyDayOrientedObject = {
     sunday: {},
@@ -25,12 +25,13 @@ const emptyDayOrientedObject = {
 interface IShiftsTableProps {
     data: ShiftReqs[]
     user: Employer
-    forDate: string
   }
 
 
-export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProps) {
+export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
   const shiftsReqs: ShiftReqs[] = data
+  const forDate = 'Sun Sep 29 2024'
+  // getDateOfApply(user.applicationTime.day, user.applicationTime.time);
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
   const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
@@ -39,13 +40,6 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
   },[])
   
-  const maxRows = (items: WeeklyShifts) => {
-    const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
-      return Math.max(acc, element.length)
-    }, 0);
-    return [...Array(maxRowsPerColumn)].map(() => '')
-  
-  };
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     if (isRemove) return
@@ -81,8 +75,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
     } 
   }
 
-  const handleSelectChange = async (day: string, shiftIdx: number, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
-    const { shiftId } = user.weeklyWorkflow[day][shiftIdx]
+  const handleSelectChange = async (day: string, shiftId: string, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
     const shiftSelected = (shiftUnselected) ? shiftUnselected : updatedShifts[updatedShifts.length-1]
     const isPossible = await checkRules(day, shiftSelected, (shiftUnselected) ? true : false)
     if (!isPossible) return false
@@ -133,39 +126,38 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
       }) 
   }
 
+  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
+  
   return selectedShifts && (
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
       <GeneralTitle title={`Set the shifts for the ${forDate}`} />
       <Table aria-label="Employer Shifts Table" className="text-xs">
-        <TableHeader>
-          {daysOfWeek.map((day) => (
-            <TableColumn key={day} className="text-center">{day}</TableColumn>
-          ))}
+        <TableHeader columns={daysOfWeek}>
+          {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
         </TableHeader>
-        <TableBody>
-          {maxRows(user.weeklyWorkflow).map((_, shiftIndex) => (
-              <TableRow key={shiftIndex}>
-                {daysOfWeek.map((day) => (
-                  <TableCell key={day}>
-                    {(user.weeklyWorkflow[day.toLowerCase()][shiftIndex]) ? 
+        <TableBody items={tableItems}>
+          {(item) => (
+              <TableRow key={item.key}>
+                {item.rowItems.map((shiftElement, index) => (
+                  <TableCell key={index}>
+                    {shiftElement ? 
                     <SetShiftsTableCell
-                      day={day.toLowerCase()}
-                      shiftIndex={shiftIndex}
+                      day={daysOfWeek[index].day.toLowerCase()}
+                      shiftIndex={index}
                       availableShifts={shiftsReqs.flatMap(req => ({
-                        name: req.name, ...req.shifts[day.toLowerCase()][shiftIndex]
-                      
+                        name: req.name, ...req.shifts[daysOfWeek[index].day.toLowerCase()][item.key]
                       }))}
-                      selectedShifts={selectedShifts && selectedShifts[day.toLowerCase()][user.weeklyWorkflow[day.toLowerCase()][shiftIndex].shiftId]}
-                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
+                      selectedShifts={selectedShifts && selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]}
+                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(daysOfWeek[index].day.toLowerCase(), shiftElement.shiftId, updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div> // remove the div?
                       }
                   </TableCell>
-                ))}
+                  ))}
               </TableRow>
-            ))}
+            )}
         </TableBody>
       </Table>
       <Button color='success' onPress={applyShifts}>Apply Shifts</Button>

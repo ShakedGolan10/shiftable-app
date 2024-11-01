@@ -7,7 +7,7 @@ import { getEmployeesByFilter } from '@/services/server-services/employer.servic
 import { getDateOfApply } from '@/lib/server.utils'
 
 
-export default function EmployeeHomePage({ employerUser }: { employerUser: Employer }) {
+export default function EmployerHomePage({ employerUser }: { employerUser: Employer }) {
 
   const [usersNotApplied, setUsersNotApplied] = useState<Employee[]>([])
   const router = useRouter()
@@ -48,8 +48,8 @@ export default function EmployeeHomePage({ employerUser }: { employerUser: Emplo
       </div>
 
       <div className='flex flex-col gap-2 my-2'>
-        <Button onClick={()=> router.push('/main/set-weekly-shifts')} className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
-        <Button className='rounded-md bg-teal-400 text-base hover:bg-teal-600'>Shift schedule</Button>
+        <Button onClick={()=> router.push('main/admin/set-weekly-shifts')} className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
+        <Button onClick={()=> router.push('main/admin/work-week')} className='rounded-md bg-teal-400 text-base hover:bg-teal-600'>Shift schedule</Button>
         <Button className='rounded-md bg-cyan-500 text-base hover:bg-cyan-700'>Employees</Button>
         <Button className='rounded-md bg-indigo-500 text-base hover:bg-indigo-700'>Edit employees messages</Button>
       </div>

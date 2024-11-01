@@ -1,16 +1,13 @@
-
-
-
-export const getNextSunday = (): string =>  {
+export const getThisSunday = (): string =>  {
       const now = new Date();
       const nowDay = now.getDay();
   
-      const nextSunday = new Date();
-      nextSunday.setDate(now.getDate() + (7 - nowDay));
+      const thisSunday = new Date();
+      thisSunday.setDate((now.getDate() - nowDay));
   
-      const nextSundayString = nextSunday.toDateString();
+      const thisSundayString = thisSunday.toDateString();
   
-      return nextSundayString;
+      return thisSundayString;
 }
 
 export const getDateOfApply = (day: number, time: string): string =>  {
@@ -41,3 +38,26 @@ export const getDateOfApply = (day: number, time: string): string =>  {
       { day: 'Saturday', key: '6' }
     ];
     
+
+    export const maxRows = (items: WeeklyShifts) => {
+      const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
+        return Math.max(acc, element.length)
+      }, 0);
+      return [...Array(maxRowsPerColumn)].map(() => '')
+    };
+
+
+    export const createTableRows = <T, Z>(items: T, columns: any[]) => {
+      const maxShiftsPerDay = Object.values(items).reduce((acc, element) => {
+        return Math.max(acc, element.length);
+      }, 0);
+      const rows: {key: string, rowItems: Z[]}[] = [];
+      for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
+        const rowItems = columns.map(dayElement => items[dayElement.day.toLowerCase()]?.[rowIndex] || "");
+        rows.push({
+          key: rowIndex.toString(),
+          rowItems
+        });
+      }
+      return rows;
+    };

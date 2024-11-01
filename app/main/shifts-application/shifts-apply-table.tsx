@@ -1,23 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Switch } from "@nextui-org/react";
-import { Employee } from '@/types/class.service'; // Assuming your types
+import { Employee } from '@/types/class.service';
 import { RulesTable } from '@/components/application_rules';
 import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
-import { getDateOfApply } from '@/lib/server.utils';
+import { createTableRows, daysOfWeek, getDateOfApply } from '@/lib/server.utils';
 import { RowItem, Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
-
-const daysOfWeek = [
-  { day: 'Sunday', key: '0' },
-  { day: 'Monday', key: '1' },
-  { day: 'Tuesday', key: '2' },
-  { day: 'Wednesday', key: '3' },
-  { day: 'Thursday', key: '4' },
-  { day: 'Friday', key: '5' },
-  { day: 'Saturday', key: '6' }
-];
 
 interface ShiftsTableProps {
   data: {
@@ -35,9 +25,10 @@ const emptySelectedShifts = {
   thursday: [],
   friday: [],
   saturday: [],
-};
+}
 
-export function ShiftsTable({ data, user }: ShiftsTableProps) {
+export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
+
   const { weeklyWorkflow, applicationRules } = data;
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
   const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
@@ -53,19 +44,15 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
   useEffect(() => {
     const adJustedShifts = (): TableShifts => {
       const dayObj = {}
-      daysOfWeek.forEach((element) => {
-        if (!weeklyWorkflow[element.day.toLowerCase()].length) dayObj[element.day.toLowerCase()] = []
+      daysOfWeek.forEach((dayElement) => {
+        if (!weeklyWorkflow[dayElement.day.toLowerCase()].length) dayObj[dayElement.day.toLowerCase()] = []
         else {
-          dayObj[element.day.toLowerCase()] = weeklyWorkflow[element.day.toLowerCase()]
+          dayObj[dayElement.day.toLowerCase()] = weeklyWorkflow[dayElement.day.toLowerCase()]
           .map(({ shift, shiftId }) => {
             if (user.blockedShifts.includes(shiftId)) return {shift: '', shiftId}
             else return {shift, shiftId, isSelected: false, isCant: false}
-          })
-          
-        }
-      })
-      
-      return dayObj as TableShifts
+          })}})
+          return dayObj as TableShifts
     }
     const tableShifts = adJustedShifts()
     setApplicableShifts(tableShifts);
@@ -73,23 +60,6 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
     setOptionalShiftsRule(applicationRules.optionalShifts.map(() => 0))
     setForDate(getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time))
   },[])
-
-  const createRows = (): RowItem[] => {
-    const maxShiftsPerDay = Object.values(applicableShifts).reduce((acc, element) => {
-      return Math.max(acc, element.length);
-    }, 0);
-  
-    const rows = [];
-  
-    for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-      const shifts: Shift[] = daysOfWeek.map(element => applicableShifts[element.day.toLowerCase()]?.[rowIndex] || "");
-      rows.push({
-        key: rowIndex.toString(),
-        shifts
-      });
-    }
-    return rows;
-  };
 
   const checkRules = (day: string, isRemove: boolean, shiftIdx: string, prevStateOfShift: Shift) => {
     let isAllMandatoryShiftsSelected:boolean = false 
@@ -136,7 +106,7 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
       }
   }
 
-  const selectShift = (item: RowItem, day: string) => {
+  const selectShift = (item: { key: string, rowItems: Shift[] }, day: string) => {
     
     if (!applicableShifts[day][item.key] || !applicableShifts[day][item.key].shift) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
@@ -178,30 +148,31 @@ export function ShiftsTable({ data, user }: ShiftsTableProps) {
       successMsg: 'Shifts applied successfuly' 
     })
     
-}
+  }
+
 
 return applicableShifts &&
   <>
   <GeneralTitle title={`Please apply your shifts for ${forDate}`} />
-  <span className='text-small '>Pay attention to the rules table</span>
+  <span className='text-small'>Pay attention to the rules table</span>
   <Table aria-label="Shifts table" className="w-full">
     <TableHeader columns={daysOfWeek}>
-      {(column) => <TableColumn aria-label={column.day} key={column.key} className="text-base text-center">{column.day}</TableColumn>}
+      {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
     </TableHeader>
-    <TableBody items={createRows()}>
+    <TableBody items={createTableRows<TableShifts, Shift>(applicableShifts, daysOfWeek)}>
       {(item) => (
         <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
-            {item.shifts.map((shift, index) => (
+            {item.rowItems.map((shiftElement, index) => (
             <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
                 dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  
               text-center p-[2.6%] text-base
-              ${shift && shift.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
-              ${(shift.isCant) ? ` bg-red`
-              : (shift.isSelected) ? ` bg-light-green` : ``}
+              ${shiftElement && shiftElement.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
+              ${(shiftElement.isCant) ? ` bg-red`
+              : (shiftElement.isSelected) ? ` bg-light-green` : ``}
               `}>
-              {shift.shift || "No Shifts"}
+              {shiftElement.shift || "No Shifts"}
             </TableCell>
           ))}
         </TableRow>
