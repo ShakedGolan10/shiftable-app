@@ -45,3 +45,19 @@ export const getDateOfApply = (day: number, time: string): string =>  {
       }, 0);
       return [...Array(maxRowsPerColumn)].map(() => '')
     };
+
+
+    export const createTableRows = <T, Z>(items: T, columns: any[]) => {
+      const maxShiftsPerDay = Object.values(items).reduce((acc, element) => {
+        return Math.max(acc, element.length);
+      }, 0);
+      const rows: {key: string, rowItems: Z[]}[] = [];
+      for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
+        const rowItems = columns.map(dayElement => items[dayElement.day.toLowerCase()]?.[rowIndex] || "");
+        rows.push({
+          key: rowIndex.toString(),
+          rowItems
+        });
+      }
+      return rows;
+    };

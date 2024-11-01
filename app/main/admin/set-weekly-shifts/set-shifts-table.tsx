@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
 import { Employer } from '@/types/class.service';
 import { SetShiftsTableCell } from './set-shifts-table-cell';
-import { DayOrientedObject, Shift, ShiftReqs } from '@/types/user/types.server';
+import { DayOrientedObject, RowItem, Shift, ShiftReqs } from '@/types/user/types.server';
 import { useConfirm } from '@/hooks/useConfirm';
 import ConfirmationModal from '@/components/helpers/confirm-modal';
 import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
-import { daysOfWeek, getDateOfApply, maxRows } from '@/lib/server.utils';
+import { createTableRows, daysOfWeek, getDateOfApply, maxRows } from '@/lib/server.utils';
 
 
 const emptyDayOrientedObject = {
@@ -75,8 +75,7 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
     } 
   }
 
-  const handleSelectChange = async (day: string, shiftIdx: number, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
-    const { shiftId } = user.weeklyWorkflow[day][shiftIdx]
+  const handleSelectChange = async (day: string, shiftId: string, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
     const shiftSelected = (shiftUnselected) ? shiftUnselected : updatedShifts[updatedShifts.length-1]
     const isPossible = await checkRules(day, shiftSelected, (shiftUnselected) ? true : false)
     if (!isPossible) return false
@@ -127,6 +126,8 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
       }) 
   }
 
+  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
+  
   return selectedShifts && (
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
@@ -136,27 +137,27 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
         <TableHeader columns={daysOfWeek}>
           {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
         </TableHeader>
-        <TableBody>
-          {maxRows(user.weeklyWorkflow).map((_, shiftIndex) => (
-              <TableRow key={shiftIndex}>
-                {daysOfWeek.map((dayElement) => (
-                  <TableCell key={dayElement.key}>
-                    {(user.weeklyWorkflow[dayElement.day.toLowerCase()][shiftIndex]) ? 
+        <TableBody items={tableItems}>
+          {(item) => (
+              <TableRow key={item.key}>
+                {item.rowItems.map((shiftElement, index) => (
+                  <TableCell key={index}>
+                    {shiftElement ? 
                     <SetShiftsTableCell
-                      day={dayElement.day.toLowerCase()}
-                      shiftIndex={shiftIndex}
+                      day={daysOfWeek[index].day.toLowerCase()}
+                      shiftIndex={index}
                       availableShifts={shiftsReqs.flatMap(req => ({
-                        name: req.name, ...req.shifts[dayElement.day.toLowerCase()][shiftIndex]
+                        name: req.name, ...req.shifts[daysOfWeek[index].day.toLowerCase()][item.key]
                       }))}
-                      selectedShifts={selectedShifts && selectedShifts[dayElement.day.toLowerCase()][user.weeklyWorkflow[dayElement.day.toLowerCase()][shiftIndex].shiftId]}
-                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(dayElement.day.toLowerCase(), shiftIndex, updatedShifts, shiftUnselected)}
+                      selectedShifts={selectedShifts && selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]}
+                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(daysOfWeek[index].day.toLowerCase(), shiftElement.shiftId, updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div> // remove the div?
                       }
                   </TableCell>
-                ))}
+                  ))}
               </TableRow>
-            ))}
+            )}
         </TableBody>
       </Table>
       <Button color='success' onPress={applyShifts}>Apply Shifts</Button>

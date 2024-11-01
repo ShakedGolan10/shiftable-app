@@ -5,7 +5,7 @@ import { Employee } from '@/types/class.service';
 import { RulesTable } from '@/components/application_rules';
 import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
-import { daysOfWeek, getDateOfApply } from '@/lib/server.utils';
+import { createTableRows, daysOfWeek, getDateOfApply } from '@/lib/server.utils';
 import { RowItem, Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
 
@@ -61,25 +61,6 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     setForDate(getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time))
   },[])
 
-  const createRows = (): RowItem[] => {
-    const maxShiftsPerDay = Object.values(applicableShifts).reduce((acc, element) => {
-      return Math.max(acc, element.length);
-    }, 0);
-  
-    const rows = [];
-  
-    for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-      const shifts: Shift[] = daysOfWeek.map(dayElement => applicableShifts[dayElement.day.toLowerCase()]?.[rowIndex] || "");
-      rows.push({
-        key: rowIndex.toString(),
-        shifts
-      });
-    }
-
-    console.log({rows})
-    return rows;
-  };
-
   const checkRules = (day: string, isRemove: boolean, shiftIdx: string, prevStateOfShift: Shift) => {
     let isAllMandatoryShiftsSelected:boolean = false 
      for (const key in applyRules) {
@@ -125,7 +106,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
       }
   }
 
-  const selectShift = (item: RowItem, day: string) => {
+  const selectShift = (item: { key: string, rowItems: Shift[] }, day: string) => {
     
     if (!applicableShifts[day][item.key] || !applicableShifts[day][item.key].shift) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
@@ -169,6 +150,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     
   }
 
+
 return applicableShifts &&
   <>
   <GeneralTitle title={`Please apply your shifts for ${forDate}`} />
@@ -177,20 +159,20 @@ return applicableShifts &&
     <TableHeader columns={daysOfWeek}>
       {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
     </TableHeader>
-    <TableBody items={createRows()}>
+    <TableBody items={createTableRows<TableShifts, Shift>(applicableShifts, daysOfWeek)}>
       {(item) => (
         <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
-            {item.shifts.map((shift, index) => (
+            {item.rowItems.map((shiftElement, index) => (
             <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
                 dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  
               text-center p-[2.6%] text-base
-              ${shift && shift.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
-              ${(shift.isCant) ? ` bg-red`
-              : (shift.isSelected) ? ` bg-light-green` : ``}
+              ${shiftElement && shiftElement.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
+              ${(shiftElement.isCant) ? ` bg-red`
+              : (shiftElement.isSelected) ? ` bg-light-green` : ``}
               `}>
-              {shift.shift || "No Shifts"}
+              {shiftElement.shift || "No Shifts"}
             </TableCell>
           ))}
         </TableRow>
