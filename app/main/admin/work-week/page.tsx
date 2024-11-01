@@ -1,3 +1,4 @@
+'use client'
 import { getWeeklySchedule } from '@/services/server-services/shifts.service';
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { WorkWeekTable } from './work_week_table';
