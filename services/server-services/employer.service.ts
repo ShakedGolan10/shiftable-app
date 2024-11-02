@@ -5,7 +5,7 @@ import { Employee } from "@/types/class.service"
 import { ShiftReqs } from "@/types/user/types.server"
 
 
-export const getEmployeesByFilter = async (filterBy: Params, employerId: string) => {
+export const getEmployeesByFilter = async (filterBy = {}, employerId: string) => {
     filterBy = {...filterBy, employerId}
     const data = await queryMany<Employee>('users', filterBy)
     return data

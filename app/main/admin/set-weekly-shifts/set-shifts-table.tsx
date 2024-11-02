@@ -1,16 +1,17 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
-import { Employer } from '@/types/class.service';
+import { Employee, Employer } from '@/types/class.service';
 import { SetShiftsTableCell } from './set-shifts-table-cell';
-import { DayOrientedObject, RowItem, Shift, ShiftReqs } from '@/types/user/types.server';
+import { DayOrientedObject, Shift, ShiftReqs, TableShifts } from '@/types/user/types.server';
 import { useConfirm } from '@/hooks/useConfirm';
 import ConfirmationModal from '@/components/helpers/confirm-modal';
 import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
-import { createTableRows, daysOfWeek, getDateOfApply, maxRows } from '@/lib/server.utils';
+import { createTableRows, daysOfWeek, getLastSunday, getNextSunday } from '@/lib/server.utils';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
+import { getEmployeesByFilter } from '@/services/server-services/employer.service';
 
 
 const emptyDayOrientedObject = {
@@ -30,17 +31,49 @@ interface IShiftsTableProps {
     setForDate: React.Dispatch<React.SetStateAction<string>>
   }
 
+  // {
+  //   shift: string
+  //   shiftId: string
+  //   isSelected: boolean
+  //   isCant: boolean
+  //   name?: string
+  // }
+const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Employee): TableShifts => {
+  let emptyShiftReq = {}
+  Object.keys(weeklyFlow).forEach(dayKey => {
+    emptyShiftReq[dayKey] = weeklyFlow[dayKey].map(shift => {
+        return {...shift, isSelected: false, isCant: false, name: employee.name}
+      })
+  })
+  return emptyShiftReq as TableShifts
+}
+ 
 
 export default function SetShiftsTable({ data, user, forDate, setForDate }: IShiftsTableProps) {
-  const shiftsReqs: ShiftReqs[] = data
-  // getDateOfApply(user.applicationTime.day, user.applicationTime.time);
+  const [shiftsReqs, setShiftsReqs] = useState<ShiftReqs[]>(null)
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
   const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
 
   useEffect(()=> {
     getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
-  },[])
+    getEmployeesByFilter({}, user.id).then(res => {
+        if (res.length === data.length) { // if all users applied reqs
+          setShiftsReqs(data)
+        } 
+        else if (!data.length) {
+          const emptyShiftReqs:ShiftReqs[] = []
+          res.map(employee => {
+              emptyShiftReqs.push({
+                id: employee.id,
+                name: employee.name,
+                shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
+              })
+          })
+          setShiftsReqs(emptyShiftReqs)
+        }
+      })
+  },[data, forDate])
   
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
@@ -130,17 +163,17 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
 
   const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
   
-  return selectedShifts && (
+  return (selectedShifts && shiftsReqs) && (
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
       <GeneralTitle title={`Set the shifts for`} />
       <div className='flex flex-row gap-5 items-center'>
-          <Button isIconOnly className='bg-transparent'>
+          <Button onClick={()=> setForDate(getLastSunday(forDate))} isIconOnly className='bg-transparent'>
             <ArrowLeftCircleIcon />
           </Button>
           <p className='text-medium'>{forDate}</p>
-          <Button isIconOnly className='bg-transparent'>
+          <Button onClick={()=> setForDate(getNextSunday(forDate))} isIconOnly className='bg-transparent'>
             <ArrowRightCircleIcon />
           </Button>
       </div>
