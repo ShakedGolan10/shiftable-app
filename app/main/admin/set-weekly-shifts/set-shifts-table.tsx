@@ -133,19 +133,21 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
   
   const checkEmptyShifts = async () => {
     let isPossible = true
-    for (const dayKey in selectedShifts) {
-        for (const shiftKey in selectedShifts[dayKey]) {
-            if (!Object.keys(selectedShifts[dayKey][shiftKey]).length) {
+    for (const dayKey in user.weeklyWorkflow) {
+        for (const shiftKey in user.weeklyWorkflow[dayKey]) {
+          const { shiftId } = user.weeklyWorkflow[dayKey][shiftKey]
+          if (!selectedShifts[dayKey][shiftId]) {
+            const isConfirm = await askConfirmation('There are shifts that are empty')
+                if (isConfirm) isPossible = true
+                else isPossible = false
+                  return isPossible
+          }
+          if (!Object.keys(selectedShifts[dayKey][shiftId]).length) {
                 const isConfirm = await askConfirmation('There are shifts that are empty')
-                if (isConfirm) {
-                    isPossible = true
-                } else {
-                    isPossible = false
-                    return isPossible
-                }
-            } else {
-                isPossible = true
-            }
+                if (isConfirm) isPossible = true
+                else isPossible = false
+                  return isPossible
+            } 
         }
     }
     return isPossible;
