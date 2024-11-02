@@ -10,6 +10,7 @@ import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-service
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
 import { createTableRows, daysOfWeek, getDateOfApply, maxRows } from '@/lib/server.utils';
+import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 
 
 const emptyDayOrientedObject = {
@@ -25,12 +26,13 @@ const emptyDayOrientedObject = {
 interface IShiftsTableProps {
     data: ShiftReqs[]
     user: Employer
+    forDate: string
+    setForDate: React.Dispatch<React.SetStateAction<string>>
   }
 
 
-export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
+export default function SetShiftsTable({ data, user, forDate, setForDate }: IShiftsTableProps) {
   const shiftsReqs: ShiftReqs[] = data
-  const forDate = 'Sun Sep 29 2024'
   // getDateOfApply(user.applicationTime.day, user.applicationTime.time);
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
   const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
@@ -132,7 +134,16 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
-      <GeneralTitle title={`Set the shifts for the ${forDate}`} />
+      <GeneralTitle title={`Set the shifts for`} />
+      <div className='flex flex-row gap-5 items-center'>
+          <Button isIconOnly className='bg-transparent'>
+            <ArrowLeftCircleIcon />
+          </Button>
+          <p className='text-medium'>{forDate}</p>
+          <Button isIconOnly className='bg-transparent'>
+            <ArrowRightCircleIcon />
+          </Button>
+      </div>
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader columns={daysOfWeek}>
           {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
@@ -160,7 +171,7 @@ export default function SetShiftsTable({ data, user }: IShiftsTableProps) {
             )}
         </TableBody>
       </Table>
-      <Button color='success' onPress={applyShifts}>Apply Shifts</Button>
+      <Button color='success' onPress={applyShifts}>Save Shifts</Button>
     </section>
   </>
   )
