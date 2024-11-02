@@ -1,9 +1,9 @@
 'use client'
 import { getWeeklySchedule } from '@/services/server-services/shifts.service';
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
-import { WorkWeekTable } from './work_week_table';
 import { Employer } from '@/types/class.service';
 import { getThisSunday } from '@/lib/server.utils';
+import WorkWeekTable from './work_week_table';
 
 export default function ShiftsApplyPage() {
   const forDate = getThisSunday() 
