@@ -9,7 +9,7 @@ import ConfirmationModal from '@/components/helpers/confirm-modal';
 import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
-import { createTableRows, daysOfWeek, getLastSunday, getNextSunday } from '@/lib/server.utils';
+import { createTableRows, daysOfWeek, getDateOfApply, getLastSunday, getNextSunday } from '@/lib/server.utils';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 import { getEmployeesByFilter } from '@/services/server-services/employer.service';
 
@@ -31,13 +31,6 @@ interface IShiftsTableProps {
     setForDate: React.Dispatch<React.SetStateAction<string>>
   }
 
-  // {
-  //   shift: string
-  //   shiftId: string
-  //   isSelected: boolean
-  //   isCant: boolean
-  //   name?: string
-  // }
 const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Employee): TableShifts => {
   let emptyShiftReq = {}
   Object.keys(weeklyFlow).forEach(dayKey => {
@@ -50,30 +43,34 @@ const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Empl
  
 
 export default function SetShiftsTable({ data, user, forDate, setForDate }: IShiftsTableProps) {
+  
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqs[]>(null)
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
   const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ excuteAsyncFunc ] = useAsync()
 
   useEffect(()=> {
-    getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
-    getEmployeesByFilter({}, user.id).then(res => {
-        if (res.length === data.length) { // if all users applied reqs
-          setShiftsReqs(data)
-        } 
-        else if (!data.length) {
-          const emptyShiftReqs:ShiftReqs[] = []
-          res.map(employee => {
-              emptyShiftReqs.push({
-                id: employee.id,
-                name: employee.name,
-                shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
-              })
-          })
-          setShiftsReqs(emptyShiftReqs)
-        }
-      })
-  },[data, forDate])
+    if (!forDate) setForDate(getDateOfApply(user.applicationTime.day, user.applicationTime.time))
+    else {
+      getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
+      getEmployeesByFilter({}, user.id).then(res => {
+          if (res.length === data.length) { // if all users applied reqs
+            setShiftsReqs(data)
+          } 
+          else if (!data.length) {
+            const emptyShiftReqs:ShiftReqs[] = []
+            res.map(employee => {
+                emptyShiftReqs.push({
+                  id: employee.id,
+                  name: employee.name,
+                  shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
+                })
+            })
+            setShiftsReqs(emptyShiftReqs)
+          }
+        })
+    }
+  },[])
   
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
