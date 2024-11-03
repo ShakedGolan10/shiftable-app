@@ -121,8 +121,14 @@ export interface Shift {
     shifts: Shift[] 
   }
   
+  export interface ShiftReqsOOP {
+    [key: string]: {
+      id: string
+      name: string
+      shifts: TableShifts
+  }
+}
   export interface ShiftReqs {
-    id: string
-    name: string
-    shifts: TableShifts
+      id: string
+      shifts: TableShifts
 }
