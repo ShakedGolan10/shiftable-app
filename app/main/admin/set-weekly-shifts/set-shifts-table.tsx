@@ -52,38 +52,38 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
   useEffect(()=> {
     if (!forDate) setForDate(getDateOfApply(user.applicationTime.day, user.applicationTime.time))
     else {
-  getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
-  getEmployeesByFilter({}, user.id).then(res => {
-        const emptyShiftReqs:ShiftReqsOOP = {}
-        const dataLength = Object.keys(data).length
-          if (res.length === dataLength) { // if all users applied reqs
-            setShiftsReqs(data)
-          } 
-          else if (!dataLength) {
-            res.map(employee => {
-                emptyShiftReqs[employee.id] = {
-                  id: employee.id,
-                  name: employee.name,
-                  shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
-                }
+      getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
+      getEmployeesByFilter({}, user.id).then(res => {
+            const emptyShiftReqs:ShiftReqsOOP = {}
+            const dataLength = Object.keys(data).length
+              if (res.length === dataLength) { // if all users applied reqs
+                setShiftsReqs(data)
+              } 
+              else if (!dataLength) {
+                res.map(employee => {
+                    emptyShiftReqs[employee.id] = {
+                      id: employee.id,
+                      name: employee.name,
+                      shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
+                    }
+                })
+                setShiftsReqs(emptyShiftReqs)
+              }
+              else if (dataLength < res.length) {
+                res.forEach(employee => {
+                  if (!data[employee.id]) {
+                    emptyShiftReqs[employee.id] = {
+                      id: employee.id,
+                      name: employee.name,
+                      shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
+                    }
+                  } else emptyShiftReqs[employee.id] = data[employee.id]
+                  
+                })
+                setShiftsReqs(emptyShiftReqs)
+              }
             })
-            setShiftsReqs(emptyShiftReqs)
-          }
-          else if (dataLength < res.length) {
-            res.forEach(employee => {
-              if (!data[employee.id]) {
-                emptyShiftReqs[employee.id] = {
-                  id: employee.id,
-                  name: employee.name,
-                  shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
-                }
-              } else emptyShiftReqs[employee.id] = data[employee.id]
-              
-            })
-            setShiftsReqs(emptyShiftReqs)
-          }
-        })
-    }
+        }
   },[])
   
 
