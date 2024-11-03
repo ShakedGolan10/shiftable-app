@@ -3,15 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Employer } from "@/types/class.service";
 import { useAuth } from "@/providers/UserContextProvider";
 import { useAsync } from "@/hooks/useAsync";
-import { useForm } from "@/hooks/useForm";
-import { Input } from "@nextui-org/react";
+import { Input, Button } from "@nextui-org/react";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 
 export default function EditEmployeesMsgs() {
     const { user } = useAuth<Employer>()
     const [ excuteAsyncFunc ] = useAsync()
     const [msgs, setMsgs] = useState<string[]>(null)
-    const [inputMsgs, handleInputChange] = useForm<string[]>(undefined)
     
     
     useEffect(()=> {
@@ -21,12 +20,15 @@ export default function EditEmployeesMsgs() {
   
 
 
-    return msgs && <section>
+    return msgs && <section className="flex flex-col gap-8 justify-center items-center">
         {msgs.map((msg, index) => (
             <Input
+            // size="lg"
+            key={index}
             isRequired
             type="text"
-            // label="Email"
+            variant="faded"
+            description='Press to edit the msg'
             defaultValue={msg}
             className="max-w-xs"
             onValueChange={(v)=> setMsgs(prev => {
@@ -36,6 +38,9 @@ export default function EditEmployeesMsgs() {
               })}
           />
         ))}
+        <Button onClick={()=> setMsgs(prev => [...prev, ''])} isIconOnly className="bg-transparent">
+            <PlusCircleIcon />
+        </Button>
     </section>;
   }
   
