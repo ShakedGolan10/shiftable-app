@@ -10,6 +10,25 @@ export const getThisSunday = (): string =>  {
       return thisSundayString;
 }
 
+export const getLastSunday = (thisSunday: string): string =>  {
+  
+      const lastSunday = new Date(thisSunday);
+      lastSunday.setDate((lastSunday.getDate() - 7));
+  
+      const lastSundayString = lastSunday.toDateString();
+  
+      return lastSundayString;
+}
+
+export const getNextSunday = (thisSunday: string): string =>  {
+      const nextSunday = new Date(thisSunday);
+      nextSunday.setDate((nextSunday.getDate() + 7));
+  
+      const nextSundayString = nextSunday.toDateString();
+  
+      return nextSundayString;
+}
+
 export const getDateOfApply = (day: number, time: string): string =>  {
       const [targetHour, targetMinute] = time.split(':').map(Number);
         const now = new Date();
@@ -38,14 +57,6 @@ export const getDateOfApply = (day: number, time: string): string =>  {
       { day: 'Saturday', key: '6' }
     ];
     
-
-    export const maxRows = (items: WeeklyShifts) => {
-      const maxRowsPerColumn = Object.values(items).reduce((acc, element) => {
-        return Math.max(acc, element.length)
-      }, 0);
-      return [...Array(maxRowsPerColumn)].map(() => '')
-    };
-
 
     export const createTableRows = <T, Z>(items: T, columns: any[]) => {
       const maxShiftsPerDay = Object.values(items).reduce((acc, element) => {

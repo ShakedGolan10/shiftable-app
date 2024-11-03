@@ -49,7 +49,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
         else {
           dayObj[dayElement.day.toLowerCase()] = weeklyWorkflow[dayElement.day.toLowerCase()]
           .map(({ shift, shiftId }) => {
-            if (user.blockedShifts.includes(shiftId)) return {shift: '', shiftId}
+            if (user.blockedShifts.includes(shiftId)) return {}
             else return {shift, shiftId, isSelected: false, isCant: false}
           })}})
           return dayObj as TableShifts
