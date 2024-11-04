@@ -3,6 +3,8 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 import { queryMany, queryOne } from "./db.service"
 import { Employee } from "@/types/class.service"
 import { ShiftReqs, ShiftReqsOOP } from "@/types/user/types.server"
+import { firestore } from "@/firebaseConfig.mjs"
+import { doc, getDoc, updateDoc } from "firebase/firestore"
 
 
 export const getEmployeesByFilter = async (filterBy = {}, employerId: string) => {
@@ -19,3 +21,16 @@ export const getEmployeesShiftsReqs = async (employerId: string, forDate: string
     }))
     return dataObj as ShiftReqsOOP
 }
+
+export const saveEmployerMsgs = async (
+    employerId: string,
+    newMsgs: string[]
+  ) => {
+    try {
+      const employerRef = doc(firestore, 'users', employerId);
+  
+        await updateDoc(employerRef, {employerMsg: newMsgs});
+    } catch (error) {
+      throw new Error(`Error updating employer msgs: ${error}`);
+    }
+  };

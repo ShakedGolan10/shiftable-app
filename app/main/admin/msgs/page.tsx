@@ -1,35 +1,51 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import { Employer } from "@/types/class.service";
-import { useAuth } from "@/providers/UserContextProvider";
 import { useAsync } from "@/hooks/useAsync";
 import { Input, Button } from "@nextui-org/react";
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import { saveEmployerMsgs } from "@/services/server-services/employer.service";
+import GeneralTitle from "@/components/helpers/general-title";
+import WithDataWrapper from "@/components/helpers/cmp-wrapper";
 
 
-export default function EditEmployeesMsgs() {
-    const { user } = useAuth<Employer>()
+const EditEmployeesMsgs = ({user}: {user: Employer}) => {
     const [ excuteAsyncFunc ] = useAsync()
-    const [msgs, setMsgs] = useState<string[]>(null)
+    const [msgs, setMsgs] = useState<string[]>([])
     
     
     useEffect(()=> {
         if (!user) return
-        setMsgs(user.employerMsg)
+        setMsgs((msgs.length) ? msgs : user.employerMsg)
     },[user])
   
+    const saveMsgs = async () => {
+        await excuteAsyncFunc({
+            asyncOperation: () => saveEmployerMsgs(user.id , msgs),
+            errorMsg: 'Couldnt save employer messages, please try again',
+            successMsg:'Your messages saved succesfuly'
+        })
+    }
 
 
-    return msgs && <section className="flex flex-col gap-8 justify-center items-center">
+    return msgs && 
+    <section className="flex flex-col gap-8 justify-center items-center">
+        <GeneralTitle title='Edit your employer messages' />
         {msgs.map((msg, index) => (
+            <article key={index} className="flex flex-row gap-3">
+            <Button onClick={()=> setMsgs(prev => {
+                const newArray = [...prev].filter((_, idx) => idx !== index)
+                return newArray
+            })} 
+            isIconOnly className="bg-transparent">
+            <MinusCircleIcon color="red" />
+            </Button>
             <Input
-            // size="lg"
-            key={index}
             isRequired
             type="text"
             variant="faded"
             description='Press to edit the msg'
-            defaultValue={msg}
+            value={msg}
             className="max-w-xs"
             onValueChange={(v)=> setMsgs(prev => {
                 const updatedMsgs = [...prev];
@@ -37,10 +53,22 @@ export default function EditEmployeesMsgs() {
                 return updatedMsgs;
               })}
           />
+        </article>
         ))}
         <Button onClick={()=> setMsgs(prev => [...prev, ''])} isIconOnly className="bg-transparent">
             <PlusCircleIcon />
         </Button>
+        <Button onClick={saveMsgs} color="success">
+            <span>Save</span>
+        </Button>
     </section>;
   }
   
+
+  const EditMsgsPage = WithDataWrapper({
+    Component: (props) => <EditEmployeesMsgs {...props} />, 
+    errorMsg: 'Couldnt load user msgs',
+    loadingMsg: 'Loading msgs...'
+  });
+
+  export default EditMsgsPage

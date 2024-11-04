@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/UserContextProvider';
 import { Employee, Employer } from '@/types/class.service';
 
 interface WrapperProps<T> {
-  dataPromise: (user: Employee | Employer) => Promise<T>;
+  dataPromise?: (user: Employee | Employer) => Promise<T> | undefined;
   Component: React.ComponentType<{ user: any, data: T }>;
   loadingMsg: string
   errorMsg: string
@@ -26,16 +26,19 @@ export default function WithDataWrapper<T>({
     
     useEffect(() => { 
       if (user) {
-      setLoading(true);
-      dataPromise(user)
-        .then((result) => {
-          setData(result);
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(err);
-          setLoading(false);
-        })
+      
+        if (dataPromise) {
+            setLoading(true);
+            dataPromise(user)
+              .then((result) => {
+                setData(result);
+                setLoading(false);
+              })
+              .catch((err) => {
+                setLoading(false);
+                setError(err);
+              }) 
+            } else setLoading(false)
       }
     }, [user]);
 
@@ -47,9 +50,14 @@ export default function WithDataWrapper<T>({
       return <ErrorElement message={errorMsg} />;
     }
 
+    if (!dataPromise && user) {
+      return <Component user={user} data={undefined} />;
+    }
+
     if (data && user) {
       return <Component user={user} data={data} />;
     }
+    
 
     return null; // In case there's no data, just return null (optional safeguard)
   };
