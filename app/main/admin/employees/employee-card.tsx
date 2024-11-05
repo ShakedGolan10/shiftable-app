@@ -10,10 +10,15 @@ interface IEmployeeCardProps {
 }
 export default function EmployeeCard({user, selectUser, employer} : IEmployeeCardProps) {
 
-    // const blockedShifts = Object.keys(employer.weeklyWorkflow).map((day) => {
-    //     const shiftsIdsArray = employer.weeklyWorkflow
-    // }) 
-    // In order to make it happen, Ill need to change the way weekly work flow is stored, from array in every day to keys of Ids of the shifts.
+    const blockedShifts = []
+    // Object.keys(employer.weeklyWorkflow).map((day) => {
+        // for (i = 0; i < user.blockedShifts.length; i++) {
+            // if (employer.weeklyWorkflow[day][user.blockedShifts[i]]) blockedShifts.push({
+            //     day,
+            //     ...employer.weeklyWorkflow[day][user.blockedShifts[i]]
+            // }) 
+        // }    
+    // }) In order to make it happen, Ill need to change the way weekly work flow is stored, from array in every day to keys of Ids of the shifts.
   return (
     <Card className="max-w-fit">
       <CardHeader className="justify-between">
@@ -42,6 +47,9 @@ export default function EmployeeCard({user, selectUser, employer} : IEmployeeCar
         </p>
         <p>
           {`Email: ${user.email}`}
+        </p>
+        <p>
+          {`Blocked Shifts: ${blockedShifts.map(shift => <p> shift </p>)}`}
         </p>
         
       </CardBody>
