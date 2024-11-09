@@ -42,7 +42,8 @@ export async function PUT(req: UpdateRequest) {
           })
         return NextResponse.json('Success', {status: 200})
     } catch (error) {
-        return await logout()
+        return new NextResponse(error, { status: 500 })
+        // return await logout()
     }
 }
 
