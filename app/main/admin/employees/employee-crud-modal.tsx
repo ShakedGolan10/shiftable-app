@@ -1,15 +1,24 @@
 'use client'
 
 import { useForm } from "@/hooks/useForm";
+import { updateUserCredentials } from "@/services/server-services/employer.service";
 import { Employee } from "@/types/class.service";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input} from "@nextui-org/react";
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export function EmployeeCrudModal({user} : {user: Employee}) {
     
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
 
-    const [name, setName] = useForm(user.name)
+    const [creds, handleCredChange] = useForm({email: user.email, password: ''})
+    const [name, setName] = useState(user.name)
+    const updateCred = async () => {
+
+    }
+    const updateCreds = async () => {
+        
+        updateUserCredentials(creds.email, creds.password, user.id)
+    }
     const saveEmployee = () => {
         onClose()
     }
@@ -27,13 +36,9 @@ export function EmployeeCrudModal({user} : {user: Employee}) {
                             type="text"
                             variant="faded"
                             description='Press to edit employee name'
-                            value={user.name}
+                            value={name}
                             className="max-w-xs"
-                            onValueChange={(v)=> setMsgs(prev => {
-                                const updatedMsgs = [...prev];
-                                updatedMsgs[index] = v;
-                                return updatedMsgs;
-                            })}
+                            onValueChange={(v)=> setName(v)}
                 />
                  </ModalBody>
                  <ModalFooter>

@@ -5,6 +5,8 @@ import { Employee } from "@/types/class.service"
 import { ShiftReqs, ShiftReqsOOP } from "@/types/user/types.server"
 import { firestore } from "@/firebaseConfig.mjs"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
+import { generateJwtToken } from "./token.service"
+import { fetchService } from "../fetch.service"
 
 
 export const getEmployeesByFilter = async (filterBy = {}, employerId: string) => {
@@ -35,23 +37,11 @@ export const saveEmployerMsgs = async (
     }
   };
 
-  export const updateUserCredentials = async (newEmail, newPassword) => {
-    const user = auth.currentUser;
-  
-    if (user) {
-      try {
-        // Update email
-        await updateEmail(user, newEmail);
-        console.log("Email updated successfully");
-  
-        // Update password
-        await updatePassword(user, newPassword);
-        console.log("Password updated successfully");
-      } catch (error) {
-        console.error("Error updating user credentials:", error);
-        // Handle re-authentication if required
-      }
-    } else {
-      console.log("No user is signed in.");
+  export const updateUserCredentials = async (newEmail: string, newPassword: string, userId: string) => {
+    const encryptedCredentials = await generateJwtToken({newEmail, newPassword, userId})
+    try {
+        await fetchService.PUT<void>('auth', JSON.stringify(encryptedCredentials))
+    } catch (error) {
+        throw new Error('Error while trying to update user : ', error)
     }
   }

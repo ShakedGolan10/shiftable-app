@@ -6,14 +6,16 @@ import { generateJwtToken, validateJwtToken } from '@/services/server-services/t
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
 import Admin from 'firebase-admin'
-
+import serviceAccount from '@/admin-sdk.env.json'
 interface UpdateRequest extends NextRequest {
     json: () => Promise<string>
 }
 
+
+
 interface IUpdateUserPayload {
-    email: string
-    password: string
+    newEmail: string
+    newPassword?: string
     userId: string
 }
 export async function POST(req: NextRequest) {
@@ -27,11 +29,18 @@ export async function POST(req: NextRequest) {
     }
 }
 export async function PUT(req: UpdateRequest) {
-    const admin = Admin.initializeApp(app)
     try {
-        const token = await req.json() // If there isnt body value (aka logout) req.json will throw an error which will cause logout.
-        const newUserCred = await validateJwtToken<IUpdateUserPayload>(token)
-        return await updateUserAuth(newUserCred)
+        const admin = Admin.initializeApp({
+            credential: Admin.credential.cert(serviceAccount as Admin.ServiceAccount),
+            databaseURL: process.env.SERVICE_KEY
+          });
+          const token = await req.json() // If there isnt body value (aka logout) req.json will throw an error which will cause logout.
+          const { newEmail, newPassword, userId } = await validateJwtToken<IUpdateUserPayload>(token)
+          await admin.auth().updateUser(userId, {
+            email:newEmail,
+            password: newPassword 
+          })
+        return NextResponse.json('Success', {status: 200})
     } catch (error) {
         return await logout()
     }
@@ -71,17 +80,4 @@ const login = async (auth: Auth, UserCredentials: Credentials) => {
     }
 }
 
-const updateUserAuth = async ({email, password, userId}: IUpdateUserPayload) => {
-    try {
-        // Update email
-        await updateEmail(user, newEmail);
-        console.log("Email updated successfully");
-  
-        // Update password
-        await updatePassword(user, newPassword);
-        console.log("Password updated successfully");
-      } catch (error) {
-        console.error("Error updating user credentials:", error);
-        // Handle re-authentication if required
-      }
-}
+
