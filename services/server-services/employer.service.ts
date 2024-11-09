@@ -34,3 +34,24 @@ export const saveEmployerMsgs = async (
       throw new Error(`Error updating employer msgs: ${error}`);
     }
   };
+
+  export const updateUserCredentials = async (newEmail, newPassword) => {
+    const user = auth.currentUser;
+  
+    if (user) {
+      try {
+        // Update email
+        await updateEmail(user, newEmail);
+        console.log("Email updated successfully");
+  
+        // Update password
+        await updatePassword(user, newPassword);
+        console.log("Password updated successfully");
+      } catch (error) {
+        console.error("Error updating user credentials:", error);
+        // Handle re-authentication if required
+      }
+    } else {
+      console.log("No user is signed in.");
+    }
+  }

@@ -1,18 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { app } from '@/firebaseConfig.mjs'
-import { Auth, UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { Auth, UserCredential, getAuth, signInWithEmailAndPassword, updateEmail, updatePassword } from 'firebase/auth'
 import { clearCookie, setCookie } from '@/services/server-services/cookie.service'
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
-import { NextURL } from 'next/dist/server/web/next-url'
+import Admin from 'firebase-admin'
 
+interface UpdateRequest extends NextRequest {
+    json: () => Promise<string>
+}
+
+interface IUpdateUserPayload {
+    email: string
+    password: string
+    userId: string
+}
 export async function POST(req: NextRequest) {
     const auth = getAuth(app)
     try {
         const token = await req.json() // If there isnt body value (aka logout) req.json will throw an error which will cause logout.
-        let UserCredentials = await validateJwtToken<Credentials>(token)
-        return await login(auth, UserCredentials)
+        let userCredentials = await validateJwtToken<Credentials>(token)
+        return await login(auth, userCredentials)
+    } catch (error) {
+        return await logout()
+    }
+}
+export async function PUT(req: UpdateRequest) {
+    const admin = Admin.initializeApp(app)
+    try {
+        const token = await req.json() // If there isnt body value (aka logout) req.json will throw an error which will cause logout.
+        const newUserCred = await validateJwtToken<IUpdateUserPayload>(token)
+        return await updateUserAuth(newUserCred)
     } catch (error) {
         return await logout()
     }
@@ -50,4 +69,19 @@ const login = async (auth: Auth, UserCredentials: Credentials) => {
         console.log('POST_AUTH - couldnt login', error)
         return new NextResponse(`Couldnt login, Error - ${error}`, { status: 500 })
     }
+}
+
+const updateUserAuth = async ({email, password, userId}: IUpdateUserPayload) => {
+    try {
+        // Update email
+        await updateEmail(user, newEmail);
+        console.log("Email updated successfully");
+  
+        // Update password
+        await updatePassword(user, newPassword);
+        console.log("Password updated successfully");
+      } catch (error) {
+        console.error("Error updating user credentials:", error);
+        // Handle re-authentication if required
+      }
 }

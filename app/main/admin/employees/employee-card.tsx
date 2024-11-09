@@ -71,10 +71,9 @@ export default function EmployeeCard({user, selectUser, employer} : IEmployeeCar
             {blockedShifts.length ? (
               <article className="flex flex-col gap-1 bg-default-50 p-3 rounded-md mt-2 shadow-sm">
                 {blockedShifts.map((shiftElement, idx) => (
-                  <p key={idx} className="text-default-700 bg-default-200 px-2 py-1 rounded-md flex items-center">
-                    <ExclamationTriangleIcon className="h-4 w-4 text-red-500 mr-2" />
-                    <span className="font-semibold text-default-800">Shift:</span> {shiftElement.shift}, 
-                    <span className="font-semibold text-default-800 ml-1">Day:</span> {shiftElement.day}
+                  <p key={idx} className="bg-default-200 px-2 py-1 rounded-md flex flex-col">
+                    <p className="font-semibold">Day: <span className="text-red">{shiftElement.day}</span></p> 
+                    <p className="font-semibold">Shift: <span className="text-red">{shiftElement.shift}</span></p> 
                   </p>
                 ))}
               </article>
