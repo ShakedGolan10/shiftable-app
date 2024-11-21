@@ -34,7 +34,7 @@ export async function PUT(req: UpdateRequest) {
             credential: Admin.credential.cert(serviceAccount as Admin.ServiceAccount),
             databaseURL: process.env.SERVICE_KEY
           });
-          const token = await req.json() // If there isnt body value (aka logout) req.json will throw an error which will cause logout.
+          const token = await req.json()
           const { newEmail, newPassword, userId } = await validateJwtToken<IUpdateUserPayload>(token)
           await admin.auth().updateUser(userId, {
             email:newEmail,
