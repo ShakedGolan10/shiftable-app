@@ -39,7 +39,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
   const [forDate, setForDate] = useState<string>(undefined)
-  const [excuteAsyncFunc] = useAsync()
+  const [executeAsyncFunc] = useAsync()
 
   useEffect(() => {
     const adJustedShifts = (): TableShifts => {
@@ -142,7 +142,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   }
   
   const applyShifts = async () => {
-    await excuteAsyncFunc({
+    await executeAsyncFunc({
       asyncOperation: () => saveUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
       errorMsg: 'Couldnt apply shifts',
       successMsg: 'Shifts applied successfuly' 

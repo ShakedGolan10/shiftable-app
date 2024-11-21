@@ -1,12 +1,9 @@
 'use server'
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 import { queryMany, queryOne } from "./db.service"
 import { Employee } from "@/types/class.service"
 import { ShiftReqs, ShiftReqsOOP } from "@/types/user/types.server"
 import { firestore } from "@/firebaseConfig.mjs"
-import { doc, getDoc, updateDoc } from "firebase/firestore"
-import { generateJwtToken } from "./token.service"
-import { fetchService } from "../fetch.service"
+import { doc, updateDoc } from "firebase/firestore"
 
 
 export const getEmployeesByFilter = async (filterBy = {}, employerId: string) => {
@@ -37,11 +34,3 @@ export const saveEmployerMsgs = async (
     }
   };
 
-  export const updateUserCredentials = async (newEmail: string, newPassword: string, userId: string) => {
-    const encryptedCredentials = await generateJwtToken({newEmail, newPassword, userId})
-    try {
-        await fetchService.PUT<void>('auth', JSON.stringify(encryptedCredentials))
-    } catch (error) {
-        throw new Error('Error while trying to update user : ', error)
-    }
-  }

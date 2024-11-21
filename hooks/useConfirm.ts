@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export const useConfirm = () => {
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isConfirmModalOpen, setIsModalOpen] = useState(false)
   const [msg, setMsg] = useState('')  
   const [confirmPromise, setConfirmPromise] = useState<{
     resolve: (value: boolean) => void;
@@ -24,6 +24,6 @@ export const useConfirm = () => {
     }
   };
 
-  return {isModalOpen, handleModalClose, askConfirmation, msg}
+  return {isConfirmModalOpen, handleModalClose, askConfirmation, msg}
 };
 

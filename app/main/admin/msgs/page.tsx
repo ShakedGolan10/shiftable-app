@@ -10,7 +10,7 @@ import WithDataWrapper from "@/components/helpers/cmp-wrapper";
 
 
 const EditEmployeesMsgs = ({user}: {user: Employer}) => {
-    const [ excuteAsyncFunc ] = useAsync()
+    const [ executeAsyncFunc ] = useAsync()
     const [msgs, setMsgs] = useState<string[]>([])
     
     
@@ -20,7 +20,7 @@ const EditEmployeesMsgs = ({user}: {user: Employer}) => {
     },[user])
   
     const saveMsgs = async () => {
-        await excuteAsyncFunc({
+        await executeAsyncFunc({
             asyncOperation: () => saveEmployerMsgs(user.id , msgs),
             errorMsg: 'Couldnt save employer messages, please try again',
             successMsg:'Your messages saved succesfuly'

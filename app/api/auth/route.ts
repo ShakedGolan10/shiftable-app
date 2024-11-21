@@ -1,21 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { app } from '@/firebaseConfig.mjs'
-import { Auth, UserCredential, getAuth, signInWithEmailAndPassword, updateEmail, updatePassword } from 'firebase/auth'
+import { Auth, UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { clearCookie, setCookie } from '@/services/server-services/cookie.service'
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
 import Admin from 'firebase-admin'
 import serviceAccount from '@/admin-sdk.env.json'
+import { saveEmployeeEmail } from '@/services/server-services/admin.service'
+
 interface UpdateRequest extends NextRequest {
     json: () => Promise<string>
 }
 
-
-
-interface IUpdateUserPayload {
-    newEmail: string
-    newPassword?: string
+interface IUpdateUserCredsPayload {
+    newCreds: {
+        email?: string
+        password?: string
+    }
     userId: string
 }
 export async function POST(req: NextRequest) {
@@ -35,15 +37,17 @@ export async function PUT(req: UpdateRequest) {
             databaseURL: process.env.SERVICE_KEY
           });
           const token = await req.json()
-          const { newEmail, newPassword, userId } = await validateJwtToken<IUpdateUserPayload>(token)
-          await admin.auth().updateUser(userId, {
-            email:newEmail,
-            password: newPassword 
-          })
+          const userNewCred = await validateJwtToken<IUpdateUserCredsPayload>(token)
+          await Promise.all([
+            // Todo: Add transaction handling the race condition over here
+            admin.auth().updateUser(userNewCred.userId, {
+                ...userNewCred.newCreds
+              }),
+              saveEmployeeEmail(userNewCred.userId, userNewCred.newCreds.email)
+            ])
         return NextResponse.json('Success', {status: 200})
     } catch (error) {
         return new NextResponse(error, { status: 500 })
-        // return await logout()
     }
 }
 

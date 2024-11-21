@@ -40,7 +40,7 @@ export default function EmployeeCard({user, selectUser, employer} : IEmployeeCar
               size="sm"
               onPress={() => selectUser(user.id)}
             >
-              Edit
+              Edit employee
             </Button>
         </CardHeader>
         <CardBody className="px-4 py-4 bg-default-100 text-small rounded-md shadow-md">
@@ -71,10 +71,10 @@ export default function EmployeeCard({user, selectUser, employer} : IEmployeeCar
             {blockedShifts.length ? (
               <article className="flex flex-col gap-1 bg-default-50 p-3 rounded-md mt-2 shadow-sm">
                 {blockedShifts.map((shiftElement, idx) => (
-                  <p key={idx} className="bg-default-200 px-2 py-1 rounded-md flex flex-col">
-                    <p className="font-semibold">Day: <span className="text-red">{shiftElement.day}</span></p> 
-                    <p className="font-semibold">Shift: <span className="text-red">{shiftElement.shift}</span></p> 
-                  </p>
+                  <article key={idx} className="bg-default-200 px-2 py-1 rounded-md flex flex-col">
+                    <div><span className="font-semibold">Day: </span> <span className="text-red">{shiftElement.day}</span></div>
+                    <div><span className="font-semibold">Shift: </span> <span className="text-red">{shiftElement.shift}</span> </div>
+                  </article>
                 ))}
               </article>
             ) : (

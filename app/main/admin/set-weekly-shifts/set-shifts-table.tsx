@@ -14,6 +14,8 @@ import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/s
 import { getEmployeesByFilter } from '@/services/server-services/employer.service';
 
 
+// BIG TODO !!! : Identify shifts needs to be based on userId and not user name, because WHAT IF I CHANGE EMPLOYEE NAME ?!
+
 const emptyDayOrientedObject = {
     sunday: {},
     monday: {},
@@ -46,8 +48,8 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
   
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqsOOP>(null)
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
-  const { isModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
-  const [ excuteAsyncFunc ] = useAsync()
+  const { isConfirmModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
+  const [ executeAsyncFunc ] = useAsync()
 
   useEffect(()=> {
     if (!forDate) setForDate(getDateOfApply(user.applicationTime.day, user.applicationTime.time))
@@ -166,7 +168,7 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
 
   const applyShifts = async () => {
     const isPossible = await checkEmptyShifts()
-    if (isPossible) await excuteAsyncFunc({
+    if (isPossible) await executeAsyncFunc({
         asyncOperation: () => saveWeeklySchedule(user.id, forDate, selectedShifts), 
         errorMsg: 'Couldnt apply shifts, please try again',
         successMsg: 'Weekly shifts applied successfuly',
@@ -178,7 +180,7 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
   
   return (selectedShifts && shiftsReqs) && (
   <>
-    <ConfirmationModal message={msg} onClose={handleModalClose} open={isModalOpen} />
+    <ConfirmationModal message={msg} onClose={handleModalClose} open={isConfirmModalOpen} />
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
       <GeneralTitle title={`Set the shifts for`} />
       <div className='flex flex-row gap-5 items-center'>
