@@ -49,16 +49,14 @@ export default function WithDataWrapper<T>({
     if (error) {
       return <ErrorElement message={errorMsg} />;
     }
-
-    if (!dataPromise && user) {
+    
+    if (!dataPromise && user || !data && user) {
       return <Component user={user} data={undefined} />;
     }
 
     if (data && user) {
       return <Component user={user} data={data} />;
     }
-    
 
-    return null; // In case there's no data, just return null (optional safeguard)
   };
 }

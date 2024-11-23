@@ -4,12 +4,14 @@ import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employer } from '@/types/class.service';
 import { getThisSunday } from '@/lib/server.utils';
 import WorkWeekTable from './work_week_table';
+import { useState } from 'react';
 
 export default function ShiftsApplyPage() {
-  const forDate = getThisSunday() 
+  const [forDate, setForDate] = useState<string>(getThisSunday())
+
   const WorkWeekTableWithData = WithDataWrapper({
-    dataPromise: (user: Employer) => getWeeklySchedule(user.id, 'Sun Sep 29 2024'),
-    Component: (props) => <WorkWeekTable {...props} />, 
+    dataPromise: (user: Employer) => getWeeklySchedule(user.id, forDate),
+    Component: (props) => <WorkWeekTable {...props} setForDate={setForDate} forDate={forDate}/>, 
     errorMsg: 'Couldnt load weekly schedule',
     loadingMsg: 'Loading weekly schedule...'
   });

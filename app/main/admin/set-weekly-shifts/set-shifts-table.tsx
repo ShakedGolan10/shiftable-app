@@ -37,7 +37,7 @@ const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Empl
   let emptyShiftReq = {}
   Object.keys(weeklyFlow).forEach(dayKey => {
     emptyShiftReq[dayKey] = weeklyFlow[dayKey].map(shift => {
-        if (!employee.blockedShifts.includes(shift.shiftId)) return {...shift, isSelected: false, isCant: false, name: employee.name}
+        if (!employee.blockedShifts.includes(shift.shiftId)) return {...shift, isSelected: false, isCant: false, name: employee.name, employeeId: employee.id}
       })
   })
   return emptyShiftReq as TableShifts
@@ -47,7 +47,7 @@ const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Empl
 export default function SetShiftsTable({ data, user, forDate, setForDate }: IShiftsTableProps) {
   
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqsOOP>(null)
-  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: boolean}>>(undefined);
+  const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: string}>>(undefined);
   const { isConfirmModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ executeAsyncFunc ] = useAsync()
 
@@ -91,7 +91,8 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     if (isRemove) return
-    const isEmployeeWorkingToday = Object.keys(selectedShifts[day]).find(key => selectedShifts[day][key][shiftSelected.name] === true)
+    // A problem over here: need to adjust the key selection to be based on userId instead of name
+    const isEmployeeWorkingToday = Object.keys(selectedShifts[day]).find(key => selectedShifts[day][key][shiftSelected.employeeId])
     if (!isEmployeeWorkingToday) return true
     else {
         const isPossible = await askConfirmation(`Youre about to asign ${shiftSelected.name} for more then 1 shift this day`)
@@ -123,7 +124,7 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
     } 
   }
 
-  const handleSelectChange = async (day: string, shiftId: string, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
+  const handleSelectChange = async (day: string, updatedShifts: Shift[], shiftUnselected?: Shift): Promise<boolean> => {
     const shiftSelected = (shiftUnselected) ? shiftUnselected : updatedShifts[updatedShifts.length-1]
     const isPossible = await checkRules(day, shiftSelected, (shiftUnselected) ? true : false)
     if (!isPossible) return false
@@ -131,13 +132,14 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
       const newObj = {...prev,
       [day]: {
         ...prev?.[day],
-        [shiftId]: {
-          ...prev[day][shiftId],
-          [shiftSelected.name]: true
+        [shiftSelected.shiftId]: {
+          ...prev[day][shiftSelected.shiftId],
+          [shiftSelected.employeeId]: shiftSelected.name
         },
       },
+      // Name bug : Over here also 
     }
-    if (shiftUnselected) delete newObj[day][shiftId][shiftSelected.name]
+    if (shiftUnselected) delete newObj[day][shiftSelected.shiftId][shiftSelected.employeeId]
     return newObj
   });
     
@@ -206,10 +208,10 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
                       day={daysOfWeek[index].day.toLowerCase()}
                       shiftIndex={index}
                       availableShifts={Object.values(shiftsReqs).flatMap(req => ({
-                        name: req.name, ...req.shifts[daysOfWeek[index].day.toLowerCase()][item.key]
+                        ...req.shifts[daysOfWeek[index].day.toLowerCase()][item.key]
                       }))}
                       selectedShifts={selectedShifts && selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]}
-                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(daysOfWeek[index].day.toLowerCase(), shiftElement.shiftId, updatedShifts, shiftUnselected)}
+                      onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(daysOfWeek[index].day.toLowerCase(), updatedShifts, shiftUnselected)}
                     /> :
                       <div><p>No Shifts</p></div> // remove the div?
                       }
