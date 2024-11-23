@@ -12,7 +12,6 @@ export const useForm = <T>(initialState: T): [T, EventHandler, (fields: T) => vo
 
     const handleInputChange: EventHandler = ({ target }: any) => {
         let { value, name: field, type, checked } = target
-
         switch (type) {
             case 'number':
             case 'range':

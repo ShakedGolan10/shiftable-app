@@ -25,7 +25,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
     const [isLoadingAuth, setLoadingAuth] = useState(null)
     const [isLoadingLogin, setLoadingLogin] = useState(null)
     const router = useRouter()
-    const [excuteAsyncFunc] = useAsync()
+    const [executeAsyncFunc] = useAsync()
     
     useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage.
         setLoadingAuth(true)
@@ -45,7 +45,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             const login = async (credentials: Credentials) : Promise<void> => {
                 try {
                     setLoadingLogin(true)
-                    let user = await excuteAsyncFunc({
+                    let user = await executeAsyncFunc({
                         asyncOperation: () => userService.login(credentials), 
                         errorMsg: 'Couldnt login, please try again',
                         isLoaderDisabled: true
@@ -64,7 +64,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             const logout = async () : Promise<void> => {
                 setUser(null)
                 try {
-                    await excuteAsyncFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
+                    await executeAsyncFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
                 } catch (error) {
                     router.push('/')
                 } finally {

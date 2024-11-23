@@ -7,7 +7,7 @@ export default function MainRouteLayout({ children }: { children: React.ReactNod
     return (
         <>
         <MainNavBar />
-        <main className="container p-4 flex flex-col items-center" style={{minHeight: "90vh", minWidth:'100%', justifyContent: 'space-evenly', gap: '2vh'}}>
+        <main className="container p-4 flex flex-col items-center" style={{minHeight: "90vh", minWidth:'100%', justifyContent: 'flex-start', gap: '2vh'}}>
             {children}
         </main>
         </>

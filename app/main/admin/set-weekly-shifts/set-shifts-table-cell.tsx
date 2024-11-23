@@ -21,7 +21,7 @@ export const SetShiftsTableCell = ({
   useEffect(()=> {
     if (!selectedShifts) return 
     setLocalSelectedShifts((prev) => {
-      return [...Object.keys(selectedShifts).map((employeeName) => availableShifts.find((shift)=> shift.name === employeeName))]
+      return [...Object.keys(selectedShifts).map((employeeId) => availableShifts.find((shift)=> shift.employeeId === employeeId))]
     })
 
   },[])
@@ -37,7 +37,7 @@ export const SetShiftsTableCell = ({
   };
 
   const handleRemove = (value: Shift) => {
-    const updatedShifts = localSelectedShifts.filter((shift) => ((shift.name !== value.name)));
+    const updatedShifts = localSelectedShifts.filter((shift) => ((shift.employeeId !== value.employeeId)));
     const isPossible = onSelectChange(updatedShifts, value);
     if (isPossible) setLocalSelectedShifts(updatedShifts);
   };

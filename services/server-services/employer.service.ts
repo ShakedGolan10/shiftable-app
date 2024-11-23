@@ -1,10 +1,9 @@
 'use server'
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 import { queryMany, queryOne } from "./db.service"
 import { Employee } from "@/types/class.service"
 import { ShiftReqs, ShiftReqsOOP } from "@/types/user/types.server"
 import { firestore } from "@/firebaseConfig.mjs"
-import { doc, getDoc, updateDoc } from "firebase/firestore"
+import { doc, updateDoc } from "firebase/firestore"
 
 
 export const getEmployeesByFilter = async (filterBy = {}, employerId: string) => {
@@ -34,3 +33,4 @@ export const saveEmployerMsgs = async (
       throw new Error(`Error updating employer msgs: ${error}`);
     }
   };
+

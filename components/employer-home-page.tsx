@@ -27,7 +27,6 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <span className='text-large font-serif mt-10 mb-5 text-center'>Hi {employerUser.name}, are you ready for another week?</span>
-      {/* Todo: Design the header of the name */}
       <div className='my-7'>
         <p className='text-subHeader my-3 font-semibold text-center'>Shifts application is available for {forDate}
         </p>
@@ -50,7 +49,7 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
       <div className='flex flex-col gap-2 my-2'>
         <Button onClick={()=> router.push('main/admin/set-weekly-shifts')} className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
         <Button onClick={()=> router.push('main/admin/work-week')} className='rounded-md bg-teal-400 text-base hover:bg-teal-600'>Shift schedule</Button>
-        <Button className='rounded-md bg-cyan-500 text-base hover:bg-cyan-700'>Employees</Button>
+        <Button onClick={()=> router.push('main/admin/employees')} className='rounded-md bg-cyan-500 text-base hover:bg-cyan-700'>Employees</Button>
         <Button onClick={()=> router.push('main/admin/msgs')} className='rounded-md bg-indigo-500 text-base hover:bg-indigo-700'>Edit employees messages</Button>
       </div>
 

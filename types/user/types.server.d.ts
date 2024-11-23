@@ -114,6 +114,7 @@ export interface Shift {
     isSelected: boolean
     isCant: boolean
     name?: string
+    employeeId?: string
   }
 
   export interface RowItem {
