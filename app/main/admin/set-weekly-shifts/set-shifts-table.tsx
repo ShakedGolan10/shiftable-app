@@ -14,7 +14,6 @@ import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/s
 import { getEmployeesByFilter } from '@/services/server-services/employer.service';
 
 
-// BIG TODO !!! : Identify shifts needs to be based on userId and not user name, because WHAT IF I CHANGE EMPLOYEE NAME ?!
 
 const emptyDayOrientedObject = {
     sunday: {},
@@ -91,7 +90,6 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     if (isRemove) return
-    // A problem over here: need to adjust the key selection to be based on userId instead of name
     const isEmployeeWorkingToday = Object.keys(selectedShifts[day]).find(key => selectedShifts[day][key][shiftSelected.employeeId])
     if (!isEmployeeWorkingToday) return true
     else {
@@ -137,7 +135,6 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
           [shiftSelected.employeeId]: shiftSelected.name
         },
       },
-      // Name bug : Over here also 
     }
     if (shiftUnselected) delete newObj[day][shiftSelected.shiftId][shiftSelected.employeeId]
     return newObj
@@ -213,7 +210,7 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
                       selectedShifts={selectedShifts && selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]}
                       onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(daysOfWeek[index].day.toLowerCase(), updatedShifts, shiftUnselected)}
                     /> :
-                      <div><p>No Shifts</p></div> // remove the div?
+                      <div><p>No Shifts</p></div> 
                       }
                   </TableCell>
                   ))}
