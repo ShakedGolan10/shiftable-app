@@ -20,7 +20,6 @@ export default function Carousel({ slides }) {
             }}>
                 {slides.map((s, idx) => {
                     return <article key={idx} className="flex flex-shrink-0 justify-center w-full p-2 mb-2" style={{
-                        // display: (idx !== current) ? 'none' : 'block'
                     }}>
                         <span>{s}</span>
                     </article>

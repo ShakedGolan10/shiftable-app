@@ -51,9 +51,9 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                         isLoaderDisabled: true
                     }) 
                     if (!user) throw new Error('error')
+                    router.push('/main')
                     user = CreateUserInstance(user)
                     setUser(user)
-                    router.push('/main')
                 } catch (error) {
                     throw new Error(error)
                 } finally {

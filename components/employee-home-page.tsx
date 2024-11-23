@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 
 export default function EmployeeHomePage({ employeeUser }: { employeeUser: Employee }) {
-    // Todo: Modal opens if the user has a shift today - Make the shifts database first
     const { toggleModalAction } = useSystemActions()
 
     const router = useRouter()
