@@ -63,6 +63,18 @@ export const getWeeklySchedule = async (
     throw new Error(`Error updating employee schedule: ${error}`);
   }
 };
+export const getEmployeeWeeklySchedule = async (
+  employerId: string,
+  forDate: string,
+) => {
+  try {
+    const existedSchedule = await queryOne<DayOrientedObject<{[key: string]: string}>>(`weeklySchedule/${employerId}/forDate/${forDate}`)
+    // Add logic of retuning only the employee schedule
+    return existedSchedule
+  } catch (error) {
+    throw new Error(`Error updating employee schedule: ${error}`);
+  }
+};
 
 
 
