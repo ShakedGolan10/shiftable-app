@@ -30,7 +30,7 @@ export default function WorkWeekTable({ data, user, setForDate, forDate }: IWork
             <ArrowRightCircleIcon />
           </Button>
       </div>
-      {(data) ? <Table aria-label="Employer Shifts Table">
+      {(shifts) ? <Table aria-label="Employer Shifts Table">
         <TableHeader columns={daysOfWeek}>
           {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
         </TableHeader>
