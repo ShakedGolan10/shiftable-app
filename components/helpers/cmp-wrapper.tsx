@@ -18,6 +18,7 @@ export default function WithDataWrapper<T extends unknown[]>({
   loadingMsg,
   errorMsg,
 }: WrapperProps<T>) {
+  return function WrappedComponent() {
     const [data, setData] = useState<T>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>(null);
@@ -58,4 +59,5 @@ export default function WithDataWrapper<T extends unknown[]>({
       return <Component user={user} data={data} />;
     }
 
+  };
 }

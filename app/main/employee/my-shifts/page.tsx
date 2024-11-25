@@ -10,11 +10,12 @@ import { DayOrientedObject } from '@/types/user/types.server';
 export default function ShiftsApplyPage() {
   const [forDate, setForDate] = useState<string>(getThisSunday())
 
-  return WithDataWrapper<[DayOrientedObject<{[key: string]: string}>, WeeklyShifts]>({
+  const MyShiftsWrraper = WithDataWrapper<[DayOrientedObject<{[key: string]: string}>, WeeklyShifts]>({
     dataPromises: [(user: Employee) => getWeeklySchedule(user.employer.id, forDate), (user: Employee) => getEmployerWeeklyShifts(user.employer.id)],
     Component: (props) => <MyShiftsTable {...props} setForDate={setForDate} forDate={forDate}/>, 
     errorMsg: 'Couldnt load weekly schedule',
     loadingMsg: 'Loading weekly schedule...'
   });
 
+  <MyShiftsWrraper />
 }

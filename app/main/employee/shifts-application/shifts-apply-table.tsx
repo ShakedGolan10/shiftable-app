@@ -12,7 +12,7 @@ import GeneralTitle from '@/components/helpers/general-title';
 interface ShiftsTableProps {
   data: [
     weeklyWorkflow: WeeklyShifts,
-    applicationRules: ApplicationRules
+    applyRules: ApplicationRules
   ];
   user: Employee;
 }
@@ -29,10 +29,9 @@ const emptySelectedShifts = {
 
 export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
 
-  const [ weeklyWorkflow, applicationRules ] = data;
+  const [ weeklyWorkflow, applyRules ] = data;
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
   const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
-  const [applyRules, setApplyRules] = useState<ApplicationRules>(undefined);
   const [numOfCantRule, setNumOfCantRule] = useState<number>(0);
   const [minDaysRule, setMinDaysRule] = useState<number>(0);
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
@@ -56,8 +55,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     }
     const tableShifts = adJustedShifts()
     setApplicableShifts(tableShifts);
-    setApplyRules(applicationRules);
-    setOptionalShiftsRule(applicationRules.optionalShifts.map(() => 0))
+    setOptionalShiftsRule(applyRules.optionalShifts.map(() => 0))
     setForDate(getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time))
   },[])
 

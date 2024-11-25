@@ -20,7 +20,7 @@ export const SetShiftsTableCell = ({
  
   useEffect(()=> {
     if (!selectedShifts) return 
-    setLocalSelectedShifts((prev) => [...Object.keys(selectedShifts).map((employeeId) => availableShifts.find((shift)=> shift.employeeId === employeeId))])
+    setLocalSelectedShifts(() => [...Object.keys(selectedShifts).map((employeeId) => availableShifts.find((shift)=> shift.employeeId === employeeId))])
   },[])
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
   const [isSelectOpen, setIsSelectOpen] = useState(false);

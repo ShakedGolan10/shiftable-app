@@ -3,15 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
 import { Employee, Employer } from '@/types/class.service';
 import { SetShiftsTableCell } from './set-shifts-table-cell';
-import { DayOrientedObject, Shift, ShiftReqs, ShiftReqsOOP, TableShifts } from '@/types/user/types.server';
+import { DayOrientedObject, Shift, ShiftReqsOOP, TableShifts } from '@/types/user/types.server';
 import { useConfirm } from '@/hooks/useConfirm';
 import ConfirmationModal from '@/components/helpers/confirm-modal';
-import { getWeeklySchedule, saveWeeklySchedule } from '@/services/server-services/shifts.service';
+import { saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
 import { createTableRows, daysOfWeek, getDateOfApply, getLastSunday, getNextSunday } from '@/lib/server.utils';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
-import { getEmployeesByFilter } from '@/services/server-services/employer.service';
 
 
 
@@ -26,7 +25,7 @@ const emptyDayOrientedObject = {
 }
 
 interface IShiftsTableProps {
-    data: [ShiftReqsOOP]
+    data: [ShiftReqsOOP, DayOrientedObject<{[key: string]: string}>, Employee[]]
     user: Employer
     forDate: string
     setForDate: React.Dispatch<React.SetStateAction<string>>
@@ -45,7 +44,7 @@ const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Empl
 
 export default function SetShiftsTable({ data, user, forDate, setForDate }: IShiftsTableProps) {
   
-  const [rawDataShiftReqs] = data
+  const [rawDataShiftReqs, existedWeeklySched, employees] = data
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqsOOP>(null)
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: string}>>(undefined);
   const { isConfirmModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
@@ -55,17 +54,14 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
   useEffect(()=> {
     if (!forDate) setForDate(getDateOfApply(user.applicationTime.day, user.applicationTime.time))
     else {
-      getWeeklySchedule(user.id, forDate).then(res => {
-        (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject)
-      })
-      getEmployeesByFilter({}, user.id).then(res => {
+        (existedWeeklySched) ? setSelectedShifts(existedWeeklySched) : setSelectedShifts(emptyDayOrientedObject)
             const emptyShiftReqs:ShiftReqsOOP = {}
             const dataLength = Object.keys(rawDataShiftReqs).length
-              if (res.length === dataLength) { // if all users applied reqs
+              if (employees.length === dataLength) { // if all users applied reqs
                 setShiftsReqs(rawDataShiftReqs)
               } 
               else if (!dataLength) {
-                res.map(employee => {
+                employees.map(employee => {
                     emptyShiftReqs[employee.id] = {
                       id: employee.id,
                       name: employee.name,
@@ -74,8 +70,8 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
                 })
                 setShiftsReqs(emptyShiftReqs)
               }
-              else if (dataLength < res.length) {
-                res.forEach(employee => {
+              else if (dataLength < employees.length) {
+                employees.forEach(employee => {
                   if (!rawDataShiftReqs[employee.id]) {
                     emptyShiftReqs[employee.id] = {
                       id: employee.id,
@@ -87,7 +83,6 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
                 })
                 setShiftsReqs(emptyShiftReqs)
               }
-            })
         }
   },[])
   
