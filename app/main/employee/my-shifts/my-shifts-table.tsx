@@ -1,23 +1,26 @@
 import React from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Button } from '@nextui-org/react';
-import { Employer } from '@/types/class.service';
-import { DayOrientedObject } from '@/types/user/types.server';
+import { Employee } from '@/types/class.service';
+import { DayOrientedObject, Shift } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
 import { createTableRows, daysOfWeek, getLastSunday, getNextSunday } from '@/lib/server.utils';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 
 
 interface IMyShiftsTable {
-  data: DayOrientedObject<{[key: string]: string }>
-  user: Employer
+  data: [
+    weeklySchedule: DayOrientedObject<{[key: string]: string}>,
+    weeklyWorkflow: WeeklyShifts
+  ];
+  user: Employee
   forDate: string
   setForDate: React.Dispatch<React.SetStateAction<string>>
 }
 
 
 export default function MyShiftsTable({ data, user, setForDate, forDate }: IMyShiftsTable) {
-  const selectedShifts = data
-  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
+  const [weeklySchedule, weeklyWorkflow] = data
+  const tableItems = createTableRows<WeeklyShifts, Shift>(weeklyWorkflow, daysOfWeek)
   return (
   <>
       <GeneralTitle title={`Weekly schedule for week ${forDate}`} />
@@ -43,9 +46,9 @@ export default function MyShiftsTable({ data, user, setForDate, forDate }: IMySh
                     <div className='flex flex-col h-40'>
                       <p className='text-base border-b border-gray-500'>{shiftElement.shift}</p>
                       <div className="my-5 mx-1 flex flex-col gap-4 overflow-y-scroll">
-                        {Object.keys(selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]).map(key =>
+                        {Object.keys(weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]).map(key =>
                             <Chip size="lg" key={key} style={{backgroundColor: 'lightgreen'}} className="text-base p-3">
-                              {selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][key]}
+                              {weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][key]}
                             </Chip>
                         )}
                       </div>

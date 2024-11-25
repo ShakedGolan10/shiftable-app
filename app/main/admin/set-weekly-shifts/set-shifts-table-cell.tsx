@@ -1,14 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
-import { Shift } from '@/types/user/types.server';
+import { DayOrientedObject, Shift } from '@/types/user/types.server';
 
 interface ISetShiftsTableCellProps {
   day: string
   shiftIndex: number
   availableShifts: Shift[]
   onSelectChange: (updatedShifts: Shift[], shiftUnselected?: Shift) => Promise<boolean>
-  selectedShifts?
+  selectedShifts: DayOrientedObject<{ [key: string]: string }>
 }
 export const SetShiftsTableCell = ({
   day,
@@ -20,10 +20,7 @@ export const SetShiftsTableCell = ({
  
   useEffect(()=> {
     if (!selectedShifts) return 
-    setLocalSelectedShifts((prev) => {
-      return [...Object.keys(selectedShifts).map((employeeId) => availableShifts.find((shift)=> shift.employeeId === employeeId))]
-    })
-
+    setLocalSelectedShifts((prev) => [...Object.keys(selectedShifts).map((employeeId) => availableShifts.find((shift)=> shift.employeeId === employeeId))])
   },[])
   const [localSelectedShifts, setLocalSelectedShifts] = useState<Shift[]>([]);
   const [isSelectOpen, setIsSelectOpen] = useState(false);

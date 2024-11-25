@@ -5,16 +5,16 @@ import { Employer } from '@/types/class.service';
 import { getThisSunday } from '@/lib/server.utils';
 import WorkWeekTable from './work_week_table';
 import { useState } from 'react';
+import { DayOrientedObject } from '@/types/user/types.server';
 
 export default function ShiftsApplyPage() {
   const [forDate, setForDate] = useState<string>(getThisSunday())
 
-  const WorkWeekTableWithData = WithDataWrapper({
-    dataPromise: (user: Employer) => getWeeklySchedule(user.id, forDate),
-    Component: (props) => <WorkWeekTable {...props} setForDate={setForDate} forDate={forDate}/>, 
+  return WithDataWrapper<[DayOrientedObject<{[key: string]: string}>]>({
+    dataPromises: [(user: Employer) => getWeeklySchedule(user.id, forDate)],
+    Component: (props) => <WorkWeekTable {...props} setForDate={setForDate} forDate={forDate} />, 
     errorMsg: 'Couldnt load weekly schedule',
     loadingMsg: 'Loading weekly schedule...'
   });
 
-  return <WorkWeekTableWithData />;
 }

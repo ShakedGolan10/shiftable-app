@@ -26,7 +26,7 @@ const emptyDayOrientedObject = {
 }
 
 interface IShiftsTableProps {
-    data: ShiftReqsOOP
+    data: [ShiftReqsOOP]
     user: Employer
     forDate: string
     setForDate: React.Dispatch<React.SetStateAction<string>>
@@ -36,7 +36,7 @@ const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Empl
   let emptyShiftReq = {}
   Object.keys(weeklyFlow).forEach(dayKey => {
     emptyShiftReq[dayKey] = weeklyFlow[dayKey].map(shift => {
-        if (!employee.blockedShifts.includes(shift.shiftId)) return {...shift, isSelected: false, isCant: false, name: employee.name, employeeId: employee.id}
+        if (!employee.blockedShifts.includes(shift.shiftId)) return {...shift, isSelected: false, isCant: false}
       })
   })
   return emptyShiftReq as TableShifts
@@ -45,20 +45,24 @@ const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Empl
 
 export default function SetShiftsTable({ data, user, forDate, setForDate }: IShiftsTableProps) {
   
+  const [rawDataShiftReqs] = data
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqsOOP>(null)
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: string}>>(undefined);
   const { isConfirmModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ executeAsyncFunc ] = useAsync()
 
+
   useEffect(()=> {
     if (!forDate) setForDate(getDateOfApply(user.applicationTime.day, user.applicationTime.time))
     else {
-      getWeeklySchedule(user.id, forDate).then(res => (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject))
+      getWeeklySchedule(user.id, forDate).then(res => {
+        (res) ? setSelectedShifts(res) : setSelectedShifts(emptyDayOrientedObject)
+      })
       getEmployeesByFilter({}, user.id).then(res => {
             const emptyShiftReqs:ShiftReqsOOP = {}
-            const dataLength = Object.keys(data).length
+            const dataLength = Object.keys(rawDataShiftReqs).length
               if (res.length === dataLength) { // if all users applied reqs
-                setShiftsReqs(data)
+                setShiftsReqs(rawDataShiftReqs)
               } 
               else if (!dataLength) {
                 res.map(employee => {
@@ -72,13 +76,13 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
               }
               else if (dataLength < res.length) {
                 res.forEach(employee => {
-                  if (!data[employee.id]) {
+                  if (!rawDataShiftReqs[employee.id]) {
                     emptyShiftReqs[employee.id] = {
                       id: employee.id,
                       name: employee.name,
                       shifts: createEmptyShiftReqPerEmployee(user.weeklyWorkflow, employee)
                     }
-                  } else emptyShiftReqs[employee.id] = data[employee.id]
+                  } else emptyShiftReqs[employee.id] = rawDataShiftReqs[employee.id]
                   
                 })
                 setShiftsReqs(emptyShiftReqs)
@@ -205,7 +209,7 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
                       day={daysOfWeek[index].day.toLowerCase()}
                       shiftIndex={index}
                       availableShifts={Object.values(shiftsReqs).flatMap(req => ({
-                        ...req.shifts[daysOfWeek[index].day.toLowerCase()][item.key]
+                        name: req.name, employeeId: req.id ,...req.shifts[daysOfWeek[index].day.toLowerCase()][item.key]
                       }))}
                       selectedShifts={selectedShifts && selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]}
                       onSelectChange={(updatedShifts, shiftUnselected) => handleSelectChange(daysOfWeek[index].day.toLowerCase(), updatedShifts, shiftUnselected)}

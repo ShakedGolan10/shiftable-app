@@ -10,10 +10,10 @@ import { RowItem, Shift, TableShifts, WeeklyShifts } from '@/types/user/types.se
 import GeneralTitle from '@/components/helpers/general-title';
 
 interface ShiftsTableProps {
-  data: {
-    weeklyWorkflow: WeeklyShifts;
-    applicationRules: ApplicationRules;
-  };
+  data: [
+    weeklyWorkflow: WeeklyShifts,
+    applicationRules: ApplicationRules
+  ];
   user: Employee;
 }
 
@@ -29,7 +29,7 @@ const emptySelectedShifts = {
 
 export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
 
-  const { weeklyWorkflow, applicationRules } = data;
+  const [ weeklyWorkflow, applicationRules ] = data;
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
   const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
   const [applyRules, setApplyRules] = useState<ApplicationRules>(undefined);

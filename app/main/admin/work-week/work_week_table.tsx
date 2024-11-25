@@ -8,7 +8,7 @@ import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/s
 
 
 interface IWorkWeekTableProps {
-  data: DayOrientedObject<{[key: string]: string }>
+  data: [DayOrientedObject<{[key: string]: string }>]
   user: Employer
   forDate: string
   setForDate: React.Dispatch<React.SetStateAction<string>>
@@ -16,7 +16,7 @@ interface IWorkWeekTableProps {
 
 
 export default function WorkWeekTable({ data, user, setForDate, forDate }: IWorkWeekTableProps) {
-  const selectedShifts = data
+  const [ shifts ] = data
   const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
   return (
   <>
@@ -43,9 +43,9 @@ export default function WorkWeekTable({ data, user, setForDate, forDate }: IWork
                     <div className='flex flex-col h-40'>
                       <p className='text-base border-b border-gray-500'>{shiftElement.shift}</p>
                       <div className="my-5 mx-1 flex flex-col gap-4 overflow-y-scroll">
-                        {Object.keys(selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]).map(key =>
+                        {Object.keys(shifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]).map(key =>
                             <Chip size="lg" key={key} style={{backgroundColor: 'lightgreen'}} className="text-base p-3">
-                              {selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][key]}
+                              {shifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][key]}
                             </Chip>
                         )}
                       </div>
