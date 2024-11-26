@@ -6,9 +6,16 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 
 export const getEmployerWeeklyShifts = async (employerId: string) => {
   try {
-    const applicationRules = await queryOneField<ApplicationRules>(`users/${employerId}`, 'application_rules')
     const weeklyWorkflow = await queryOneField<WeeklyShifts>(`users/${employerId}`, 'weeklyWorkflow')
-    return { applicationRules, weeklyWorkflow }
+    return weeklyWorkflow 
+  } catch (error) {
+    throw new Error(`Error catched while trying to get shifts data at firebase: ${error}`)    
+  }
+}
+export const getEmployerApplicationRules = async (employerId: string) => {
+  try {
+    const applicationRules = await queryOneField<ApplicationRules>(`users/${employerId}`, 'application_rules')
+    return applicationRules 
   } catch (error) {
     throw new Error(`Error catched while trying to get shifts data at firebase: ${error}`)    
   }
@@ -63,18 +70,8 @@ export const getWeeklySchedule = async (
     throw new Error(`Error updating employee schedule: ${error}`);
   }
 };
-export const getEmployeeWeeklySchedule = async (
-  employerId: string,
-  forDate: string,
-) => {
-  try {
-    const existedSchedule = await queryOne<DayOrientedObject<{[key: string]: string}>>(`weeklySchedule/${employerId}/forDate/${forDate}`)
-    // Add logic of retuning only the employee schedule
-    return existedSchedule
-  } catch (error) {
-    throw new Error(`Error updating employee schedule: ${error}`);
-  }
-};
+
+
 
 
 

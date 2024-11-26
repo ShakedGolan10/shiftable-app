@@ -8,7 +8,7 @@ import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/s
 
 
 interface IWorkWeekTableProps {
-  data: DayOrientedObject<{[key: string]: string }>
+  data: [DayOrientedObject<{[key: string]: string }>]
   user: Employer
   forDate: string
   setForDate: React.Dispatch<React.SetStateAction<string>>
@@ -16,7 +16,7 @@ interface IWorkWeekTableProps {
 
 
 export default function WorkWeekTable({ data, user, setForDate, forDate }: IWorkWeekTableProps) {
-  const selectedShifts = data
+  const [ weeklySchedule ] = data
   const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
   return (
   <>
@@ -30,7 +30,8 @@ export default function WorkWeekTable({ data, user, setForDate, forDate }: IWork
             <ArrowRightCircleIcon />
           </Button>
       </div>
-      {(data) ? <Table aria-label="Employer Shifts Table">
+      {(weeklySchedule) ? 
+      <Table aria-label="Employer Shifts Table">
         <TableHeader columns={daysOfWeek}>
           {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
         </TableHeader>
@@ -43,9 +44,9 @@ export default function WorkWeekTable({ data, user, setForDate, forDate }: IWork
                     <div className='flex flex-col h-40'>
                       <p className='text-base border-b border-gray-500'>{shiftElement.shift}</p>
                       <div className="my-5 mx-1 flex flex-col gap-4 overflow-y-scroll">
-                        {Object.keys(selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]).map(key =>
+                        {Object.keys(weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId]).map(key =>
                             <Chip size="lg" key={key} style={{backgroundColor: 'lightgreen'}} className="text-base p-3">
-                              {selectedShifts[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][key]}
+                              {weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][key]}
                             </Chip>
                         )}
                       </div>
@@ -60,7 +61,7 @@ export default function WorkWeekTable({ data, user, setForDate, forDate }: IWork
         </TableBody>
       </Table> 
     :
-    <h1 className='text-subHeader'>There isnt a shift schedule for {forDate}</h1>  
+    <h1 className='text-subHeader'>No shift schedule for {forDate}</h1>  
     }
   </>
   )
