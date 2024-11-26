@@ -67,7 +67,21 @@ export const getWeeklySchedule = async (
     const existedSchedule = await queryOne<DayOrientedObject<{[key: string]: string}>>(`weeklySchedule/${employerId}/forDate/${forDate}`)
     return existedSchedule
   } catch (error) {
-    throw new Error(`Error updating employee schedule: ${error}`);
+    throw new Error(`Error getting schedule: ${error}`);
+  }
+};
+
+export const getTodaySchedule = async (
+  employerId: string,
+  forDate: string,
+  dayName: string
+) => {
+  try {
+    
+    const existedSchedule = await queryOneField<{ [key:string] : { [key: string]: string } }>(`weeklySchedule/${employerId}/forDate/${forDate}`, dayName)
+    return existedSchedule
+  } catch (error) {
+    throw new Error(`Error getting schedule: ${error}`);
   }
 };
 

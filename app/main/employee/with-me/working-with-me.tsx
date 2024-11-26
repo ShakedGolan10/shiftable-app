@@ -1,71 +1,46 @@
 import React from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Button } from '@nextui-org/react';
 import { Employee } from '@/types/class.service';
-import { DayOrientedObject, Shift } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
-import { createTableRows, daysOfWeek, getLastSunday, getNextSunday } from '@/lib/server.utils';
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 
 
 interface IWorkingWithMe {
   data: [
-    weeklySchedule: DayOrientedObject<{[key: string]: string}>,
-    weeklyWorkflow: WeeklyShifts
+    { [key: string] : { [key: string]: string } },
+    WeeklyShifts
   ];
   user: Employee
-  forDate: string
-  setForDate: React.Dispatch<React.SetStateAction<string>>
+  dayName: string
 }
 
 
-export default function WorkingWithMe({ data, user, setForDate, forDate }: IWorkingWithMe) {
-  const [weeklySchedule, weeklyWorkflow] = data
-  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(weeklyWorkflow, daysOfWeek)
+export default function WorkingWithMe({ data, user, dayName }: IWorkingWithMe) {
+  const [ todaySched , weeklySchedule ] = data
+  const todayEmployees = Object.keys(todaySched).reduce((acc, shiftId, shiftIdx) => {
+    if (todaySched[shiftId][user.id]) {
+      acc.push({
+        shift: (weeklySchedule[dayName][shiftIdx] as ShiftSlot).shift,
+        employees: Object.values(todaySched[shiftId]).filter(name => name !== user.name),
+      });
+    }
+    return acc
+  }, [] as { shift: string; employees: string[] }[]);
   return (
   <>
       <GeneralTitle title={`Who's working with me today ? `} />
-      {/* <div className='flex flex-row gap-5 items-center'>
-          <Button onClick={()=> setForDate(getLastSunday(forDate))} isIconOnly className='bg-transparent'>
-            <ArrowLeftCircleIcon />
-          </Button>
-          <p className='text-medium'>{forDate}</p>
-          <Button onClick={()=> setForDate(getNextSunday(forDate))} isIconOnly className='bg-transparent'>
-            <ArrowRightCircleIcon />
-          </Button>
-      </div>
-      {(weeklySchedule) ? 
-      <Table aria-label="Employer Shifts Table">
-        <TableHeader columns={daysOfWeek}>
-          {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
-        </TableHeader>
-        <TableBody items={tableItems}>
-          {(item) => (
-              <TableRow key={item.key}>
-                {item.rowItems.map((shiftElement, index) => (
-                  <TableCell key={index}>
-                  {shiftElement ? 
-                    <div className='flex flex-col h-40'>
-                      <p className='text-base border-b border-gray-500'>{shiftElement.shift}</p>
-                      <div className="my-5 mx-1 flex flex-col gap-4">
-                        {(weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][user.id]) ? 
-                          <Chip size="lg" key={shiftElement.shiftId} style={{backgroundColor: 'lightgreen'}} className="text-base p-5">
-                              {weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][user.id]}
-                            </Chip> :
-                            <p key={shiftElement.shiftId}>No Shifts</p>}
-                      </div>
-                    </div>
-                      :
-                          <p>No Shifts</p>                      
-                      }
-                  </TableCell>
-                  ))}
-              </TableRow>
-            )}
-        </TableBody>
-      </Table> 
+      {(todayEmployees.length) ? 
+        todayEmployees.map((obj, idx) => 
+          <article className='flex flex-col gap-4' key={idx}>
+              <p className='text-subHeader font-bold'>Shift: {obj.shift}</p>
+              <div className='flex flex-col gap-2'>
+              {obj.employees.map(employee => 
+                <li className='text-base' key={employee}>{employee}</li>
+              )}
+              </div>
+          </article>
+
+        )
     :
-    <h1 className='text-subHeader'>No shift schedule for {forDate}</h1>  
-    } */}
+    <h1 className='text-subHeader'>Youre not working today!</h1>  }
   </>
   )
 }
