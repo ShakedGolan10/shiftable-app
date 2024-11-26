@@ -13,6 +13,6 @@ export default function ShiftsApplyPage() {
     loadingMsg: 'Loading Shifts requests...'
   });
 
-  <ShiftsApplyWrapper />
+  return <ShiftsApplyWrapper />
 
 }

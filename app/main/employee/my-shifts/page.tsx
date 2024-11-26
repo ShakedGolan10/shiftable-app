@@ -17,5 +17,5 @@ export default function ShiftsApplyPage() {
     loadingMsg: 'Loading weekly schedule...'
   });
 
-  <MyShiftsWrraper />
+  return <MyShiftsWrraper />
 }
