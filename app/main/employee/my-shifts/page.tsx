@@ -4,8 +4,8 @@ import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employee } from '@/types/class.service';
 import { getThisSunday } from '@/lib/server.utils';
 import { useState } from 'react';
-import MyShiftsTable from './my-shifts-table';
 import { DayOrientedObject } from '@/types/user/types.server';
+import MyShiftsTable from './my-shifts-table';
 
 export default function ShiftsApplyPage() {
   const [forDate, setForDate] = useState<string>(getThisSunday())
