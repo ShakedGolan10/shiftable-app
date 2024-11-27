@@ -58,13 +58,13 @@ export const getDateOfApply = (day: number, time: string): string =>  {
     ];
     
 
-    export const createTableRows = <T, Z>(items: T, columns: any[]) => {
-      const maxShiftsPerDay = Object.values(items).reduce((acc, element) => {
+    export const createTableRows = <T, Z>(items: T, columns: any[], valueKeyName: string) => {
+      const maxRows = Object.values(items).reduce((acc, element) => {
         return Math.max(acc, element.length);
       }, 0);
       const rows: {key: string, rowItems: Z[]}[] = [];
-      for (let rowIndex = 0; rowIndex < maxShiftsPerDay; rowIndex++) {
-        const rowItems = columns.map(dayElement => items[dayElement.day.toLowerCase()]?.[rowIndex] || "");
+      for (let rowIndex = 0; rowIndex < maxRows; rowIndex++) {
+        const rowItems = columns.map(columnElement => items[columnElement[valueKeyName].toLowerCase()]?.[rowIndex] || "");
         rows.push({
           key: rowIndex.toString(),
           rowItems
@@ -72,3 +72,5 @@ export const getDateOfApply = (day: number, time: string): string =>  {
       }
       return rows;
     };
+
+    export const generateId = () => Math.random().toString(36).substring(2, 7);

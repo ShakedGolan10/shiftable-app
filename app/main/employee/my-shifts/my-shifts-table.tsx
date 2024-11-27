@@ -20,7 +20,7 @@ interface IMyShiftsTable {
 
 export default function MyShiftsTable({ data, user, setForDate, forDate }: IMyShiftsTable) {
   const [weeklySchedule, weeklyWorkflow] = data
-  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(weeklyWorkflow, daysOfWeek)
+  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(weeklyWorkflow, daysOfWeek, 'day')
   return (
   <>
       <GeneralTitle title={`Weekly schedule for week ${forDate}`} />
@@ -50,7 +50,7 @@ export default function MyShiftsTable({ data, user, setForDate, forDate }: IMySh
                         {(weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][user.id]) ? 
                           <Chip size="lg" key={shiftElement.shiftId} style={{backgroundColor: 'lightgreen'}} className="text-base p-5">
                               {weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][user.id]}
-                            </Chip> :
+                          </Chip> :
                             <p key={shiftElement.shiftId}>No Shifts</p>}
                       </div>
                     </div>

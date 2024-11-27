@@ -157,7 +157,7 @@ return applicableShifts &&
     <TableHeader columns={daysOfWeek}>
       {(dayElement) => <TableColumn aria-label={dayElement.day} key={dayElement.key} className="text-base text-center">{dayElement.day}</TableColumn>}
     </TableHeader>
-    <TableBody items={createTableRows<TableShifts, Shift>(applicableShifts, daysOfWeek)}>
+    <TableBody items={createTableRows<TableShifts, Shift>(applicableShifts, daysOfWeek, 'day')}>
       {(item) => (
         <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
             {item.rowItems.map((shiftElement, index) => (
