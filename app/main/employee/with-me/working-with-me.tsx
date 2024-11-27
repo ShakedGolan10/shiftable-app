@@ -2,7 +2,6 @@ import React from 'react';
 import { Employee } from '@/types/class.service';
 import GeneralTitle from '@/components/helpers/general-title';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
-import { generateId } from '@/lib/server.utils';
 
 interface IWorkingWithMe {
   data: [
@@ -43,11 +42,11 @@ export default function WorkingWithMe({ data, user, dayName }: IWorkingWithMe) {
             {todayEmployees.map((employeeObj, idx) => (
               <TableRow key={idx}>
                 <TableCell>
-                  {employeeObj.shift}
+                  <p className='text-center'>{employeeObj.shift}</p>
                 </TableCell>
                 <TableCell>
                   {employeeObj.employees.map((employee, index) => (
-                    <p key={index}>{employee}</p>
+                    <p className='text-center'key={index}>{employee}</p>
                   ))}
                 </TableCell>
               </TableRow>
