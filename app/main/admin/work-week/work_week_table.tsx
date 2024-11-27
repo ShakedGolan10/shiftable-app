@@ -17,7 +17,7 @@ interface IWorkWeekTableProps {
 
 export default function WorkWeekTable({ data, user, setForDate, forDate }: IWorkWeekTableProps) {
   const [ weeklySchedule ] = data
-  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
+  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek, 'day')
   return (
   <>
       <GeneralTitle title={`Weekly schedule for week ${forDate}`} />

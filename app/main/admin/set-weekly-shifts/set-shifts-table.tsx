@@ -174,7 +174,7 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
       }) 
   }
 
-  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek)
+  const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek, 'day')
   
   return (selectedShifts && shiftsReqs) && (
   <>

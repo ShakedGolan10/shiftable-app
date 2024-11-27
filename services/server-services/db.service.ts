@@ -19,8 +19,8 @@ export const queryOneField = async <T>(docPath: string, fieldPath: string): Prom
     try {
         const docRef = doc(firestore, docPath)
         const docData = await getDoc(docRef)
-        const value: T = await docData.get(fieldPath)
-        return value
+        const value = await docData.get(fieldPath)
+        return value as T
     } catch (error) {
         console.log('DB_SERVICE - couldnt get data from database', error)
         throw error
