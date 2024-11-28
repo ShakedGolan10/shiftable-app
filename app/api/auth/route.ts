@@ -32,6 +32,8 @@ export async function POST(req: NextRequest) {
 }
 export async function PUT(req: UpdateRequest) {
     try {
+        if (process.env.NODE_ENV === 'production')
+            return NextResponse.json('Success', {status: 200})
         const admin = Admin.initializeApp({
             credential: Admin.credential.cert(serviceAccount as Admin.ServiceAccount),
             databaseURL: process.env.SERVICE_KEY
