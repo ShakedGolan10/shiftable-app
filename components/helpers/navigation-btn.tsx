@@ -5,7 +5,7 @@ import { HomeIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { Button } from "@nextui-org/react";
 
-const NavigationBtn = () => {
+export default function NavigationBtn() {
   const router = useRouter();
   const [canGoBack, setCanGoBack] = useState(false);
 
@@ -58,4 +58,3 @@ const NavigationBtn = () => {
   );
 };
 
-export default NavigationBtn;
