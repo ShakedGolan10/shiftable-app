@@ -6,6 +6,7 @@ import EmployerMsg from './employer-msg'
 import { useSystemActions } from '@/store/actions/system.actions'
 import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/react'
+import GeneralTitle from './helpers/general-title'
 
 export default function EmployeeHomePage({ employeeUser }: { employeeUser: Employee }) {
     const { toggleModalAction } = useSystemActions()
@@ -19,8 +20,9 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
     }, [])
 
     return (
+        <>
+            <GeneralTitle title={`Hi ${employeeUser.name}, how are you today?`} />
         <main className="flex flex-col items-center pt-16 text-center">
-            <span className='text-medium font-serif mt-10 mb-5'>Hi {employeeUser.name}, how are you today?</span>
             <div className='my-7'>
                 <h4 className='text-small'>Your next shift:</h4>
                 <p className='text-base my-3 font-semibold'>Sunday - Noon: 15:00-23:00{/* Todo: Design the sift today */}</p>
@@ -37,5 +39,6 @@ export default function EmployeeHomePage({ employeeUser }: { employeeUser: Emplo
            
 
         </main>
+        </>
     )
 }
