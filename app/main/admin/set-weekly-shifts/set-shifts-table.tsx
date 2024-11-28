@@ -85,7 +85,6 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
               }
         }
   },[])
-  
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
     if (isRemove) return

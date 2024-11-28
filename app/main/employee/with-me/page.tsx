@@ -2,8 +2,6 @@
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employee } from '@/types/class.service';
 import { getThisSunday } from '@/lib/server.utils';
-import { useState } from 'react';
-import { DayOrientedObject } from '@/types/user/types.server';
 import WorkingWithMe from './working-with-me';
 import { getEmployerWeeklyShifts, getTodaySchedule } from '@/services/server-services/shifts.service';
 

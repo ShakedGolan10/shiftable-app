@@ -5,6 +5,7 @@ import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { getEmployeesByFilter } from '@/services/server-services/employer.service'
 import { getDateOfApply } from '@/lib/server.utils'
+import GeneralTitle from './helpers/general-title'
 
 
 export default function EmployerHomePage({ employerUser }: { employerUser: Employer }) {
@@ -25,8 +26,9 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
 
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <span className='text-large font-serif mt-10 mb-5 text-center'>Hi {employerUser.name}, are you ready for another week?</span>
+    <>
+    <GeneralTitle title={`Hi ${employerUser.name}, are you ready for another week?`} />
+    <section className="flex flex-col items-center pt-16 text-center">
       <div className='my-7'>
         <p className='text-subHeader my-3 font-semibold text-center'>Shifts application is available for {forDate}
         </p>
@@ -53,6 +55,7 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
         <Button onClick={()=> router.push('main/admin/msgs')} className='rounded-md bg-indigo-500 text-base hover:bg-indigo-700'>Edit employees messages</Button>
       </div>
 
-    </main>
+    </section>
+    </>
   )
 }

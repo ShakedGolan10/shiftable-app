@@ -39,5 +39,3 @@ export default function RootLayout({
 
   )
 }
-
-// If want store - uncomment the ReduxProvider
