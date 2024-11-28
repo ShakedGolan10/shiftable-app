@@ -1,6 +1,6 @@
 import "firebase/auth";
-import fetch, { Request } from 'node-fetch'
-import { doc, getDoc, getFirestore } from 'firebase/firestore'
+import fetch from 'node-fetch'
+import { getFirestore } from 'firebase/firestore'
 import { initializeApp, } from "firebase/app";
 
 globalThis.fetch = fetch

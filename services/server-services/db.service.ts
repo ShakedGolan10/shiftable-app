@@ -1,6 +1,6 @@
 'use server'
 
-import { firestore } from "@/firebaseConfig.mjs"
+import { firestore } from "@/firebase.config.mjs"
 import { collection, doc, FieldPath, getDoc, getDocs, query, QueryConstraint, where,  } from "firebase/firestore"
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { app } from '@/firebaseConfig.mjs'
+import { app } from '@/firebase.config.mjs'
+import firebaseAdminConfig from '@/firebase-admin.config.mjs'
 import { Auth, UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { clearCookie, setCookie } from '@/services/server-services/cookie.service'
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
 import Admin from 'firebase-admin'
-import serviceAccount from '@/admin-sdk.env.json'
 import { saveEmployeeEmail } from '@/services/server-services/admin.service'
 
 interface UpdateRequest extends NextRequest {
@@ -35,7 +35,7 @@ export async function PUT(req: UpdateRequest) {
         if (process.env.NODE_ENV === 'production')
             return NextResponse.json('Success', {status: 200})
         const admin = Admin.initializeApp({
-            credential: Admin.credential.cert(serviceAccount as Admin.ServiceAccount),
+            credential: Admin.credential.cert(firebaseAdminConfig as Admin.ServiceAccount),
             databaseURL: process.env.SERVICE_KEY
           });
           const token = await req.json()

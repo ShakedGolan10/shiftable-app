@@ -2,7 +2,7 @@
 import { queryMany, queryOne } from "./db.service"
 import { Employee } from "@/types/class.service"
 import { ShiftReqs, ShiftReqsOOP } from "@/types/user/types.server"
-import { firestore } from "@/firebaseConfig.mjs"
+import { firestore } from "@/firebase.config.mjs"
 import { doc, updateDoc } from "firebase/firestore"
 
 

@@ -1,5 +1,5 @@
 [debug] [2024-06-19T16:38:06.690Z] ----------------------------------------------------------------------
-[debug] [2024-06-19T16:38:06.693Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shake\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use --add
+[debug] [2024-06-19T16:38:06.693Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shake\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\s use --add
 [debug] [2024-06-19T16:38:06.693Z] CLI Version:   13.11.2
 [debug] [2024-06-19T16:38:06.693Z] Platform:      win32
 [debug] [2024-06-19T16:38:06.694Z] Node Version:  v18.19.0
