@@ -66,6 +66,7 @@ const EditEmployeesMsgs = ({user}: {user: Employer}) => {
   
 
   const EditMsgsPage = WithDataWrapper({
+    dataPromises: [],
     Component: (props) => <EditEmployeesMsgs {...props} />, 
     errorMsg: 'Couldnt load user msgs',
     loadingMsg: 'Loading msgs...'

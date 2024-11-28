@@ -7,12 +7,13 @@ import { useDisclosure } from '@nextui-org/react'
 import { EmployeeCardModal } from './employee-card-modal'
 
 interface IManageEmployeesProps {
-    data: Employee[]
+    data: [Employee[]]
     user: Employer
   }
   
 export default function ManageEmployeesPage({data, user} : IManageEmployeesProps) {
   
+  const [employees] = data
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>(undefined)
 
   const {isOpen, onOpen, onClose} = useDisclosure();
@@ -22,9 +23,9 @@ export default function ManageEmployeesPage({data, user} : IManageEmployeesProps
     {selectedEmployee && <EmployeeCardModal user={selectedEmployee} isOpen={isOpen} onClose={onClose} />}
     <GeneralTitle title={`Employees managment`} />
     <section className='flex flex-row gap-3'>
-      {data.map((employee, idx) => 
+      {employees.map((employee, idx) => 
         <EmployeeCard employer={user} user={employee} key={idx} selectUser={(userId) => {
-          setSelectedEmployee(data[idx])
+          setSelectedEmployee(employees[idx])
           onOpen()
         }} />
       )}

@@ -8,9 +8,3 @@ export const AppLayout = dynamic(() => import("../dynamic_cmps/app_layout"), {
 			return <LoadingElement />;
 		},
 	});
-export const MainRouteLayout = dynamic(() => import("../dynamic_cmps/main_layout"), {
-	ssr: false,
-	loading: function LoadingComponent() {
-		return <LoadingElement />;
-	},
-	});

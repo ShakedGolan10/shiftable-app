@@ -9,20 +9,18 @@ export default function AppLayout({
 }: {
   children: React.ReactNode
 }) {
-  useResponsiveTheme(); // Initialize the hook
+  useResponsiveTheme(); // Initialize the design hook
 
   return (
          
-            // <ReduxProvider>
             <>
               <OpacityLoader />
               <AlertModal />
-              <div className='main-layout'>
+              <section className='main-layout'>
               {children}
-              </div>
+              </section>
               <ThemeSwitcher />
-              </>
-            // </ReduxProvider>
+            </>
 
   )
 }
