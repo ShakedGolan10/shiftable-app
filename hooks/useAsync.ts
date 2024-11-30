@@ -9,15 +9,13 @@ interface AsyncOpArgs<T> {
 }
 
 export const useAsync = () => {
-
   const { toggleModalAction, toggleLoaderAction } = useSystemActions()
-  
   const executeAsyncFunction = async <T>(args: AsyncOpArgs<T>): Promise<T> => {
     const { asyncOperation, successMsg, errorMsg, isLoaderDisabled } = args
     if (!isLoaderDisabled) toggleLoaderAction()
       try {
         const res = await asyncOperation()
-        toggleModalAction((successMsg) ? successMsg : 'Success !')
+        if (successMsg) toggleModalAction(successMsg)
         return res
     } catch (error) {
       toggleModalAction(errorMsg, true)
@@ -27,5 +25,5 @@ export const useAsync = () => {
     }
   }
 
-  return [executeAsyncFunction]
+  return [ executeAsyncFunction ]
 }
