@@ -24,6 +24,6 @@ export const saveEmployeeEmail = async (
       const employerRef = doc(firestore, 'users', employeeId);
         await updateDoc(employerRef, { email });
     } catch (error) {
-      throw new Error(`Error updating employer msgs: ${error}`);
+      throw new Error(`Error updating employee email: ${error}`);
     }
   };
