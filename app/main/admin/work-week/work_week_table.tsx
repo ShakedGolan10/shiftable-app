@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Button, Link } from '@nextui-org/react';
 import { Employer } from '@/types/class.service';
 import { DayOrientedObject } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
@@ -11,24 +11,27 @@ interface IWorkWeekTableProps {
   data: [DayOrientedObject<{[key: string]: string }>]
   user: Employer
   forDate: string
-  setForDate: React.Dispatch<React.SetStateAction<string>>
 }
 
 
-export default function WorkWeekTable({ data, user, setForDate, forDate }: IWorkWeekTableProps) {
+export default function WorkWeekTable({ data, user, forDate }: IWorkWeekTableProps) {
   const [ weeklySchedule ] = data
   const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek, 'day')
   return (
   <>
       <GeneralTitle title={`Weekly schedule for week ${forDate}`} />
       <div className='flex flex-row gap-5 items-center'>
-          <Button onClick={()=> setForDate(getLastSunday(forDate))} isIconOnly className='bg-transparent'>
+        <Link size='sm' color='foreground' href={`/main/admin/work-week/${getLastSunday(forDate)}`}>
+            <Button className='bg-transparent'> 
             <ArrowLeftCircleIcon />
-          </Button>
+            </Button>
+          </Link>
           <p className='text-medium'>{forDate}</p>
-          <Button onClick={()=> setForDate(getNextSunday(forDate))} isIconOnly className='bg-transparent'>
+          <Link size='sm' color='foreground' href={`/main/admin/work-week/${getNextSunday(forDate)}`}>
+          <Button className='bg-transparent'>
             <ArrowRightCircleIcon />
-          </Button>
+            </Button>
+          </Link>
       </div>
       {(weeklySchedule) ? 
       <Table aria-label="Employer Shifts Table">

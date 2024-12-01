@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Button, Link } from '@nextui-org/react';
 import { Employee } from '@/types/class.service';
 import { DayOrientedObject, Shift } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
@@ -14,24 +14,27 @@ interface IMyShiftsTable {
   ];
   user: Employee
   forDate: string
-  setForDate: React.Dispatch<React.SetStateAction<string>>
 }
 
 
-export default function MyShiftsTable({ data, user, setForDate, forDate }: IMyShiftsTable) {
+export default function MyShiftsTable({ data, user, forDate }: IMyShiftsTable) {
   const [weeklySchedule, weeklyWorkflow] = data
   const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(weeklyWorkflow, daysOfWeek, 'day')
   return (
   <>
       <GeneralTitle title={`Weekly schedule for week ${forDate}`} />
       <div className='flex flex-row gap-5 items-center'>
-          <Button onClick={()=> setForDate(getLastSunday(forDate))} isIconOnly className='bg-transparent'>
+      <Link size='sm' color='foreground' href={`/main/employee/my-shifts/${getLastSunday(forDate)}`}>
+            <Button className='bg-transparent'> 
             <ArrowLeftCircleIcon />
-          </Button>
+            </Button>
+          </Link>
           <p className='text-medium'>{forDate}</p>
-          <Button onClick={()=> setForDate(getNextSunday(forDate))} isIconOnly className='bg-transparent'>
+          <Link size='sm' color='foreground' href={`/main/employee/my-shifts/${getNextSunday(forDate)}`}>
+          <Button className='bg-transparent'>
             <ArrowRightCircleIcon />
-          </Button>
+            </Button>
+          </Link>
       </div>
       {(weeklySchedule) ? 
       <Table aria-label="Employer Shifts Table">
@@ -47,7 +50,7 @@ export default function MyShiftsTable({ data, user, setForDate, forDate }: IMySh
                     <div className='flex flex-col h-40'>
                       <p className='text-base border-b border-gray-500'>{shiftElement.shift}</p>
                       <div className="my-5 mx-1 flex flex-col gap-4">
-                        {(weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][user.id]) ? 
+                        {(weeklySchedule[daysOfWeek[index].day.toLowerCase()]?.[shiftElement.shiftId]?.[user.id]) ? 
                           <Chip size="lg" key={shiftElement.shiftId} style={{backgroundColor: 'lightgreen'}} className="text-base p-5">
                               {weeklySchedule[daysOfWeek[index].day.toLowerCase()][shiftElement.shiftId][user.id]}
                           </Chip> :

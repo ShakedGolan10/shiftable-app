@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Link } from '@nextui-org/react';
 import { Employee, Employer } from '@/types/class.service';
 import { SetShiftsTableCell } from './set-shifts-table-cell';
 import { DayOrientedObject, Shift, ShiftReqsOOP, TableShifts } from '@/types/user/types.server';
@@ -28,7 +28,6 @@ interface IShiftsTableProps {
     data: [ShiftReqsOOP, DayOrientedObject<{[key: string]: string}>, Employee[]]
     user: Employer
     forDate: string
-    setForDate: React.Dispatch<React.SetStateAction<string>>
   }
 
 const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Employee): TableShifts => {
@@ -42,7 +41,7 @@ const createEmptyShiftReqPerEmployee = (weeklyFlow: WeeklyShifts, employee: Empl
 }
  
 
-export default function SetShiftsTable({ data, user, forDate, setForDate }: IShiftsTableProps) {
+export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProps) {
   
   const [rawDataShiftReqs, existedWeeklySched, employees] = data
   const [shiftsReqs, setShiftsReqs] = useState<ShiftReqsOOP>(null)
@@ -52,8 +51,6 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
 
 
   useEffect(()=> {
-    if (!forDate) setForDate(getDateOfApply(user.applicationTime.day, user.applicationTime.time))
-    else {
         (existedWeeklySched) ? setSelectedShifts(existedWeeklySched) : setSelectedShifts(emptyDayOrientedObject)
             const emptyShiftReqs:ShiftReqsOOP = {}
             const dataLength = Object.keys(rawDataShiftReqs).length
@@ -83,7 +80,6 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
                 })
                 setShiftsReqs(emptyShiftReqs)
               }
-        }
   },[])
 
   const confirmDailyLimit = async (day: string, shiftSelected: Shift, isRemove: boolean):Promise<boolean> => {
@@ -181,13 +177,17 @@ export default function SetShiftsTable({ data, user, forDate, setForDate }: IShi
     <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
       <GeneralTitle title={`Set the shifts for`} />
       <div className='flex flex-row gap-5 items-center'>
-          <Button onClick={()=> setForDate(getLastSunday(forDate))} isIconOnly className='bg-transparent'>
+          <Link  size='sm' color='foreground' href={`/main/admin/set-weekly-shifts/${getLastSunday(forDate)}`}>
+            <Button className='bg-transparent'> 
             <ArrowLeftCircleIcon />
-          </Button>
+            </Button>
+          </Link>
           <p className='text-medium'>{forDate}</p>
-          <Button onClick={()=> setForDate(getNextSunday(forDate))} isIconOnly className='bg-transparent'>
+          <Link size='sm' color='foreground' href={`/main/admin/set-weekly-shifts/${getNextSunday(forDate)}`}>
+          <Button className='bg-transparent'>
             <ArrowRightCircleIcon />
-          </Button>
+            </Button>
+          </Link>
       </div>
       <Table aria-label="Employer Shifts Table" className="text-xs">
         <TableHeader columns={daysOfWeek}>
