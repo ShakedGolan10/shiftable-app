@@ -1,5 +1,7 @@
 'use client';
+import { useAuth } from '@/providers/UserContextProvider';
 import { useSystemActions } from '@/store/actions/system.actions';
+import { Employee, Employer } from '@/types/class.service';
 
 interface AsyncOpArgs<T> {
   asyncOperation: () => Promise<T>
@@ -10,10 +12,13 @@ interface AsyncOpArgs<T> {
 
 export const useAsync = () => {
   const { toggleModalAction, toggleLoaderAction } = useSystemActions()
+  const auth = useAuth<Employee | Employer>()
   const executeAsyncFunction = async <T>(args: AsyncOpArgs<T>): Promise<T> => {
     const { asyncOperation, successMsg, errorMsg, isLoaderDisabled } = args
     if (!isLoaderDisabled) toggleLoaderAction()
       try {
+        const isLoggedIn = await auth.isUserSessionValid()
+        if (!isLoggedIn) return 
         const res = await asyncOperation()
         if (successMsg) toggleModalAction(successMsg)
         return res

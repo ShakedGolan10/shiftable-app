@@ -4,15 +4,15 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { usePathname, useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import LoadingElement from '@/components/helpers/loading-element';
-import { useAsync } from '@/hooks/useAsync';
-import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
+import { useAsyncAuth } from '@/hooks/useAsyncAuth';
 
 interface useAuth<T> {
     isLoadingAuth: boolean
     isLoadingLogin: boolean
     user: T 
     login: (credentials: Credentials) => Promise<void> 
-    logout: () => void 
+    logout: () => Promise<void> 
+    isUserSessionValid: () => Promise<boolean> 
 }
 
 const UserContext = createContext(null);
@@ -25,16 +25,15 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
     const [isLoadingLogin, setLoadingLogin] = useState(null)
     const router = useRouter();
     const path = usePathname() 
-    const [executeAsyncFunc] = useAsync()
+    const [ executeAuthFunc ] = useAsyncAuth()
     
             
     const login = async (credentials: Credentials) : Promise<void> => {
         try {
             setLoadingLogin(true)
-            let user = await executeAsyncFunc({
+            let user = await executeAuthFunc({
                 asyncOperation: () => userService.login(credentials), 
                 errorMsg: 'Couldnt login, please try again',
-                isLoaderDisabled: true
             }) 
             if (!user) throw new Error('error')
             router.push('/main')
@@ -46,9 +45,10 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                     setLoadingLogin(false)
                 }
     }    
+
     const logout = async () : Promise<void> => {
         try {
-            await executeAsyncFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
+            await executeAuthFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
         } catch (error) {
             router.push('/')
         } finally {
@@ -56,6 +56,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             router.push('/')
         }
     };
+
     const authUser = async () => {
         try {
             let loggedInUser = await userService.getLoggedInUser()
@@ -64,7 +65,19 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                 loggedInUser instanceof Employer && path.includes('employee')
             ) window.location.assign('/main') // Keep it that way: The method is quicker then the error that has been displayed by the employer func, unlik router.push ?? 
         } catch (error) {
-                router.push('/')
+                await logout()
+        } finally {
+                setLoadingAuth(false)
+        }
+    }
+
+    const isUserSessionValid = async () => {
+        try {
+            await userService.getLoggedInUser()
+            return true
+        } catch (error) {
+                await logout()
+                return false
         } finally {
                 setLoadingAuth(false)
         }
@@ -74,7 +87,8 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             user,
             isLoadingLogin,
             login,
-            logout
+            logout,
+            isUserSessionValid
         }), [isLoadingAuth, user, isLoadingLogin]);
         
 
