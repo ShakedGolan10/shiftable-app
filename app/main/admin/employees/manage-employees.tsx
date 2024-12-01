@@ -22,7 +22,7 @@ export default function ManageEmployeesPage({data, user} : IManageEmployeesProps
     <>
     {selectedEmployee && <EmployeeCardModal user={selectedEmployee} isOpen={isOpen} onClose={onClose} />}
     <GeneralTitle title={`Employees managment`} />
-    <section className='flex flex-row gap-3'>
+    <section className='flex flex-wrap justify-center gap-3'>
       {employees.map((employee, idx) => 
         <EmployeeCard employer={user} user={employee} key={idx} selectUser={(userId) => {
           setSelectedEmployee(employees[idx])

@@ -12,11 +12,16 @@ import React, { useEffect, useState } from 'react'
 export function EmployeeCardModal({user, isOpen, onClose} : {user: Employee, isOpen: boolean, onClose: () => void}) {
     
 
-    const [creds, handleCredChange] = useForm({email: user.email, password: ''})
+    const [creds, handleCredChange, setFields] = useForm({email: user.email, password: ''})
     const [name, setName] = useState(user.name)
     const [ executeAsyncFunc ] = useAsync()
-
     const { askConfirmation, handleModalClose, isConfirmModalOpen, msg } = useConfirm()
+    
+    useEffect(()=>{
+      setName(user.name)
+      setFields({email: user.email, password: ''})
+    },[user])
+
 
     const updateCreds = async () => {
       await executeAsyncFunc({
@@ -43,9 +48,6 @@ export function EmployeeCardModal({user, isOpen, onClose} : {user: Employee, isO
         }
     }
   
-    useEffect(()=>{
-
-    },[user])
     
     return (
       <>
