@@ -11,7 +11,6 @@ import { useParams } from "next/navigation";
 export default function SetShiftsPage() {
   const params = useParams()
   const forDate = decodeURIComponent(params.date as string)
-
     const SetShiftsTableWrapper = WithDataWrapper<[ShiftReqsOOP, DayOrientedObject<{[key: string]: string}>, Employee[]]>({
       dataPromises: [
         (user: Employer) => getEmployeesShiftsReqs(user.id, forDate),
