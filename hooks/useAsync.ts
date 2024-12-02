@@ -1,6 +1,7 @@
 'use client';
 import { useAuth } from '@/providers/UserContextProvider';
 import { useSystemActions } from '@/store/actions/system.actions';
+import { useAppSelector } from '@/store/store';
 import { Employee, Employer } from '@/types/class.service';
 
 interface AsyncOpArgs<T> {
@@ -12,10 +13,11 @@ interface AsyncOpArgs<T> {
 
 export const useAsync = () => {
   const { toggleModalAction, toggleLoaderAction } = useSystemActions()
+  const isLoading = useAppSelector(state => state.systemReducer.isLoading)
   const auth = useAuth<Employee | Employer>()
   const executeAsyncFunction = async <T>(args: AsyncOpArgs<T>): Promise<T> => {
     const { asyncOperation, successMsg, errorMsg, isLoaderDisabled } = args
-    if (!isLoaderDisabled) toggleLoaderAction()
+    if (!isLoaderDisabled && !isLoading) toggleLoaderAction()
       try {
         const isLoggedIn = await auth.isUserSessionValid()
         if (!isLoggedIn) return 
@@ -26,7 +28,7 @@ export const useAsync = () => {
       toggleModalAction(errorMsg, true)
       throw new Error(error)
     } finally {
-      if (!isLoaderDisabled) toggleLoaderAction()
+      if (!isLoaderDisabled && isLoading) toggleLoaderAction()
     }
   }
 

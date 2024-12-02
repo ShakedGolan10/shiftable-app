@@ -20,7 +20,7 @@ export function EmployeeCardModal({user, isOpen, onClose} : {user: Employee, isO
     useEffect(()=>{
       setName(user.name)
       setFields({email: user.email, password: ''})
-    },[user])
+    },[isOpen])
 
 
     const updateCreds = async () => {
