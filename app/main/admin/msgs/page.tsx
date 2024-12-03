@@ -21,7 +21,7 @@ const EditEmployeesMsgs = ({user}: {user: Employer}) => {
   
     const saveMsgs = async () => {
         await executeAsyncFunc({
-            asyncOperation: () => saveEmployerMsgs(user.id , msgs),
+            asyncOps: [() => saveEmployerMsgs(user.id , msgs)],
             errorMsg: 'Couldnt save employer messages, please try again',
             successMsg:'Your messages saved succesfuly'
         })

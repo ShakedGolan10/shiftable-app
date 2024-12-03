@@ -22,28 +22,14 @@ export function EmployeeCardModal({user, isOpen, onClose} : {user: Employee, isO
       setFields({email: user.email, password: ''})
     },[isOpen])
 
-
-    const updateCreds = async () => {
-      await executeAsyncFunc({
-        asyncOperation: () => updateUserCredentials({ userId: user.id, newCreds: {email: (user.email !== creds.email) &&  creds.email, password: creds.password}}),
-        errorMsg: 'Couldnt save new credentials please try again later...',
-        successMsg: 'Saved new creds has been successful'
-      })
-    }
-
-    const updateUserName = async () => {
-      await executeAsyncFunc({
-        asyncOperation: () => updateUserData(user.id, name),
-        errorMsg: 'Couldnt save new name please try again later...',
-        successMsg: 'Saved new name has been successful'
-      })
-    }
-
     const saveEmployee = async () => {
         const isApproved = await askConfirmation(`Youre about to change Employee's private information`)
         if (isApproved) {
-          await updateCreds()
-          await updateUserName()
+          await executeAsyncFunc<[boolean, boolean]>({
+            asyncOps: [() => updateUserData(user.id, name), () => updateUserCredentials({ userId: user.id, newCreds: { email: creds.email, password: creds.password }})],
+            errorMsg: 'Couldnt save new employee please try again later...',
+            successMsg: 'Saved new employee has been successful'
+          })
           onClose()
         }
     }

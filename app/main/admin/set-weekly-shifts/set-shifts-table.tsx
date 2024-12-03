@@ -158,7 +158,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
   const applyShifts = async () => {
     const isPossible = await checkEmptyShifts()
     if (isPossible) await executeAsyncFunc({
-        asyncOperation: () => saveWeeklySchedule(user.id, forDate, selectedShifts), 
+        asyncOps:[() => saveWeeklySchedule(user.id, forDate, selectedShifts)], 
         errorMsg: 'Couldnt apply shifts, please try again',
         successMsg: 'Weekly shifts applied successfuly',
         isLoaderDisabled: false

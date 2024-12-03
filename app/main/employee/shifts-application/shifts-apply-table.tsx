@@ -141,7 +141,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   
   const applyShifts = async () => {
     await executeAsyncFunc({
-      asyncOperation: () => saveUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts),
+      asyncOps: [() => saveUserShiftsRequest(user.id, user.employer.id, forDate, applicableShifts)],
       errorMsg: 'Couldnt apply shifts',
       successMsg: 'Shifts applied successfuly' 
     })
