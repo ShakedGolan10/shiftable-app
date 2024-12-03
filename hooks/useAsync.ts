@@ -13,7 +13,7 @@ interface AsyncOpArgs<T> {
 
 export const useAsync = () => {
   const { toggleModalAction, toggleLoaderAction } = useSystemActions()
-  const isLoading = useAppSelector(state => state.systemReducer.isLoading)
+  const { isLoading, modal } = useAppSelector(state => state.systemReducer)
   const auth = useAuth<Employee | Employer>()
   const executeAsyncFunction = async <T>(args: AsyncOpArgs<T>): Promise<T> => {
     const { asyncOperation, successMsg, errorMsg, isLoaderDisabled } = args
