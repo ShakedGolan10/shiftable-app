@@ -15,7 +15,6 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
   const forDate = getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time)
   
   useEffect(() => {
-
     const getEmployees = async () => {
       const data = await getEmployeesByFilter({isApplied: false}, employerUser.id)
       setUsersNotApplied(data)

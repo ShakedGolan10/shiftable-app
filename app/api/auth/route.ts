@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { app } from '@/firebase.config.mjs'
-import firebaseAdminConfig from '@/firebase-admin.config.mjs'
 import { Auth, UserCredential, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { clearCookie, setCookie } from '@/services/server-services/cookie.service'
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
-import Admin from 'firebase-admin'
 import { saveEmployeeEmail } from '@/services/server-services/admin.service'
-
+import { admin } from '@/firebase-admin.config.mjs'
 interface UpdateRequest extends NextRequest {
     json: () => Promise<string>
 }
@@ -32,23 +30,23 @@ export async function POST(req: NextRequest) {
 }
 export async function PUT(req: UpdateRequest) {
     try {
-        if (process.env.NODE_ENV === 'production')
-            return NextResponse.json('Success', {status: 200})
-        const admin = Admin.initializeApp({
-            credential: Admin.credential.cert(firebaseAdminConfig as Admin.ServiceAccount),
-            databaseURL: process.env.SERVICE_KEY
-          });
-          const token = await req.json()
-          const userNewCred = await validateJwtToken<IUpdateUserCredsPayload>(token)
-          await Promise.all([
+        if (process.env.NODE_ENV === 'production') return NextResponse.json('Success', {status: 200})
+        
+        const token = await req.json()
+        const userNewCred = await validateJwtToken<IUpdateUserCredsPayload>(token)
+        const filteredCreds = Object.fromEntries(
+            Object.entries(userNewCred).filter(([_, value]) => value !== undefined)
+        );
+        await Promise.all([
             // Todo: Add transaction handling the race condition over here
             admin.auth().updateUser(userNewCred.userId, {
-                ...userNewCred.newCreds
-              }),
-              saveEmployeeEmail(userNewCred.userId, userNewCred.newCreds.email)
-            ])
+                    ...filteredCreds,
+                }),
+            saveEmployeeEmail(userNewCred.userId, userNewCred.newCreds.email)
+        ])
         return NextResponse.json('Success', {status: 200})
     } catch (error) {
+        console.log({error})
         return new NextResponse(error, { status: 500 })
     }
 }

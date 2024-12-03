@@ -10,7 +10,8 @@ export const updateUserCredentials = async (newCredObj: { userId: string, newCre
         await fetchService.PUT('auth', JSON.stringify(encryptedCredentials))
         return true
     } catch (error) {
-        throw new Error('USER_SERVICE: unable to login', error)
+        console.log({error})
+        throw new Error('AMDIN_SERVICE: unable to perform action', error)
     }
 }
 
@@ -20,6 +21,7 @@ export const updateUserData = async (userId: string, newName: string) => {
         await fetchService.PUT('auth/user', JSON.stringify(encryptedData))
         return true
     } catch (error) {
-        throw new Error('USER_SERVICE: unable to login', error)
+        console.log({error})
+        throw new Error('AMDIN_SERVICE: unable to perform action', error)
     }
 }

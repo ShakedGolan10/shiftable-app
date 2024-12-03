@@ -61,8 +61,8 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         try {
             let loggedInUser = await userService.getLoggedInUser()
             setUser(loggedInUser)
-            if (loggedInUser instanceof Employee && path.includes('admin') ||
-                loggedInUser instanceof Employer && path.includes('employee')
+            if (loggedInUser instanceof Employee && path.includes('/admin/') ||
+                loggedInUser instanceof Employer && path.includes('/employee/')
             ) window.location.assign('/main') // Keep it that way: The method is quicker then the error that has been displayed by the employer func, unlik router.push ?? 
         } catch (error) {
                 await logout()

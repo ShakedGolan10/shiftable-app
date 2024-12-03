@@ -18,6 +18,7 @@ export async function PUT(req: IUpdateRequest) {
           saveEmployeeName(userId, name)
         return NextResponse.json('Success', {status: 200})
     } catch (error) {
+        console.log({error})
         return new NextResponse(error, { status: 500 })
     }
 }
