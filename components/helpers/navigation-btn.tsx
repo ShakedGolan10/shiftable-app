@@ -32,13 +32,13 @@ export default function NavigationBtn() {
     router.push("/main");
   };
 
-  if (!isVisible) return null;
+  if (!isVisible || resolvedTheme.includes('mobile')) return null;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: "58px",
+        top: "65px",
         display: "flex",
         gap: "10px",
         alignItems: "center",

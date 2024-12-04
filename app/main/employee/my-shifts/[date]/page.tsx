@@ -6,7 +6,7 @@ import { DayOrientedObject } from '@/types/user/types.server';
 import MyShiftsTable from '../my-shifts-table';
 import { useParams } from 'next/navigation';
 
-export default function ShiftsApplyPage() {
+export default function MyShiftsPage() {
   
   const params = useParams()
   const forDate = decodeURIComponent(params.date as string)

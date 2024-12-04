@@ -6,7 +6,7 @@ import { RulesTable } from '@/components/application_rules';
 import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import { createTableRows, daysOfWeek, getDateOfApply } from '@/lib/server.utils';
-import { RowItem, Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
+import { Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
 
 interface ShiftsTableProps {
@@ -17,29 +17,27 @@ interface ShiftsTableProps {
   user: Employee;
 }
 
-const emptySelectedShifts = {
-  sunday: [],
-  monday: [],
-  tuesday: [],
-  wednesday: [],
-  thursday: [],
-  friday: [],
-  saturday: [],
-}
-
 export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
 
   const [ weeklyWorkflow, applyRules ] = data;
   const [applicableShifts, setApplicableShifts] = useState<TableShifts>(undefined);
-  const [selectedShifts, setSelectedShifts] = useState(emptySelectedShifts);
+  const [selectedShifts, setSelectedShifts] = useState({
+    sunday: [],
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    saturday: [],
+  });
   const [numOfCantRule, setNumOfCantRule] = useState<number>(0);
   const [minDaysRule, setMinDaysRule] = useState<number>(0);
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
   const [forDate, setForDate] = useState<string>(undefined)
-  const [executeAsyncFunc] = useAsync()
-
+  const [ executeAsyncFunc ] = useAsync()
+  
   useEffect(() => {
     const adJustedShifts = (): TableShifts => {
       const dayObj = {}
@@ -57,6 +55,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     setApplicableShifts(tableShifts);
     setOptionalShiftsRule(applyRules.optionalShifts.map(() => 0))
     setForDate(getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time))
+
   },[])
 
   const checkRules = (day: string, isRemove: boolean, shiftIdx: string, prevStateOfShift: Shift) => {
@@ -105,11 +104,9 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   }
 
   const selectShift = (item: { key: string, rowItems: Shift[] }, day: string) => {
-    
     if (!applicableShifts[day][item.key] || !applicableShifts[day][item.key].shift) return 
     if (isCant && (numOfCantRule >= applyRules.numOfCant)) return 
     if (isCant && applicableShifts[day][item.key].isCant) return 
-    
     
     let prevStateOfShift: Shift
     let shiftIdx: number
@@ -147,7 +144,6 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     })
     
   }
-
 
 return applicableShifts &&
   <>

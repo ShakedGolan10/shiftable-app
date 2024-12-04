@@ -23,11 +23,11 @@ export default function WithDataWrapper<T extends unknown[]>({
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>(null);
     const { user, isLoadingAuth } = useAuth<Employee | Employer>();
-    
+
     useEffect(() => { 
       if (user) {
-      
         if (dataPromises.length) {
+          setData(null)
           setLoading(true);
           const promises = dataPromises.map((func) => func(user))
           Promise.all(promises)
