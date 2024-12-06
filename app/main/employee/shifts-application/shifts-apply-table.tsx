@@ -35,8 +35,8 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
   const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
   const [isCant, setIsCant] = useState<boolean>(false)
-  const [forDate, setForDate] = useState<string>(undefined)
   const [ executeAsyncFunc ] = useAsync()
+  const forDate = getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time)
   
   useEffect(() => {
     const adJustedShifts = (): TableShifts => {
@@ -54,8 +54,6 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     const tableShifts = adJustedShifts()
     setApplicableShifts(tableShifts);
     setOptionalShiftsRule(applyRules.optionalShifts.map(() => 0))
-    setForDate(getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time))
-
   },[])
 
   const checkRules = (day: string, isRemove: boolean, shiftIdx: string, prevStateOfShift: Shift) => {

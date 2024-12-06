@@ -1,68 +1,50 @@
 'use client'
 
-import ConfirmationModal from "@/components/helpers/confirm-modal";
-import { useAsync } from "@/hooks/useAsync";
-import { useConfirm } from "@/hooks/useConfirm";
 import { useForm } from "@/hooks/useForm";
-import { updateUserCredentials, updateUserData } from "@/services/admin.service";
 import { Employee } from "@/types/class.service";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input} from "@nextui-org/react";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-export function EmployeeCardModal({user, isOpen, onClose} : {user: Employee, isOpen: boolean, onClose: () => void}) {
+interface IEmployeeCardProps {
+  user: Employee 
+  saveEmployee: (employeeId: string, name: string, email: string, password: string) => void  
+  isOpen: boolean 
+  onClose: () => void
+}
+
+export function EmployeeCardModal({user, isOpen, onClose, saveEmployee} : IEmployeeCardProps) {
     
-
-    const [creds, handleCredChange, setFields] = useForm({email: user.email, password: ''})
-    const [name, setName] = useState(user.name)
-    const [ executeAsyncFunc ] = useAsync()
-    const { askConfirmation, handleModalClose, isConfirmModalOpen, msg } = useConfirm()
+    const [creds, handleCredChange, setFields] = useForm({email: (user) ? user.email : 'example@example.com', password: '', name: (user) ? user.name: ''})
     
     useEffect(()=>{
-      setName(user.name)
-      setFields({email: user.email, password: ''})
+      setFields({email: (user) ? user.email : 'example@example.com', password: '', name: (user) ? user.name: ''})
     },[isOpen])
-
-    const saveEmployee = async () => {
-        const isApproved = await askConfirmation(`Youre about to change Employee's private information`)
-        if (isApproved) {
-          await executeAsyncFunc<[boolean, boolean]>({
-            asyncOps: [() => updateUserData(user.id, name), () => updateUserCredentials({ userId: user.id, newCreds: { email: creds.email, password: creds.password }})],
-            errorMsg: 'Couldnt save new employee please try again later...',
-            successMsg: 'Saved new employee has been successful'
-          })
-          onClose()
-        }
-    }
-  
     
     return (
       <>
-        <ConfirmationModal message={msg} onClose={handleModalClose} open={isConfirmModalOpen} />
         <Modal backdrop={'blur'} isOpen={isOpen} onClose={onClose} className="max-h-90vh max-w-70vw overflow-auto rounded-3xl">
            <ModalContent>
-                 <ModalHeader className="text-small">Employee: "{user.name}"</ModalHeader>
+                 <ModalHeader className="text-small">{user ? `Employee: ${user.name}` : `Create new Employee`}</ModalHeader>
                  <ModalBody>
                         <Input
-                            isRequired
                             type="text"
+                            name="name"
                             variant="faded"
-                            description='Press to edit employee name'
-                            value={name}
+                            description={user ? 'Press to edit employee name' : 'Define new employee Name'}                            
+                            value={creds.name}
                             className="max-w-xs"
-                            onValueChange={(v)=> setName(v)}
+                            onChange={handleCredChange}
                 />
                         <Input
-                            isRequired
                             type="text"
                             variant="faded"
-                            description='Press to edit employee Email'
+                            description={user ? 'Press to edit employee Email' : 'Define new employee Email' }
                             value={creds.email}
                             className="max-w-xs"
                             name="email"
                             onChange={handleCredChange}
                 />
                         <Input
-                            isRequired
                             type="password"
                             name="password"
                             variant="faded"
@@ -73,8 +55,8 @@ export function EmployeeCardModal({user, isOpen, onClose} : {user: Employee, isO
                 />
                  </ModalBody>
                  <ModalFooter>
-                   <Button color="success" variant="light" onPress={saveEmployee}>
-                     Save
+                   <Button color="success" variant="light" onPress={() => saveEmployee((user) ? user.id : undefined, creds.name, creds.email, creds.password)}>
+                     {(user) ? 'Save' : 'Create'}
                    </Button>
                    <Button color="danger" variant="light" onPress={onClose}>
                      close
