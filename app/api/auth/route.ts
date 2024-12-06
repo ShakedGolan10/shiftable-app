@@ -5,13 +5,12 @@ import { clearCookie, setCookie } from '@/services/server-services/cookie.servic
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
-import { saveEmployeeEmail } from '@/services/server-services/admin.service'
-import { admin } from '@/firebase-admin.config.mjs'
+import { updateEmployeeEmail } from '@/services/server-services/admin.service'
 interface UpdateRequest extends NextRequest {
     json: () => Promise<string>
 }
 
-interface IUpdateUserCredsPayload {
+export interface IUpdateUserCredsPayload {
     newCreds: {
         email?: string
         password?: string
@@ -22,7 +21,7 @@ export async function POST(req: NextRequest) {
     const auth = getAuth(app)
     try {
         const token = await req.json() // If there isnt body value (aka logout) req.json will throw an error which will cause logout.
-        let userCredentials = await validateJwtToken<Credentials>(token)
+        const userCredentials = await validateJwtToken<Credentials>(token)
         return await login(auth, userCredentials)
     } catch (error) {
         return await logout()
@@ -34,16 +33,7 @@ export async function PUT(req: UpdateRequest) {
         
         const token = await req.json()
         const userNewCred = await validateJwtToken<IUpdateUserCredsPayload>(token)
-        const filteredCreds = Object.fromEntries(
-            Object.entries(userNewCred).filter(([_, value]) => value !== undefined)
-        );
-        await Promise.all([
-            // Todo: Add transaction handling the race condition over here
-            admin.auth().updateUser(userNewCred.userId, {
-                    ...filteredCreds,
-                }),
-            saveEmployeeEmail(userNewCred.userId, userNewCred.newCreds.email)
-        ])
+        await updateEmployeeEmail(userNewCred)
         return NextResponse.json('Success', {status: 200})
     } catch (error) {
         console.log({error})

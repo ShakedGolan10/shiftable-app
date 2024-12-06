@@ -9,7 +9,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { useConfirm } from '@/hooks/useConfirm'
 import ConfirmationModal from '@/components/helpers/confirm-modal'
 import { useAsync } from '@/hooks/useAsync'
-import { updateUserCredentials, updateUserData } from '@/services/admin.service'
+import { createNewEmployee, updateUserCredentials, updateUserData } from '@/services/admin.service'
 
 interface IManageEmployeesProps {
     data: [Employee[]]
@@ -28,13 +28,13 @@ export default function ManageEmployeesPage({data, user} : IManageEmployeesProps
     if (!employeeId) {
       const isApproved = await askConfirmation(`Youre about to create new employee`)
       if (isApproved) {
-        await executeAsyncFunc<[boolean, boolean]>({
-          asyncOps: [() => updateUserData(employeeId, name), () => updateUserCredentials({ userId: employeeId, newCreds: { email, password }})],
+        const newEmployee = await executeAsyncFunc<[Employee]>({
+          asyncOps: [() => createNewEmployee(name, email, password, user.id)],
           errorMsg: 'Couldnt save new employee please try again later...',
-          successMsg: 'Saved new employee has been successful'
+          successMsg: 'Saving new employee has been successful'
         })
         setEmployees(prev => {
-          prev[selectedEmployeeIdx] = {...prev[selectedEmployeeIdx], name, email}
+          prev[selectedEmployeeIdx] = newEmployee[0]
           return [...prev]
         })
         onClose()
@@ -44,8 +44,8 @@ export default function ManageEmployeesPage({data, user} : IManageEmployeesProps
       if (isApproved) {
         await executeAsyncFunc<[boolean, boolean]>({
           asyncOps: [() => updateUserData(employeeId, name), () => updateUserCredentials({ userId: employeeId, newCreds: { email, password }})],
-          errorMsg: 'Couldnt save new employee please try again later...',
-          successMsg: 'Saved new employee has been successful'
+          errorMsg: 'Couldnt save employee info please try again later...',
+          successMsg: 'Saving new employee info has been successful'
         })
         setEmployees(prev => {
           prev[selectedEmployeeIdx] = {...prev[selectedEmployeeIdx], name, email}

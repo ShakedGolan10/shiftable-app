@@ -27,10 +27,11 @@ export const updateUserData = async (userId: string, newName: string) => {
     }
 }
 
-export const createNewEmployee = async (name: string, email: string, password: string) => {
+export const createNewEmployee = async (name: string, email: string, password: string, employerId: string): Promise<Employee> => {
     try {
-        const encryptedData = await generateJwtToken({name, email, password})    
+        const encryptedData = await generateJwtToken({name, email, password, employerId})    
         const newUser = await fetchService.POST('auth/user', JSON.stringify(encryptedData))
+        console.log({newUser})
         return newUser as Employee
     } catch (error) {
         console.log({error})
