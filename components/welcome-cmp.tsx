@@ -14,6 +14,7 @@ export default function WelcomeCmp({ onOpen, onLoginDemoUser, isLoadingLogin }) 
                     <GeneralTitle title={`Shift management application`} />
                     <p className='text-base mb-8'>Start getting things done together with your team based on Shiftable's revolutionary shift management features made for small and medium businesses</p>
                     <Button className='login-btn' onClick={onOpen}>Login</Button>
+                    <Button color='primary' className='hover:bg-transparent hover:text-warning-100 border border-warning-100' isLoading={isLoadingLogin} onClick={() => window.location.assign('/signup')}>Onboard as new Employer Now !</Button>
                     <Button color='success' className='hover:bg-transparent hover:text-success-100 border border-success-100' isLoading={isLoadingLogin} onClick={() => onLoginDemoUser(true)}>Try as an Employee demo user</Button>
                     <Button color='warning' className='hover:bg-transparent hover:text-warning-100 border border-warning-100' isLoading={isLoadingLogin} onClick={() => onLoginDemoUser(false)}>Try as an Employer demo user</Button>
                     <a target='_blank' href="https://wa.me/972535302345"><Button className='contact-us-btn'>Not a member? Contact us!</Button></a>
