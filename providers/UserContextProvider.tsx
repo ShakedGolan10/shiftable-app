@@ -36,9 +36,10 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                 errorMsg: 'Couldnt login, please try again',
             }) 
             if (!user) throw new Error('error')
-            router.push('/main')
-            user = CreateUserInstance(user)
-            setUser(user)
+                user = CreateUserInstance(user)
+                setUser(user)
+                if (user instanceof Employer && user.onboardingStep) window.location.assign('/main/onboarding')
+                    else router.push('/main')
         } catch (error) {
                     throw new Error(error)
         } finally {
@@ -61,7 +62,8 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         try {
             let loggedInUser = await userService.getLoggedInUser()
             setUser(loggedInUser)
-            if (loggedInUser instanceof Employee && path.includes('/admin/') ||
+            if (user instanceof Employer && user.onboardingStep) window.location.assign('/main/onboarding')
+            else if (loggedInUser instanceof Employee && path.includes('/admin/') ||
                 loggedInUser instanceof Employer && path.includes('/employee/')
             ) window.location.assign('/main') // Keep it that way: The method is quicker then the error that has been displayed by the employer func, unlik router.push ?? 
         } catch (error) {

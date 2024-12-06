@@ -29,7 +29,7 @@ export class Employer {
     public employees: Array<string> = []
     public applicationRules? : ApplicationRules
     public weeklyWorkflow? : WeeklyShifts
-
+    public onboardingStep? : string
    
     constructor(props: Employer) {
         this.id = props.id
