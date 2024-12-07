@@ -2,7 +2,7 @@
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employee, Employer } from '@/types/class.service';
 import { getEmployeesByFilter } from '@/services/server-services/employer.service';
-import ManageEmployeesPage from './manage-employees';
+import ManageEmployeesPage from '@/lib/admin/employees/manage-employees';
 
 export default function ShiftsApplyPage() {
   const ManageEmployees = WithDataWrapper<[Employee[]]>({
