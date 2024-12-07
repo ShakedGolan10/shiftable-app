@@ -22,7 +22,7 @@ export default function SignUpPage() {
     name: "",
     password: "",
   });
-  const [passwordError, setPasswordError] = useState(false);
+  const [ passwordError, setPasswordError ] = useState(false);
   const [ executeAsyncAuthFunc ] = useAsyncAuth()
   const { login } = useAuth<Employer>()
   const handleSubmit = async () => {

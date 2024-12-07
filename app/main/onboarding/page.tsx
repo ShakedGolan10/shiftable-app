@@ -52,7 +52,7 @@ const Onboarding = () => {
         transition={{ duration: 0.8 }}
         className="text-center mb-8"
       >
-        <GeneralTitle title={`Onboarding step: ${step}`} />
+        <GeneralTitle title={`Welcome to Onboarding`} />
         <motion.p
         animate={{ scale: [0.95, 1] }}
         transition={{ duration: 0.3 }}
@@ -105,7 +105,7 @@ const StepComponent = ({
         transition={{ duration: 0.4 }}
         className="text-2xl font-bold mb-2"
       >
-        {title}
+        Setting up: {title}
       </motion.h2>
       <motion.p
         animate={{ scale: [0.95, 1] }}

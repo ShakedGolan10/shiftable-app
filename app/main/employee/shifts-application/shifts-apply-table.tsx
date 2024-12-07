@@ -7,7 +7,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { createTableRows, daysOfWeek, getDateOfApply } from '@/lib/server.utils';
 import { Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
-import { RulesTable } from '@/components/application_rules';
+import { RulesTable } from '@/app/main/employee/shifts-application/application-rules';
 
 interface ShiftsTableProps {
   data: [
