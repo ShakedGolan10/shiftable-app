@@ -6,9 +6,9 @@ import { useAuth } from "@/providers/UserContextProvider";
 import { Employer } from "@/types/class.service";
 import GeneralTitle from "@/components/helpers/general-title";
 import { Button } from "@nextui-org/react";
-import SetWeeklyFlow from "./set-weekly-workflow";
-import SetApplicationRules from "./set-application-rules";
-import SetApplicationTime from "./set-application-time";
+import SetWeeklyFlow from "@/lib/onboarding/set-weekly-workflow";
+import SetApplicationRules from "@/lib/onboarding/set-application-rules";
+import SetApplicationTime from "@/lib/onboarding/set-application-time";
 
 export default function Onboarding() {
   const [step, setStep] = useState<string>("weeklyflow");
