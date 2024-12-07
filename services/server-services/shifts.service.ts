@@ -14,7 +14,7 @@ export const getEmployerWeeklyShifts = async (employerId: string) => {
 }
 export const getEmployerApplicationRules = async (employerId: string) => {
   try {
-    const applicationRules = await queryOneField<ApplicationRules>(`users/${employerId}`, 'application_rules')
+    const applicationRules = await queryOneField<ApplicationRules>(`users/${employerId}`, 'applicationRules')
     return applicationRules 
   } catch (error) {
     throw new Error(`Error catched while trying to get shifts data at firebase: ${error}`)    

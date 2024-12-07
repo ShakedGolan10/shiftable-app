@@ -5,6 +5,8 @@ import { admin } from "@/firebase-admin.config.mjs";
 import { firestore } from "@/firebase.config.mjs";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { queryOneField } from "./db.service";
+import { Employer } from "@/types/class.service";
+import { generateId } from "@/lib/server.utils";
 
 
 export const saveEmployeeName = async (
@@ -58,6 +60,44 @@ export const updateEmployeeEmail = async (
       const employeesArray = await queryOneField<string[]>(`users/${employerId}`, 'employees')
       await updateDoc(employerUserRef, {employees: [...employeesArray, newUser.uid] })
       return newUserObj
+    } catch (error) {
+      throw new Error(`Error creating new employee: ${error}`);
+    }
+  }
+  export const signupNewEmployer = async (email: string, password: string, name: string) => {
+    try {
+      // add transactions here : 
+      const newUser = await admin.auth().createUser({
+        email,
+        password
+      })
+      const newUserObj = {
+        id: newUser.uid,
+        employees: [],
+        employerMsg: [], 
+        applicationRules: {
+          numOfCant: 2,
+          optionalShifts: [{minChoices: 2, shiftsToChoose: {monday: '16:00-22:00', thursday: '16:00-22:00'}}],
+          minDays: 5,
+          mandatoryShifts: [{sunday: '12:00-19:00', friday: '08:00-13:00'}]
+        },
+        applicationTime: { day: 4, time: '1630' },
+        name,
+        email,
+        weeklyWorkflow: {
+          sunday: [{shift: '08:00-15:00', shiftId: generateId()}, {shift: '12:00-19:00', shiftId: generateId()}, {shift: '16:00-22:00', shiftId: generateId()}],
+          monday: [{shift: '08:00-15:00', shiftId: generateId()}, {shift: '12:00-19:00', shiftId: generateId()}, {shift: '16:00-22:00', shiftId: generateId()}],
+          tuesday: [{shift: '08:00-15:00', shiftId: generateId()}, {shift: '12:00-19:00', shiftId: generateId()}, {shift: '16:00-22:00', shiftId: generateId()}],
+          wednesday: [{shift: '08:00-15:00', shiftId: generateId()}, {shift: '12:00-19:00', shiftId: generateId()}, {shift: '16:00-22:00', shiftId: generateId()}],
+          thursday: [{shift: '08:00-15:00', shiftId: generateId()}, {shift: '12:00-19:00', shiftId: generateId()}, {shift: '16:00-22:00', shiftId: generateId()}],
+          friday: [{shift: '08:00-13:00', shiftId: generateId()}, {shift: '12:00-16:00', shiftId: generateId()}],
+          saturday: []
+        },
+        onboardingStep: 'weeklyflow'
+      }
+      const newUserRef = doc(firestore, 'users', newUser.uid)
+      await setDoc(newUserRef, newUserObj)
+      return newUserObj as Employer
     } catch (error) {
       throw new Error(`Error creating new employee: ${error}`);
     }

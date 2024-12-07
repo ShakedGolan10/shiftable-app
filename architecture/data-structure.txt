@@ -19,7 +19,7 @@ userEmployee: {
         employerMsg : string[],
 		employees: string[],
         weeklyWorkflow: ShiftSlot[],
-        application_rules {
+        applicationRules {
             minDays: number,
             numOfCant: 2
             mandatoryDay: string,
@@ -90,7 +90,7 @@ Firebase structure :
                         ],  
                  }
             }
-        application_rules {
+        applicationRules {
             minDays: number,
             mandatoryShifts {
                 friday: 08-13,

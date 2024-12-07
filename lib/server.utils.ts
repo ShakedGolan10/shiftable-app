@@ -73,4 +73,13 @@ export const getDateOfApply = (day: number, time: string): string =>  {
       return rows;
     };
 
+    export const getEmptyTableRow = (maxRows: number, columns: any[]) => {
+        const rowItems = columns.map(() => undefined);
+        const row = {
+          key: (maxRows+1).toString(),
+          rowItems
+        }
+      return row;
+    };
+
     export const generateId = () => Math.random().toString(36).substring(2, 7);
