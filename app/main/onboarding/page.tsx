@@ -56,7 +56,7 @@ export default function Onboarding() {
       <motion.div
         animate={{ opacity: [0, 1], y: [-30, 0] }}
         transition={{ duration: 0.8 }}
-        className="text-center mt-10 mb-28"
+        className="text-center my-10"
       >
         <GeneralTitle title={`Welcome to Onboarding`} />
         <motion.p

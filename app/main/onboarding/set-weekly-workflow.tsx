@@ -1,11 +1,9 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Employer } from '@/types/class.service';
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 import { createTableRows, daysOfWeek, getEmptyTableRow } from '@/lib/server.utils';
 import { MinusCircleIcon, PencilIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
-
-
 
 export default function SetWeeklyFlow({ user } : { user: Employer }) {
 
@@ -21,6 +19,10 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
             setTableItems(prev => [...prev].slice(0, prev.length-1))
         }
     }
+
+    useEffect(()=> {
+        console.log({tableItems})
+    },[tableItems])
     // Todo: Define a plus sign for every row (to add row at a requested location)
     // Todo: Define an empty line of shifts row
     // Todo: Enable create, edit, & delete operations upon shift
@@ -54,14 +56,14 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
                 )}
             </TableBody>
         </Table>
-        <div className='flex'>
-        <Button isIconOnly className="bg-transparent" onClick={() => createNewRow()}>
+        <Button className="bg-transparent" onClick={() => createNewRow()}>
             <PlusCircleIcon width={50} height={50} />
+            <span className='font-semibold w-28 text-left'>Add row</span>
         </Button> 
-        <Button isIconOnly className="bg-transparent" onClick={() => deleteLastRow()}>
+        <Button className="bg-transparent" onClick={() => deleteLastRow()}>
             <MinusCircleIcon width={50} height={50} />
+            <span className='font-semibold w-28 text-left'>Remove LAST row</span>
         </Button> 
-        </div>
       </>
       );
 }
