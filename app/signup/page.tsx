@@ -6,10 +6,10 @@ import GeneralTitle from "@/components/helpers/general-title";
 import { Input, Button } from "@nextui-org/react";
 import { motion, MotionConfig } from "motion/react";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { useAsync } from "@/hooks/useAsync";
 import { createNewEmployer } from "@/services/admin.service";
 import { useAuth } from "@/providers/UserContextProvider";
 import { Employer } from "@/types/class.service";
+import { useAsyncAuth } from "@/hooks/useAsyncAuth";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -23,19 +23,20 @@ export default function SignUpPage() {
     password: "",
   });
   const [passwordError, setPasswordError] = useState(false);
-  const [ executeAsyncFunc ] = useAsync()
+  const [ executeAsyncAuthFunc ] = useAsyncAuth()
   const { login } = useAuth<Employer>()
   const handleSubmit = async () => {
     if (!passwordRegex.test(formValues.password)) {
       setPasswordError(true);
       setTimeout(() => setPasswordError(false), 2000);
     } else {
-        await executeAsyncFunc({
-            asyncOps: [()=> createNewEmployer(formValues.name, formValues.email, formValues.password)],
+        await executeAsyncAuthFunc({
+            asyncOperation: ()=> createNewEmployer(formValues.name, formValues.email, formValues.password),
             errorMsg: 'Coudlnt signup new user, please try again later',
             successMsg: 'New employer user created, next stage - Define weekly scheduale'
         })
-        setTimeout(async () => await login({email: formValues.email, password: formValues.password}), 1500) 
+        console.log({formValues})
+        // setTimeout(async () => await login({email: formValues.email, password: formValues.password}), 1500) 
     }
   };
 
