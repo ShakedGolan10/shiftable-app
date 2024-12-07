@@ -35,8 +35,7 @@ export default function SignUpPage() {
             errorMsg: 'Coudlnt signup new user, please try again later',
             successMsg: 'New employer user created, next stage - Define weekly scheduale'
         })
-        console.log({formValues})
-        // setTimeout(async () => await login({email: formValues.email, password: formValues.password}), 1500) 
+        setTimeout(async () => await login({email: formValues.email, password: formValues.password}), 1500) 
     }
   };
 
