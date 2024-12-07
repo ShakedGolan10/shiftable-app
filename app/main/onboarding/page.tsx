@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Component, useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { useAuth } from "@/providers/UserContextProvider";
 import { Employer } from "@/types/class.service";
 import GeneralTitle from "@/components/helpers/general-title";
 import { Button } from "@nextui-org/react";
+import SetWeeklyFlow from "./set-weekly-workflow";
+import SetApplicationRules from "./set-application-rules";
+import SetApplicationTime from "./set-application-time";
 
-const Onboarding = () => {
+export default function Onboarding() {
   const [step, setStep] = useState<string>("weeklyflow");
   const { user } = useAuth<Employer>()
 
@@ -22,22 +25,25 @@ const Onboarding = () => {
       case "weeklyflow":
         return (
           <StepComponent
-            title="Weekly Flow"
+            title="Weekly Workflow"
             description="Plan and visualize your weekly shifts with ease."
+            Component={() => <SetWeeklyFlow />}
           />
         );
       case "rules":
         return (
           <StepComponent
-            title="Rules"
+            title="Application Rules"
             description="Define and customize the rules for managing shifts."
+            Component={() => <SetApplicationRules />}
           />
         );
       case "time":
         return (
           <StepComponent
-            title="Time"
+            title="Application Time"
             description="Select the perfect timing for your shifts and preferences."
+            Component={() => <SetApplicationTime />}
           />
         );
       default:
@@ -50,21 +56,20 @@ const Onboarding = () => {
       <motion.div
         animate={{ opacity: [0, 1], y: [-30, 0] }}
         transition={{ duration: 0.8 }}
-        className="text-center mb-8"
+        className="text-center mt-10 mb-28"
       >
         <GeneralTitle title={`Welcome to Onboarding`} />
         <motion.p
         animate={{ scale: [0.95, 1] }}
         transition={{ duration: 0.3 }}
-      >
+        >
         Let's get you started.
-      </motion.p>
+        </motion.p>
       </motion.div>
 
       <motion.div
         animate={{ scale: [0.95, 1], opacity: [0, 1] }}
         transition={{ duration: 0.5 }}
-        className="w-full shadow-xl rounded-lg p-8"
       >
         {renderStep()}
       </motion.div>
@@ -87,13 +92,11 @@ const Onboarding = () => {
   );
 };
 
-const StepComponent = ({
-  title,
-  description,
-}: {
+function StepComponent({ title, description, Component} : {
   title: string;
   description: string;
-}) => {
+  Component: React.ComponentType
+}) {
   return (
     <motion.div
       animate={{ opacity: [0, 1], y: [-20, 0] }}
@@ -103,9 +106,9 @@ const StepComponent = ({
       <motion.h2
         animate={{ letterSpacing: ["0.2em", "0em"] }}
         transition={{ duration: 0.4 }}
-        className="text-2xl font-bold mb-2"
+        className="text-2xl font-bold mb-10 underline"
       >
-        Setting up: {title}
+        Onboarding step: {title}
       </motion.h2>
       <motion.p
         animate={{ scale: [0.95, 1] }}
@@ -113,8 +116,8 @@ const StepComponent = ({
       >
         {description}
       </motion.p>
+
+      <Component />
     </motion.div>
   );
 };
-
-export default Onboarding;
