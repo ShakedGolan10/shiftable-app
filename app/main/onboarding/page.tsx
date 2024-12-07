@@ -27,7 +27,7 @@ export default function Onboarding() {
           <StepComponent
             title="Weekly Workflow"
             description="Plan and visualize your weekly shifts with ease."
-            Component={() => <SetWeeklyFlow />}
+            Component={() => <SetWeeklyFlow user={user} />}
           />
         );
       case "rules":
@@ -52,7 +52,7 @@ export default function Onboarding() {
   };
 
   return ( user &&
-    <section className="flex flex-col items-center justify-center">
+    <>
       <motion.div
         animate={{ opacity: [0, 1], y: [-30, 0] }}
         transition={{ duration: 0.8 }}
@@ -67,12 +67,13 @@ export default function Onboarding() {
         </motion.p>
       </motion.div>
 
-      <motion.div
+      <motion.section
         animate={{ scale: [0.95, 1], opacity: [0, 1] }}
         transition={{ duration: 0.5 }}
+        className="w-full flex flex-col text-center overflow-x-auto items-center justify-evenly flex-grow"
       >
         {renderStep()}
-      </motion.div>
+      </motion.section>
 
       <motion.div
         animate={{ opacity: [0, 1], y: [20, 0] }}
@@ -88,7 +89,7 @@ export default function Onboarding() {
         </Button>
         
       </motion.div>
-    </section>
+    </>
   );
 };
 
@@ -98,11 +99,7 @@ function StepComponent({ title, description, Component} : {
   Component: React.ComponentType
 }) {
   return (
-    <motion.div
-      animate={{ opacity: [0, 1], y: [-20, 0] }}
-      transition={{ duration: 0.6 }}
-      className="text-center"
-    >
+    <>
       <motion.h2
         animate={{ letterSpacing: ["0.2em", "0em"] }}
         transition={{ duration: 0.4 }}
@@ -116,8 +113,7 @@ function StepComponent({ title, description, Component} : {
       >
         {description}
       </motion.p>
-
       <Component />
-    </motion.div>
+      </>
   );
 };

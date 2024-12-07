@@ -6,6 +6,7 @@ import { generateJwtToken, validateJwtToken } from '@/services/server-services/t
 import { getUser } from '@/services/server-services/user.service'
 import { Credentials } from '@/types/user/types.server'
 import { updateEmployeeEmail } from '@/services/server-services/admin.service'
+import { Employer } from '@/types/class.service'
 interface UpdateRequest extends NextRequest {
     json: () => Promise<string>
 }
@@ -66,7 +67,7 @@ const login = async (auth: Auth, UserCredentials: Credentials) => {
     try {
         let { user }: UserCredential = await signInWithEmailAndPassword(auth, UserCredentials.email, UserCredentials.password)
         const jwtIdToken = await generateJwtToken(user.uid)
-        const loggedInUser = await getUser(user.uid)
+        const loggedInUser = await getUser(user.uid) as Employer
         await setCookie('loggedInUserToken', jwtIdToken)
         return NextResponse.json(loggedInUser, { status: 200 })
     } catch (error) {
