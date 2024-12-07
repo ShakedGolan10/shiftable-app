@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Switch } from "@nextui-org/react";
 import { Employee } from '@/types/class.service';
-import { RulesTable } from '@/components/application_rules';
 import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import { createTableRows, daysOfWeek, getDateOfApply } from '@/lib/server.utils';
 import { Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
+import { RulesTable } from '@/components/application_rules';
 
 interface ShiftsTableProps {
   data: [

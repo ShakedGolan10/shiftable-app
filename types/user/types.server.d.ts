@@ -28,7 +28,7 @@ export interface Employer {
     email: string
     employerMsg?: Array<string>
     employees: Array<string> = []
-    application_rules: ApplicationRules
+    applicationRules: ApplicationRules
     weeklyWorkflow: WeeklyShifts
 }
 
