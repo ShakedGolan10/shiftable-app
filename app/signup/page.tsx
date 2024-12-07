@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "@/hooks/useForm";
 import GeneralTitle from "@/components/helpers/general-title";
 import { Input, Button } from "@nextui-org/react";
-import { motion } from "motion/react";
+import { motion, MotionConfig } from "motion/react";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useAsync } from "@/hooks/useAsync";
 import { createNewEmployer } from "@/services/admin.service";
@@ -41,9 +41,11 @@ export default function SignUpPage() {
 
   return (
     <section className="flex flex-col items-center justify-center min-h-screen p-4">
+      <MotionConfig
+          transition={{ duration: 2 }}
+          >
       <motion.div
         animate={{ opacity: [0, 1], y: [-20, 0] }}
-        transition={{ duration: 2 }}
         className="mb-8 text-center"
       >
         <GeneralTitle title="Welcome to the onboarding journey as a new employer" />
@@ -54,48 +56,45 @@ export default function SignUpPage() {
           e.preventDefault();
           handleSubmit();
         }}
-        className="w-full max-w-md p-6 space-y-6 rounded-lg shadow-md"
+        className="w-full max-w-md p-6 space-y-6 rounded-lg"
       >
+        
+
+        <motion.p className="text-subHeader underline">Signup form</motion.p>
         <motion.div
           animate={{ opacity: [0, 1], x: [-50, 0] }}
-          transition={{ duration: 2 }}
         >
           <Input
-            label="Email"
+            placeholder="Email"
             name="email"
-            variant="bordered"
             value={formValues.email}
             onChange={handleInputChange}
-            className="w-full"
+            className="h-12 w-full"
           />
         </motion.div>
 
         <motion.div
           animate={{ opacity: [0, 1], x: [50, 0] }}
-          transition={{ duration: 2 }}
         >
           <Input
-            label="Name"
+            placeholder="Name"
             name="name"
-            variant="bordered"
             value={formValues.name}
             onChange={handleInputChange}
-            className="w-full"
+            className="h-12 w-full"
           />
         </motion.div>
 
         <motion.div
           animate={{ opacity: [0, 1], y: [50, 0] }}
-          transition={{ duration: 2 }}
         >
           <Input
-            label="Password"
+            placeholder="Password"
             name="password"
             type="password"
-            variant="bordered"
             value={formValues.password}
             onChange={handleInputChange}
-            className="w-full"
+            className="h-12 w-full"
           />
           {passwordError && (
             <motion.p
@@ -116,7 +115,6 @@ export default function SignUpPage() {
 
         <motion.div
           animate={{ opacity: [0, 1], scale: [0.9, 1] }}
-          transition={{ duration: 2 }}
           className="text-center"
         >
           <Button
@@ -129,6 +127,8 @@ export default function SignUpPage() {
           </Button>
         </motion.div>
       </motion.form>
+    </MotionConfig>
+
     </section>
   );
 };
