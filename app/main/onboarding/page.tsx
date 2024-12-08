@@ -79,8 +79,8 @@ export default function Onboarding() {
           onClick={() => setStep("weeklyflow")}
           color="secondary"
         >
-          <ArrowRightIcon  width={50} height={50} />
           <span>Next step</span>
+          <ArrowRightIcon  width={50} height={50} />
         </Button>
         
       </motion.div>
