@@ -9,6 +9,7 @@ import { Button } from "@nextui-org/react";
 import SetWeeklyFlow from "@/lib/onboarding/workflow/set-weekly-workflow";
 import SetApplicationRules from "@/lib/onboarding/rules/set-application-rules";
 import SetApplicationTime from "@/lib/onboarding/time/set-application-time";
+import { ArrowRightIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/solid";
 
 export default function Onboarding() {
   const [step, setStep] = useState<string>("weeklyflow");
@@ -75,11 +76,11 @@ export default function Onboarding() {
         className="mt-8 flex space-x-4"
       >
         <Button
-          className="px-4 py-2"
           onClick={() => setStep("weeklyflow")}
-          color="success"
+          color="secondary"
         >
-          Next step
+          <ArrowRightIcon  width={50} height={50} />
+          <span>Next step</span>
         </Button>
         
       </motion.div>
