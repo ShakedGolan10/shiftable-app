@@ -56,21 +56,15 @@ export default function Onboarding() {
       <motion.div
         animate={{ opacity: [0, 1], y: [-30, 0] }}
         transition={{ duration: 0.8 }}
-        className="text-center my-10"
+        className="text-center mt-2"
       >
         <GeneralTitle title={`Welcome to Onboarding`} />
-        <motion.p
-        animate={{ scale: [0.95, 1] }}
-        transition={{ duration: 0.3 }}
-        >
-        Let's get you started.
-        </motion.p>
       </motion.div>
 
       <motion.section
         animate={{ scale: [0.95, 1], opacity: [0, 1] }}
         transition={{ duration: 0.5 }}
-        className="w-full flex flex-col text-center overflow-x-auto items-center justify-evenly flex-grow"
+        className="w-full flex flex-col gap-5 text-center overflow-x-auto items-center justify-evenly flex-grow"
       >
         {renderStep()}
       </motion.section>

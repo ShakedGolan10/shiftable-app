@@ -4,9 +4,9 @@ import { Employer } from "@/types/class.service";
 import { useAsync } from "@/hooks/useAsync";
 import { Input, Button } from "@nextui-org/react";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
-import { saveEmployerMsgs } from "@/services/server-services/employer.service";
 import GeneralTitle from "@/components/helpers/general-title";
 import WithDataWrapper from "@/components/helpers/cmp-wrapper";
+import { saveOneField } from "@/services/server-services/db.service";
 
 
 const EditEmployeesMsgs = ({user}: {user: Employer}) => {
@@ -21,7 +21,7 @@ const EditEmployeesMsgs = ({user}: {user: Employer}) => {
   
     const saveMsgs = async () => {
         await executeAsyncFunc({
-            asyncOps: [() => saveEmployerMsgs(user.id , msgs)],
+            asyncOps: [() => saveOneField(user.id , 'employerMsg', msgs)],
             errorMsg: 'Couldnt save employer messages, please try again',
             successMsg:'Your messages saved succesfuly'
         })
