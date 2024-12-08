@@ -3,7 +3,7 @@ import { getEmployerWeeklyShifts, getWeeklySchedule } from '@/services/server-se
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employee } from '@/types/class.service';
 import { DayOrientedObject } from '@/types/user/types.server';
-import MyShiftsTable from '../my-shifts-table';
+import MyShiftsTable from '@/lib/employee/my-shifts/my-shifts-table';
 import { useParams } from 'next/navigation';
 
 export default function MyShiftsPage() {

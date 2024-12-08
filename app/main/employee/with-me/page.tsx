@@ -2,7 +2,7 @@
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employee } from '@/types/class.service';
 import { getThisSunday } from '@/lib/server.utils';
-import WorkingWithMe from './working-with-me';
+import WorkingWithMe from '@/lib/employee/with-me/working-with-me';
 import { getEmployerWeeklyShifts, getTodaySchedule } from '@/services/server-services/shifts.service';
 
 export default function WorkingWithMePage() {

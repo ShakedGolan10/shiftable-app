@@ -1,7 +1,7 @@
 'use client'
 import { getEmployerApplicationRules, getEmployerWeeklyShifts } from '@/services/server-services/shifts.service';
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
-import { ShiftsApplyTable } from './shifts-apply-table';
+import { ShiftsApplyTable } from '@/lib/employee/shifts-application/shifts-apply-table';
 import { Employee } from '@/types/class.service';
 
 export default function ShiftsApplyPage() {

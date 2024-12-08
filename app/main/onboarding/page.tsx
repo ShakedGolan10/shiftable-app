@@ -6,9 +6,9 @@ import { useAuth } from "@/providers/UserContextProvider";
 import { Employer } from "@/types/class.service";
 import GeneralTitle from "@/components/helpers/general-title";
 import { Button } from "@nextui-org/react";
-import SetWeeklyFlow from "./set-weekly-workflow";
-import SetApplicationRules from "./set-application-rules";
-import SetApplicationTime from "./set-application-time";
+import SetWeeklyFlow from "@/lib/onboarding/workflow/set-weekly-workflow";
+import SetApplicationRules from "@/lib/onboarding/rules/set-application-rules";
+import SetApplicationTime from "@/lib/onboarding/time/set-application-time";
 
 export default function Onboarding() {
   const [step, setStep] = useState<string>("weeklyflow");
@@ -56,7 +56,7 @@ export default function Onboarding() {
       <motion.div
         animate={{ opacity: [0, 1], y: [-30, 0] }}
         transition={{ duration: 0.8 }}
-        className="text-center mt-10 mb-28"
+        className="text-center my-10"
       >
         <GeneralTitle title={`Welcome to Onboarding`} />
         <motion.p
