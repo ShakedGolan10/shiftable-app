@@ -2,7 +2,6 @@
 import GeneralTitle from '@/components/helpers/general-title'
 import { Employee, Employer } from '@/types/class.service'
 import React, { useState } from 'react'
-import EmployeeCard from './employee-card'
 import { Button, useDisclosure } from '@nextui-org/react'
 import { EmployeeCardModal } from '@/lib/admin/employees/employee-card-modal'
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
@@ -10,6 +9,7 @@ import { useConfirm } from '@/hooks/useConfirm'
 import ConfirmationModal from '@/components/helpers/confirm-modal'
 import { useAsync } from '@/hooks/useAsync'
 import { createNewEmployee, updateUserCredentials, updateUserData } from '@/services/admin.service'
+import EmployeeCard from './employee-card'
 
 interface IManageEmployeesProps {
     data: [Employee[]]

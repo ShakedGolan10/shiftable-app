@@ -76,7 +76,7 @@ export const getDateOfApply = (day: number, time: string): string =>  {
     export const getEmptyTableRow = (maxRows: number, columns: any[]) => {
         const rowItems = columns.map(() => undefined);
         const row = {
-          key: (maxRows+1).toString(),
+          key: (maxRows).toString(),
           rowItems
         }
       return row;
