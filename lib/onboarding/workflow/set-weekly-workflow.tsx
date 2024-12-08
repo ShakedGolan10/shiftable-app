@@ -28,8 +28,8 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
             else prev[day][chosenShift.shift] = {shift: newShiftTime, shiftId: newShiftId}
             return {...prev}
           })
+          setChosenShift(undefined)
     }
-    // weeklyFlow[daysOfWeek[chosenShift.day].day.toLowerCase()][chosenShift.shift]
     const createNewRow = (atIdx?: string) => {
         if (!atIdx) {
             setTableItems(prev => [...prev, getEmptyTableRow(prev.length, daysOfWeek)])
@@ -41,9 +41,7 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
         }
     }
 
-    useEffect(()=> {
-        console.log({tableItems})
-    },[tableItems])
+   // Todo: Create a useAsync for applying weekly flow
     return tableItems && (
         <>
         {chosenShift && <TimeInputModal shiftSlot={weeklyFlow[daysOfWeek[chosenShift.day].day.toLowerCase()][chosenShift.shift]} setTime={(startTime: TimeInputValue, endTime: TimeInputValue) => pickShiftTime(startTime, endTime)} isOpen={Boolean(chosenShift)} onClose={() => setChosenShift(undefined)} />}
@@ -54,7 +52,7 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
             <TableBody>
               {tableItems.map((item) => (
               <TableRow key={item.key}>
-                {item.rowItems.map((shiftElement, day) => (
+                {item.rowItems.map((shiftElement, day) => ( // Needed to be that way instead of items attribute to better respond to state change in items
                   <TableCell height={'100'} key={day}>
                    <article className='flex flex-col gap-2'>
                       <p className='text-base text-center'>{(shiftElement) ? shiftElement.shift : 'No shift'}</p>
