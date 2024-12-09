@@ -10,7 +10,7 @@ import { saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
 import { createTableRows, daysOfWeek, getDateOfApply, getLastSunday, getNextSunday } from '@/lib/server.utils';
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
+import { ArrowLeftCircleIcon, ArrowRightCircleIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
 const emptyDayOrientedObject = {
     sunday: {},
@@ -47,6 +47,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
   const [ executeAsyncFunc ] = useAsync()
 
   useEffect(()=> {
+    if (!rawDataShiftReqs || !employees) return 
         (existedWeeklySched) ? setSelectedShifts(existedWeeklySched) : setSelectedShifts(emptyDayOrientedObject)
             const emptyShiftReqs:ShiftReqsOOP = {}
             const dataLength = Object.keys(rawDataShiftReqs).length
@@ -167,10 +168,10 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
 
   const tableItems = createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek, 'day')
   
-  return (selectedShifts && shiftsReqs) && (
+  return (selectedShifts && shiftsReqs && user.employees.length) ? (
   <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isConfirmModalOpen} />
-    <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly flex-grow">
+    <section className="w-full flex flex-col overflow-x-auto items-center justify-evenly gap-2 flex-grow">
       <GeneralTitle title={`Set the shifts for`} />
       <div className='flex flex-row gap-5 items-center'>
           <Link  size='sm' color='foreground' href={`/main/admin/set-weekly-shifts/${getLastSunday(forDate)}`}>
@@ -212,10 +213,21 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
             )}
         </TableBody>
       </Table>
-      <Button color='success' onPress={applyShifts}>Save Shifts</Button>
+      <Button className='mt-2' color='success' onPress={applyShifts}>Save Shifts</Button>
     </section>
   </>
-  )
+  ) 
+  : 
+   (!user.employees.length && <>
+      <p className='text-subHeader'>{`We have noticed you dont have employees in your account!`}</p>
+      <Button
+          onClick={() => window.location.assign('/main/admin/employees')}
+          color="secondary"
+        >
+          <span>Press this button to add Employees now</span>
+          <ArrowRightIcon  width={50} height={50} />
+        </Button>
+    </>)
 }
 
 

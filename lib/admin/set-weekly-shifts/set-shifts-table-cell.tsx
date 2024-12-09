@@ -38,7 +38,6 @@ export const SetShiftsTableCell = ({
     const isPossible = onSelectChange(updatedShifts, value);
     if (isPossible) setLocalSelectedShifts(updatedShifts);
   };
-
   return (
     <div className="flex flex-col items-center">
       <Select

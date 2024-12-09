@@ -4,7 +4,7 @@ import { Employer } from '@/types/class.service';
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, TimeInputValue } from '@nextui-org/react';
 import { createTableRows, daysOfWeek, generateId, getEmptyTableRow } from '@/lib/server.utils';
 import { MinusCircleIcon, PencilIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
-import { TimeInputModal } from './time-input-modal';
+import { TimeInputModal } from '../time-input-modal';
 import { ShiftSlot } from '@/types/user/types.server';
 import { useAsync } from '@/hooks/useAsync';
 import { saveOneField } from '@/services/server-services/db.service';

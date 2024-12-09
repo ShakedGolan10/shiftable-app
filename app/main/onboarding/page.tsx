@@ -9,17 +9,47 @@ import { Button } from "@nextui-org/react";
 import SetWeeklyFlow from "@/lib/onboarding/workflow/set-weekly-workflow";
 import SetApplicationRules from "@/lib/onboarding/rules/set-application-rules";
 import SetApplicationTime from "@/lib/onboarding/time/set-application-time";
-import { ArrowRightIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/solid";
+import { ArrowRightIcon } from "@heroicons/react/24/solid";
+import { saveOneField } from "@/services/server-services/db.service";
+import StepComponent from "@/lib/onboarding/step-cmp";
+import { useSystemActions } from "@/store/actions/system.actions";
 
 export default function Onboarding() {
-  const [step, setStep] = useState<string>("weeklyflow");
+  const [ step, setStep ] = useState<string>("weeklyflow");
   const { user } = useAuth<Employer>()
+  const { toggleModalAction } = useSystemActions()
 
   useEffect(() => {
-    if (user) {
+  if (user) {
       setStep(user.onboardingStep);
     }
   }, []);
+
+  const nextStep = async () => {
+      switch (step) {
+        case "weeklyflow":
+          await saveOneField<string>(`users/${user.id}`, 'onboardingStep', 'rules')
+          return setStep("rules")
+          case "rules":
+          await saveOneField<string>(`users/${user.id}`, 'onboardingStep', 'time')
+          return setStep("time")
+        case "time":
+          await saveOneField<string>(`users/${user.id}`, 'onboardingStep', '')
+          toggleModalAction('Youve finished the onboarding and now will redirected to the main page!')
+          setTimeout(()=>{
+            toggleModalAction()
+            window.location.assign('/main')
+          },2500)
+          return setStep('')
+        default:
+      }
+  }
+
+  const prevStep = () => {
+    setStep(prev => {
+      return prev
+    })
+  }
 
   const renderStep = () => {
     switch (step) {
@@ -73,10 +103,10 @@ export default function Onboarding() {
       <motion.div
         animate={{ opacity: [0, 1], y: [20, 0] }}
         transition={{ delay: 0.5, duration: 0.4 }}
-        className="mt-8 flex space-x-4"
+        className="mt-2 flex space-x-4"
       >
         <Button
-          onClick={() => setStep("weeklyflow")}
+          onClick={() => nextStep()}
           color="secondary"
         >
           <span>Next step</span>
@@ -88,27 +118,4 @@ export default function Onboarding() {
   );
 };
 
-function StepComponent({ title, description, Component} : {
-  title: string;
-  description: string;
-  Component: React.ComponentType
-}) {
-  return (
-    <>
-      <motion.h2
-        animate={{ letterSpacing: ["0.2em", "0em"] }}
-        transition={{ duration: 0.4 }}
-        className="text-2xl font-bold mb-10 underline"
-      >
-        Onboarding step: {title}
-      </motion.h2>
-      <motion.p
-        animate={{ scale: [0.95, 1] }}
-        transition={{ duration: 0.3 }}
-      >
-        {description}
-      </motion.p>
-      <Component />
-      </>
-  );
-};
+
