@@ -15,7 +15,7 @@ import StepComponent from "@/lib/onboarding/step-cmp";
 import { useSystemActions } from "@/store/actions/system.actions";
 
 export default function Onboarding() {
-  const [ step, setStep ] = useState<string>("weeklyflow");
+  const [ step, setStep ] = useState<string>('');
   const { user } = useAuth<Employer>()
   const { toggleModalAction } = useSystemActions()
 
@@ -23,7 +23,7 @@ export default function Onboarding() {
   if (user) {
       setStep(user.onboardingStep);
     }
-  }, []);
+  }, [user]);
 
   const nextStep = async () => {
       switch (step) {
@@ -35,13 +35,14 @@ export default function Onboarding() {
           return setStep("time")
         case "time":
           await saveOneField<string>(`users/${user.id}`, 'onboardingStep', '')
-          toggleModalAction('Youve finished the onboarding and now will redirected to the main page!')
+          toggleModalAction('Youve finished the onboarding and now will redirected to the employees page!')
           setTimeout(()=>{
             toggleModalAction()
-            window.location.assign('/main')
+            window.location.assign('/main/employer/employees')
           },2500)
           return setStep('')
-        default:
+        default: 
+          return null
       }
   }
 
@@ -66,7 +67,7 @@ export default function Onboarding() {
           <StepComponent
             title="Application Rules"
             description="Define and customize the rules for managing shifts."
-            Component={() => <SetApplicationRules />}
+            Component={() => <SetApplicationRules user={user} />}
           />
         );
       case "time":
@@ -78,11 +79,11 @@ export default function Onboarding() {
           />
         );
       default:
-        return null;
+        return null
     }
   };
 
-  return ( user &&
+  return ( step &&
     <>
       <motion.div
         animate={{ opacity: [0, 1], y: [-30, 0] }}

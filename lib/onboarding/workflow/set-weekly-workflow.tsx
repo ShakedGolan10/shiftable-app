@@ -15,6 +15,7 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
     const [chosenShift, setChosenShift] = useState<{day: string, shift: string}>(undefined)
     const [ weeklyFlow, setWeeklyFlow ] = useState<WeeklyShifts>(user.weeklyWorkflow)
     const [ exeuteAsyncFunc ] = useAsync()
+    
     const pickShiftTime = (startTime: TimeInputValue, endTime: TimeInputValue) => {
         const newShiftId = generateId()
         const newShiftTime = `${String(startTime.hour).padStart(2, '0')}:${String(startTime.minute).padStart(2, '0')}-${String(endTime.hour).padStart(2, '0')}:${String(endTime.minute).padStart(2, '0')}`

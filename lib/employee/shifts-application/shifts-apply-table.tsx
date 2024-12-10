@@ -7,7 +7,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { createTableRows, daysOfWeek, getDateOfApply } from '@/lib/server.utils';
 import { Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
-import { RulesTable } from '@/lib/employee/shifts-application/application-rules';
+import { RulesTable } from '@/lib/employee/shifts-application/rules-table';
 
 interface ShiftsTableProps {
   data: [
@@ -37,7 +37,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   const [isCant, setIsCant] = useState<boolean>(false)
   const [ executeAsyncFunc ] = useAsync()
   const forDate = getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time)
-  
+
   useEffect(() => {
     const adJustedShifts = (): TableShifts => {
       const dayObj = {}
@@ -142,7 +142,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     })
     
   }
-
+useEffect(()=> console.log({applicableShifts}),[applicableShifts])
 return applicableShifts &&
   <>
   <GeneralTitle title={`Please apply your shifts for ${forDate}`} />
@@ -155,7 +155,7 @@ return applicableShifts &&
       {(item) => (
         <TableRow aria-labelledby={`shifts-row-${item.key}`} key={item.key}>
             {item.rowItems.map((shiftElement, index) => (
-            <TableCell key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
+            <TableCell height={100} key={index} onClick={() => selectShift(item, daysOfWeek[index].day.toLowerCase())} 
               aria-labelledby={`shift-${item.key}-${index}`} 
               className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
                 dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  

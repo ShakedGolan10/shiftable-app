@@ -9,7 +9,7 @@ import ConfirmationModal from '@/components/helpers/confirm-modal';
 import { saveWeeklySchedule } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
-import { createTableRows, daysOfWeek, getDateOfApply, getLastSunday, getNextSunday } from '@/lib/server.utils';
+import { createTableRows, daysOfWeek, getLastSunday, getNextSunday } from '@/lib/server.utils';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
 const emptyDayOrientedObject = {
