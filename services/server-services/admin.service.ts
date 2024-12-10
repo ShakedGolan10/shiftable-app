@@ -77,9 +77,9 @@ export const updateEmployeeEmail = async (
         employerMsg: [], 
         applicationRules: {
           numOfCant: 2,
-          optionalShifts: [{minChoices: 2, shiftsToChoose: {monday: '16:00-22:00', thursday: '16:00-22:00'}}],
+          optionalShifts: {minChoices: 2, shiftsToChoose: { monday: '16:00-22:00', thursday: '16:00-22:00' }},
           minDays: 5,
-          mandatoryShifts: [{sunday: '12:00-19:00', friday: '08:00-13:00'}]
+          mandatoryShifts: {sunday: '12:00-19:00', friday: '08:00-13:00'}
         },
         applicationTime: { day: 4, time: '1630' },
         name,

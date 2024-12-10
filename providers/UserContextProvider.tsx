@@ -53,8 +53,8 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         } catch (error) {
             router.push('/')
         } finally {
-            setUser(null)
             router.push('/')
+            setUser(null)
         }
     };
 

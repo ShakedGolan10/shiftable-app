@@ -36,7 +36,10 @@ interface ApplicationRules {
     mandatoryShifts: Days | undefined
     minDays: number
     numOfCant: number
-    optionalShifts: OptionalShifts[]
+    optionalShifts: {
+        minChoices: number
+        shiftsToChoose: Days
+    }
 }
 
 interface OptionalShifts {

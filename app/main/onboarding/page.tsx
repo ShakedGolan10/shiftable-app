@@ -66,7 +66,7 @@ export default function Onboarding() {
         return (
           <StepComponent
             title="Application Rules"
-            description="Define and customize the rules for managing shifts."
+            description="Define and customize the rules for shifts application."
             Component={() => <SetApplicationRules user={user} />}
           />
         );

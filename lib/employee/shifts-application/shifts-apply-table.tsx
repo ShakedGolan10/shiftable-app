@@ -33,7 +33,7 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
   const [numOfCantRule, setNumOfCantRule] = useState<number>(0);
   const [minDaysRule, setMinDaysRule] = useState<number>(0);
   const [mandatoryShiftsRule, setMandatoryShiftsRule] = useState<boolean>(false);
-  const [optionalShiftsRule, setOptionalShiftsRule] = useState<number[]>([]);
+  const [optionalShiftsRule, setOptionalShiftsRule] = useState<number>(0);
   const [isCant, setIsCant] = useState<boolean>(false)
   const [ executeAsyncFunc ] = useAsync()
   const forDate = getDateOfApply(user.employer.applicationTime.day, user.employer.applicationTime.time)
@@ -53,7 +53,6 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     }
     const tableShifts = adJustedShifts()
     setApplicableShifts(tableShifts);
-    setOptionalShiftsRule(applyRules.optionalShifts.map(() => 0))
   },[])
 
   const checkRules = (day: string, isRemove: boolean, shiftIdx: string, prevStateOfShift: Shift) => {
@@ -82,19 +81,17 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
             }
             setMandatoryShiftsRule(isAllMandatoryShiftsSelected)
             break;
-          case "optionalShifts":
-            applyRules.optionalShifts.forEach(({ shiftsToChoose }, idx) => {
+          case "optionalShifts": {
               let count = 0
-              for (const weekDay in shiftsToChoose) {
-                const isSameShift = Boolean(applicableShifts[day][shiftIdx].shift === shiftsToChoose[weekDay] && weekDay === day)
+              for (const weekDay in applyRules.optionalShifts.shiftsToChoose) {
+                const isSameShift = Boolean(applicableShifts[day][shiftIdx].shift === applyRules.optionalShifts.shiftsToChoose[weekDay] && weekDay === day)
                 if (isSameShift && !isRemove && !isCant) count++
                 else if (isSameShift && isRemove) count--
               }
               setOptionalShiftsRule(prev => {
-                prev[idx]+=count
-                return [...prev]
-              })
-            })
+                const newPrev = prev+=count
+                return newPrev
+              })}
             break;
           
         }
