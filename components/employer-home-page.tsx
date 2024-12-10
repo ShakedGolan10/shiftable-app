@@ -37,10 +37,7 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
           {(usersNotApplied.length) ? 
           <section>
             {usersNotApplied.map((user, idx)=> (
-              <>
               <span key={idx} className='text-base'>{user.name}</span> 
-              <br/>
-              </>
               ))}
           </section> : 
           <span className='text-base'>All the employees applied !</span>}
