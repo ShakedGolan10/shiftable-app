@@ -15,9 +15,11 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
   const [applicationRules, SetApplicationRules] = useState<ApplicationRules>(user.applicationRules)
   const [chosenRule, setChosenRule] = useState('')
   const [formData, handleFormDataChange, setFields] = useForm(undefined)
-  useEffect(()=> {
 
-  },[])
+  useEffect(()=> {
+    console.log({applicationRules})
+  },[applicationRules])
+
   const formatDaysObject = (days: Days): string => {
     const capitalizeFirstLetter = (string: string): string => {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -46,14 +48,9 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
         name: 'numOfCant'
       });
       rows.push({
-        rule: `Shifts to choose from`,
+        rule: `Shifts to choose from, Min # of choices`,
         current: `${formatDaysObject(applicationRules.optionalShifts.shiftsToChoose)}`,
         name: 'optionalShifts'
-      });
-      rows.push({
-        rule: `Min # of choices for optional shifts`,
-        current: `${applicationRules.optionalShifts.minChoices}`,
-        name: 'minChoices'
       });
 
     return rows as {rule: string, current: any, name: string}[]
@@ -67,7 +64,8 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
             onClose={()=> setChosenRule('')}
             open={Boolean(chosenRule)}
             user={user}
-            ModalCmpContent={(props)=> <RuleMandatory {...props} />}
+            ModalCmpContent={(props)=> <RuleMandatory {...props} setApplicationRules={SetApplicationRules} />}
+            
           />
         );
       case "minDays":

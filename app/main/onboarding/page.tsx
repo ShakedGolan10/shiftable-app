@@ -38,7 +38,7 @@ export default function Onboarding() {
           toggleModalAction('Youve finished the onboarding and now will redirected to the employees page!')
           setTimeout(()=>{
             toggleModalAction()
-            window.location.assign('/main/employer/employees')
+            window.location.assign('/main/admin/employees')
           },2500)
           return setStep('')
         default: 

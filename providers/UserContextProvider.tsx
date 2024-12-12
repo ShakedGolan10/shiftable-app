@@ -68,7 +68,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                 loggedInUser instanceof Employer && path.includes('/employee/')
             ) window.location.assign('/main') // Keep it that way: The method is quicker then the error that has been displayed by the employer func, unlik router.push ?? 
         } catch (error) {
-            if (!path.endsWith('signup')) await logout()
+            if (!path.endsWith('signup') || path!=='/') await logout()
         } finally {
                 setLoadingAuth(false)
         }
