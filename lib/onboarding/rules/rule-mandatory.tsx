@@ -5,24 +5,25 @@ import React, { useEffect, useState } from 'react'
 
 export default function RuleMandatory({
   user,
+  applicationRulesState,
   setApplicationRules,
   onClose
 }: {
   user: Employer,
-  setApplicationRules: React.Dispatch<React.SetStateAction<ApplicationRules>>
+  setApplicationRules: React.Dispatch<React.SetStateAction<ApplicationRules>>,
+  applicationRulesState: ApplicationRules
   onClose: () => void
 }) {
   const [selectedDay, setSelectedDay] = useState<string>('')
-  const [mandatoryShifts, setMandatoryShifts] = useState<Days>(user.applicationRules.mandatoryShifts)
+  const [mandatoryShifts, setMandatoryShifts] = useState<Days>({...applicationRulesState.mandatoryShifts})
 
-  const handleDaySelect = async (keys: SharedSelection) => {
-      const selectedDayObj = [...keys].map((key) => JSON.parse(key as string))[0] as {day: string, key: string}
-      setSelectedDay(selectedDayObj.day.toLowerCase())
+  const handleDaySelect = async (day: string) => {
+      // const selectedDayObj = [...keys].map((key) => JSON.parse(key as string))[0] as {day: string, key: string}
+      setSelectedDay(day)
     };
   
-  const handleShiftSelect = async (keys: SharedSelection) => {
-      const selectedDayObj = [...keys].map((key) => JSON.parse(key as string))[0] as ShiftSlot
-      // setSelectedDay(selectedDayObj.day.toLowerCase())
+  const handleShiftSelect = async (shift: string) => {
+      setMandatoryShifts(prev => ({...prev, [selectedDay]: shift}))
     };
   
     return (
@@ -36,11 +37,11 @@ export default function RuleMandatory({
         aria-label={`Select Day`}
         label={`Select Day`}
         selectionMode="single"
-        onSelectionChange={(keys) => handleDaySelect(keys)}
         className="w-full text-xs"
         >
         {(dayObj) => (
-              <SelectItem    
+              <SelectItem
+                onClick={() => handleDaySelect(dayObj.day.toLocaleLowerCase())}    
                 className='my-1'
                 key={JSON.stringify(dayObj)}
                 textValue={dayObj?.day} 
@@ -49,16 +50,17 @@ export default function RuleMandatory({
               </SelectItem>
             )}
       </Select>
-      {user.weeklyWorkflow[selectedDay]?.length ? <Select
+      {user.weeklyWorkflow[selectedDay]?.length ? 
+      <Select
         items={user.weeklyWorkflow[selectedDay]}
         aria-label={`Select Shift`}
         label={`Select Shift`}
         selectionMode="single"
-        onSelectionChange={(keys) => handleShiftSelect(keys)}
         className="w-full text-xs"
         >
         {(shiftObj:ShiftSlot) => (
-              <SelectItem    
+              <SelectItem  
+                onClick={()=>handleShiftSelect(shiftObj.shift)}  
                 className='my-1'
                 key={JSON.stringify(shiftObj)}
                 textValue={shiftObj?.shift} 
@@ -70,7 +72,10 @@ export default function RuleMandatory({
         (selectedDay) && <p>No shifts this day</p>
       }
       {Object.entries(mandatoryShifts).map(([day, shift], idx) => (
-          <Chip size="sm" key={idx} onClose={() => console.log('hi')} className="text-tiny h-fit w-fit">
+          <Chip size="sm" key={idx} onClose={() => setMandatoryShifts(prev => {
+            delete prev[day]
+            return {...prev}
+          })} className="text-tiny h-fit w-fit">
             {`${day}: ${shift}`}
           </Chip>
         ))}
@@ -78,14 +83,8 @@ export default function RuleMandatory({
       
       <ModalFooter>
         <Button
-          color="primary"
-          onPress={() => {}}
-        >
-          Add Shift
-        </Button>
-        <Button
           color="success"
-          onPress={() => {setApplicationRules(prev => ({ ...prev })); onClose()}}
+          onPress={() => {setApplicationRules(prev => ({ ...prev, mandatoryShifts })); onClose()}}
         >
           Save
         </Button>

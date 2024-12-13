@@ -12,7 +12,7 @@ import RuleOptional from './rule-optional';
 
 export default function SetApplicationRules({ user }: { user: Employer}) {
   
-  const [applicationRules, SetApplicationRules] = useState<ApplicationRules>(user.applicationRules)
+  const [applicationRules, setApplicationRules] = useState<ApplicationRules>({...user.applicationRules})
   const [chosenRule, setChosenRule] = useState('')
   const [formData, handleFormDataChange, setFields] = useForm(undefined)
 
@@ -64,7 +64,7 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
             onClose={()=> setChosenRule('')}
             open={Boolean(chosenRule)}
             user={user}
-            ModalCmpContent={(props)=> <RuleMandatory {...props} setApplicationRules={SetApplicationRules} />}
+            ModalCmpContent={(props)=> <RuleMandatory {...props} applicationRulesState={applicationRules} setApplicationRules={setApplicationRules} />}
             
           />
         );
