@@ -18,7 +18,6 @@ export default function RuleMandatory({
   const [mandatoryShifts, setMandatoryShifts] = useState<Days>({...applicationRulesState.mandatoryShifts})
 
   const handleDaySelect = async (day: string) => {
-      // const selectedDayObj = [...keys].map((key) => JSON.parse(key as string))[0] as {day: string, key: string}
       setSelectedDay(day)
     };
   

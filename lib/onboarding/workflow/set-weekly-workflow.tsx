@@ -44,7 +44,7 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
         }
     }
 
-    const setWeeklyWorkflow = async () => {
+    const saveWeeklyWorkflow = async () => {
       await exeuteAsyncFunc({
         asyncOps: [() => saveOneField(`users/${user.id}`, 'weeklyWorkflow', weeklyFlow)],
         successMsg: 'Weekly Workflow saved successfuly!',
@@ -88,7 +88,7 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
             <MinusCircleIcon width={50} height={50} />
             <span className='font-semibold w-28 text-left'>Remove LAST row</span>
         </Button> 
-        <Button color='success' onClick={() => setWeeklyWorkflow()}>
+        <Button color='success' onClick={() => saveWeeklyWorkflow()}>
             <span>Save Weeklyflow</span>
         </Button> 
       </>

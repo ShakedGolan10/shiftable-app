@@ -1,25 +1,39 @@
-import { Button, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
-import React from 'react'
+'use client'
+import { Employer } from '@/types/class.service'
+import { Button, Input, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
+import React, { useState } from 'react'
 
-export default function RuleMinDays() {
+export default function RuleMinDays({
+  applicationRulesState,
+  setApplicationRules,
+  onClose
+}: {
+  user: Employer,
+  setApplicationRules: React.Dispatch<React.SetStateAction<ApplicationRules>>,
+  applicationRulesState: ApplicationRules
+  onClose: () => void
+}) {
+
+  const [minDays, setMinDays] = useState({...applicationRulesState}.minDays)
   return (
     <ModalContent>
-                 <ModalHeader className="text-small">Attention Please!</ModalHeader>
+                 <ModalHeader className="text-small">Set the minumum days employees will have to mark shift at</ModalHeader>
                  <ModalBody>
-                 <h2 className='text-medium font-bold'>
-                    Welcome to the modal
-                  </h2>
+                  <Input 
+                    placeholder='Enter a number'
+                    aria-label={`Number input for setting min days rule`}
+                    type='number'
+                    onValueChange={(v)=> setMinDays(Number(v))}
+                  >
+                  </Input>
                  </ModalBody>
                  <ModalFooter>
-                    <h4 className='text-base'>
-                        Do you approve continue with this action? 
-                    </h4>
-                    <Button color='danger' onClick={() => console.log(false)}>
-                    No
-                    </Button>
-                    <Button color='success' onClick={() => console.log(true)}>
-                    Yes
-                    </Button>
+                 <Button
+                          color="success"
+                          onPress={() => {setApplicationRules(prev => ({ ...prev, minDays })); onClose()}}
+                        >
+                          Save
+                        </Button>
                  </ModalFooter>
            </ModalContent>
   )

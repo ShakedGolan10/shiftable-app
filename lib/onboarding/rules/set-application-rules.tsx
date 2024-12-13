@@ -3,22 +3,19 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button
 import { CheckCircleIcon, PencilIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { Employer } from '@/types/class.service';
 import RuleEditModal from './rule-edit-modal';
-import { useForm } from '@/hooks/useForm';
 import RuleMandatory from './rule-mandatory';
 import RuleMinDays from './rule-min-days';
 import RuleCant from './rule-cant';
 import RuleOptional from './rule-optional';
+import { useAsync } from '@/hooks/useAsync';
+import { saveOneField } from '@/services/server-services/db.service';
 
 
 export default function SetApplicationRules({ user }: { user: Employer}) {
   
   const [applicationRules, setApplicationRules] = useState<ApplicationRules>({...user.applicationRules})
   const [chosenRule, setChosenRule] = useState('')
-  const [formData, handleFormDataChange, setFields] = useForm(undefined)
-
-  useEffect(()=> {
-    console.log({applicationRules})
-  },[applicationRules])
+  const [ exeuteAsyncFunc ] = useAsync()
 
   const formatDaysObject = (days: Days): string => {
     const capitalizeFirstLetter = (string: string): string => {
@@ -49,7 +46,7 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
       });
       rows.push({
         rule: `Shifts to choose from, Min # of choices`,
-        current: `${formatDaysObject(applicationRules.optionalShifts.shiftsToChoose)}`,
+        current: `${formatDaysObject(applicationRules.optionalShifts.shiftsToChoose)} (Must choose at least ${applicationRules.optionalShifts.minChoices})`,
         name: 'optionalShifts'
       });
 
@@ -74,7 +71,7 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
             onClose={()=> setChosenRule('')}
             open={Boolean(chosenRule)}
             user={user}
-            ModalCmpContent={(props)=> <RuleMinDays />}
+            ModalCmpContent={(props)=> <RuleMinDays {...props} applicationRulesState={applicationRules} setApplicationRules={setApplicationRules} />}
           />
         );
       case "numOfCant":
@@ -83,7 +80,7 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
           onClose={()=> setChosenRule('')}
           open={Boolean(chosenRule)}
           user={user}
-          ModalCmpContent={(props)=> <RuleCant />}
+          ModalCmpContent={(props)=> <RuleCant {...props} applicationRulesState={applicationRules} setApplicationRules={setApplicationRules} />}
         />
         );
       case "optionalShifts":
@@ -92,13 +89,21 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
             onClose={()=> setChosenRule('')}
             open={Boolean(chosenRule)}
             user={user}
-            ModalCmpContent={(props)=> <RuleOptional {...props} />}
+            ModalCmpContent={(props)=> <RuleOptional {...props} applicationRulesState={applicationRules} setApplicationRules={setApplicationRules} />}
           />
         );
       default:
         return null
     }
   }
+
+     const saveApplicationRules = async () => {
+        await exeuteAsyncFunc({
+          asyncOps: [() => saveOneField(`users/${user.id}`, 'applicationRules', applicationRules)],
+          successMsg: 'Application Rules saved successfuly!',
+          errorMsg: 'Wasnt successful please try again later'
+        })
+      }
 
 
 
@@ -125,6 +130,9 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
         ))}
       </TableBody>
     </Table>
+    <Button color='success' onClick={() => saveApplicationRules()}>
+        <span>Save Application rules</span>
+    </Button> 
     </>
   );
 }
