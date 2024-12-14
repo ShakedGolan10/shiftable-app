@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
-import { DayOrientedObject, Shift } from '@/types/user/types.server';
 
 interface ISetShiftsTableCellProps {
   day: string

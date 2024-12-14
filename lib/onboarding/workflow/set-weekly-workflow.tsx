@@ -5,7 +5,6 @@ import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow
 import { createTableRows, daysOfWeek, generateId, getEmptyTableRow } from '@/lib/server.utils';
 import { MinusCircleIcon, PencilIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
 import { TimeInputModal } from './shift-time-input-modal';
-import { ShiftSlot } from '@/types/user/types.server';
 import { useAsync } from '@/hooks/useAsync';
 import { saveOneField } from '@/services/server-services/db.service';
 

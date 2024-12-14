@@ -1,6 +1,0 @@
-*** Regarding userContext: Its checking only on refresh if the user is signed in and accordingly redirect the window to login page f not
-    but, I also have middleware that checks in every api call if the user is logged in, so... 
-
-*** When need to view the shifts use this: shifts/[id]/index.page.tsx because than I could make the page ssr,
-    and fetch the shifts based on Id in the query url also use loading.tsx, and fetch the data at the component.  
-    

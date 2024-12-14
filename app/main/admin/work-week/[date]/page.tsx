@@ -3,7 +3,6 @@ import { getWeeklySchedule } from '@/services/server-services/shifts.service';
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employer } from '@/types/class.service';
 import WorkWeekTable from '@/lib/admin/work-week/work_week_table';
-import { DayOrientedObject } from '@/types/user/types.server';
 import { useParams } from 'next/navigation';
 
 export default function WorkWeekPage() {

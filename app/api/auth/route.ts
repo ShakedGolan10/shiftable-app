@@ -4,7 +4,6 @@ import { Auth, UserCredential, getAuth, signInWithEmailAndPassword } from 'fireb
 import { clearCookie, setCookie } from '@/services/server-services/cookie.service'
 import { generateJwtToken, validateJwtToken } from '@/services/server-services/token.service'
 import { getUser } from '@/services/server-services/user.service'
-import { Credentials } from '@/types/user/types.server'
 import { updateEmployeeEmail } from '@/services/server-services/admin.service'
 import { Employer } from '@/types/class.service'
 interface UpdateRequest extends NextRequest {

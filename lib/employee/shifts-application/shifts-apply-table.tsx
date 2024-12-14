@@ -5,7 +5,6 @@ import { Employee } from '@/types/class.service';
 import { saveUserShiftsRequest } from '@/services/server-services/shifts.service';
 import { useAsync } from '@/hooks/useAsync';
 import { createTableRows, daysOfWeek, getDateOfApply } from '@/lib/server.utils';
-import { Shift, TableShifts, WeeklyShifts } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
 import { RulesTable } from '@/lib/employee/shifts-application/rules-table';
 

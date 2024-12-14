@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Button, Link } from '@nextui-org/react';
 import { Employer } from '@/types/class.service';
-import { DayOrientedObject } from '@/types/user/types.server';
 import GeneralTitle from '@/components/helpers/general-title';
 import { createTableRows, daysOfWeek, getLastSunday, getNextSunday } from '@/lib/server.utils';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
