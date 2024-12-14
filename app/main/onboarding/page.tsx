@@ -18,7 +18,8 @@ export default function Onboarding() {
   const [ step, setStep ] = useState<string>('');
   const { user } = useAuth<Employer>()
   const { toggleModalAction } = useSystemActions()
-
+  const [ isSaved, setIsSaved ] = useState<boolean>(false)
+  
   useEffect(() => {
   if (user) {
       setStep(user.onboardingStep);
@@ -26,6 +27,7 @@ export default function Onboarding() {
   }, [user]);
 
   const nextStep = async () => {
+    setIsSaved(false)
       switch (step) {
         case "weeklyflow":
           await saveOneField<string>(`users/${user.id}`, 'onboardingStep', 'rules')
@@ -37,13 +39,13 @@ export default function Onboarding() {
           await saveOneField<string>(`users/${user.id}`, 'onboardingStep', '')
           toggleModalAction('Youve finished the onboarding and now will redirected to the employees page!')
           setTimeout(()=>{
-            toggleModalAction()
             window.location.assign('/main/admin/employees')
           },2500)
           return setStep('')
         default: 
           return null
       }
+     
   }
 
   const prevStep = () => {
@@ -59,7 +61,7 @@ export default function Onboarding() {
           <StepComponent
             title="Weekly Workflow"
             description="Plan and visualize your weekly shifts with ease."
-            Component={() => <SetWeeklyFlow user={user} />}
+            Component={() => <SetWeeklyFlow user={user} setIsSaved={setIsSaved} />}
           />
         );
       case "rules":
@@ -67,15 +69,15 @@ export default function Onboarding() {
           <StepComponent
             title="Application Rules"
             description="Define and customize the rules for shifts application."
-            Component={() => <SetApplicationRules user={user} />}
+            Component={() => <SetApplicationRules user={user} setIsSaved={setIsSaved} />}
           />
         );
       case "time":
         return (
           <StepComponent
             title="Application Time"
-            description="Select the perfect timing for your shifts and preferences."
-            Component={() => <SetApplicationTime />}
+            description="Select the perfect time for your employees to apply their shifts."
+            Component={() => <SetApplicationTime user={user} setIsSaved={setIsSaved} />}
           />
         );
       default:
@@ -109,6 +111,7 @@ export default function Onboarding() {
         <Button
           onClick={() => nextStep()}
           color="secondary"
+          isDisabled={!isSaved}
         >
           <span>Next step</span>
           <ArrowRightIcon  width={50} height={50} />

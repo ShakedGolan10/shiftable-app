@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@nextui-org/react";
 import { CheckCircleIcon, PencilIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { Employer } from '@/types/class.service';
@@ -11,7 +11,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { saveOneField } from '@/services/server-services/db.service';
 
 
-export default function SetApplicationRules({ user }: { user: Employer}) {
+export default function SetApplicationRules({ user, setIsSaved } : { user: Employer, setIsSaved: Dispatch<SetStateAction<boolean>> }) {
   
   const [applicationRules, setApplicationRules] = useState<ApplicationRules>({...user.applicationRules})
   const [chosenRule, setChosenRule] = useState('')
@@ -97,13 +97,14 @@ export default function SetApplicationRules({ user }: { user: Employer}) {
     }
   }
 
-     const saveApplicationRules = async () => {
-        await exeuteAsyncFunc({
-          asyncOps: [() => saveOneField(`users/${user.id}`, 'applicationRules', applicationRules)],
-          successMsg: 'Application Rules saved successfuly!',
-          errorMsg: 'Wasnt successful please try again later'
-        })
-      }
+  const saveApplicationRules = async () => {
+    await exeuteAsyncFunc({
+      asyncOps: [() => saveOneField(`users/${user.id}`, 'applicationRules', applicationRules)],
+      successMsg: 'Application Rules saved successfuly!',
+      errorMsg: 'Wasnt successful please try again later'
+    })
+    setIsSaved(true)
+  }
 
 
 

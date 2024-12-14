@@ -1,15 +1,15 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Employer } from '@/types/class.service';
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, TimeInputValue } from '@nextui-org/react';
 import { createTableRows, daysOfWeek, generateId, getEmptyTableRow } from '@/lib/server.utils';
 import { MinusCircleIcon, PencilIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
-import { TimeInputModal } from '../time-input-modal';
+import { TimeInputModal } from './shift-time-input-modal';
 import { ShiftSlot } from '@/types/user/types.server';
 import { useAsync } from '@/hooks/useAsync';
 import { saveOneField } from '@/services/server-services/db.service';
 
-export default function SetWeeklyFlow({ user } : { user: Employer }) {
+export default function SetWeeklyFlow({ user, setIsSaved } : { user: Employer, setIsSaved: Dispatch<SetStateAction<boolean>> }) {
 
     const [ tableItems, setTableItems ] = useState([...createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek, 'day')])
     const [chosenShift, setChosenShift] = useState<{day: string, shift: string}>(undefined)
@@ -50,6 +50,7 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
         successMsg: 'Weekly Workflow saved successfuly!',
         errorMsg: 'Wasnt successful please try again later'
       })
+      setIsSaved(true)
     }
     
     return (
