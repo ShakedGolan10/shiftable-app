@@ -8,9 +8,9 @@ body {
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
       
-      div[data-slot="popover"] {
-        z-index: 40 !important;  
-      }
+      // div[data-slot="popover"] {
+      //   z-index: 40 !important;  
+      // }
     }
 
 [type='text'],input:where(:not([type])),[type='email'],[type='url'],[type='password'],[type='number'],[type='date'],[type='datetime-local'],[type='month'],[type='search'],[type='tel'],[type='time'],[type='week'],[multiple],textarea,select {

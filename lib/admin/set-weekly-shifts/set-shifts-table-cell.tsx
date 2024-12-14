@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Select, SelectItem, Chip, SharedSelection } from '@nextui-org/react';
-import { DayOrientedObject, Shift } from '@/types/user/types.server';
 
 interface ISetShiftsTableCellProps {
   day: string
@@ -38,7 +37,6 @@ export const SetShiftsTableCell = ({
     const isPossible = onSelectChange(updatedShifts, value);
     if (isPossible) setLocalSelectedShifts(updatedShifts);
   };
-
   return (
     <div className="flex flex-col items-center">
       <Select

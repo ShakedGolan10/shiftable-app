@@ -1,4 +1,3 @@
-import { TableShifts } from '@/types/user/types.server';
 import { NextRequest } from 'next/server';
 
 interface CustomHeaders extends Headers {

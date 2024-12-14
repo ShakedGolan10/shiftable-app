@@ -59,7 +59,7 @@ export default function ManageEmployeesPage({data, user} : IManageEmployeesProps
   return (
     <>
     <ConfirmationModal message={msg} onClose={handleModalClose} open={isConfirmModalOpen} />
-    {selectedEmployeeIdx && <EmployeeCardModal saveEmployee={saveEmployee} user={employees[selectedEmployeeIdx]} isOpen={isOpen} onClose={onClose} />}
+    <EmployeeCardModal saveEmployee={saveEmployee} user={employees[selectedEmployeeIdx]} isOpen={isOpen} onClose={onClose} />
     <GeneralTitle title={`Employees managment`} />
     <span>Create new employee</span>
     <Button className='bg-transparent' onClick={()=> {

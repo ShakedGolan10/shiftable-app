@@ -2,7 +2,6 @@
 import { getEmployerWeeklyShifts, getWeeklySchedule } from '@/services/server-services/shifts.service';
 import WithDataWrapper from '@/components/helpers/cmp-wrapper';
 import { Employee } from '@/types/class.service';
-import { DayOrientedObject } from '@/types/user/types.server';
 import MyShiftsTable from '@/lib/employee/my-shifts/my-shifts-table';
 import { useParams } from 'next/navigation';
 

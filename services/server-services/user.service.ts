@@ -1,6 +1,5 @@
 'use server'
 
-import { Employee, Employer } from "@/types/user/types.server"
 import { queryOne } from "./db.service"
 
 export const getUser = async (uid: string) => {

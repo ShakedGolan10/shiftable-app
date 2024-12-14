@@ -1,17 +1,19 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Employer } from '@/types/class.service';
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, TimeInputValue } from '@nextui-org/react';
 import { createTableRows, daysOfWeek, generateId, getEmptyTableRow } from '@/lib/server.utils';
 import { MinusCircleIcon, PencilIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
-import { TimeInputModal } from './time-input-modal';
-import { ShiftSlot } from '@/types/user/types.server';
+import { TimeInputModal } from './shift-time-input-modal';
+import { useAsync } from '@/hooks/useAsync';
+import { saveOneField } from '@/services/server-services/db.service';
 
-export default function SetWeeklyFlow({ user } : { user: Employer }) {
+export default function SetWeeklyFlow({ user, setIsSaved } : { user: Employer, setIsSaved: Dispatch<SetStateAction<boolean>> }) {
 
     const [ tableItems, setTableItems ] = useState([...createTableRows<WeeklyShifts, ShiftSlot>(user.weeklyWorkflow, daysOfWeek, 'day')])
     const [chosenShift, setChosenShift] = useState<{day: string, shift: string}>(undefined)
     const [ weeklyFlow, setWeeklyFlow ] = useState<WeeklyShifts>(user.weeklyWorkflow)
+    const [ exeuteAsyncFunc ] = useAsync()
     
     const pickShiftTime = (startTime: TimeInputValue, endTime: TimeInputValue) => {
         const newShiftId = generateId()
@@ -41,8 +43,16 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
         }
     }
 
-   // Todo: Create a useAsync for applying weekly flow
-    return tableItems && (
+    const saveWeeklyWorkflow = async () => {
+      await exeuteAsyncFunc({
+        asyncOps: [() => saveOneField(`users/${user.id}`, 'weeklyWorkflow', weeklyFlow)],
+        successMsg: 'Weekly Workflow saved successfuly!',
+        errorMsg: 'Wasnt successful please try again later'
+      })
+      setIsSaved(true)
+    }
+    
+    return (
         <>
         {chosenShift && <TimeInputModal shiftSlot={weeklyFlow[daysOfWeek[chosenShift.day].day.toLowerCase()][chosenShift.shift]} setTime={(startTime: TimeInputValue, endTime: TimeInputValue) => pickShiftTime(startTime, endTime)} isOpen={Boolean(chosenShift)} onClose={() => setChosenShift(undefined)} />}
         <Table aria-label="Employer Shifts Table" className="my-4">
@@ -53,7 +63,7 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
               {tableItems.map((item) => (
               <TableRow key={item.key}>
                 {item.rowItems.map((shiftElement, day) => ( // Needed to be that way instead of items attribute to better respond to state change in items
-                  <TableCell height={'100'} key={day}>
+                  <TableCell height={'75'} key={day}>
                    <article className='flex flex-col gap-2'>
                       <p className='text-base text-center'>{(shiftElement) ? shiftElement.shift : 'No shift'}</p>
                       <Button onClick={()=> setChosenShift({day: day.toString(), shift: item.key})} isIconOnly className="bg-transparent w-full">
@@ -77,6 +87,9 @@ export default function SetWeeklyFlow({ user } : { user: Employer }) {
         <Button className="bg-transparent" onClick={() => deleteLastRow()}>
             <MinusCircleIcon width={50} height={50} />
             <span className='font-semibold w-28 text-left'>Remove LAST row</span>
+        </Button> 
+        <Button color='success' onClick={() => saveWeeklyWorkflow()}>
+            <span>Save Weeklyflow</span>
         </Button> 
       </>
       );

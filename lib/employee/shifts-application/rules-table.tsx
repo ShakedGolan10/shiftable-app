@@ -6,11 +6,11 @@ interface RulesState {
   mandatoryShiftsRule: boolean
   minDaysRule: number
   numOfCantRule: number
-  optionalShiftsRule: number[]
+  optionalShiftsRule: number
 }
 export function RulesTable({ applicationRules, rulesState, applyShifts,  }: { applicationRules: ApplicationRules, 
   rulesState: RulesState, applyShifts: () => Promise<void>,}) {
-  
+  console.log({applicationRules})
   const formatDaysObject = (days: Days): string => {
     const capitalizeFirstLetter = (string: string): string => {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -38,14 +38,11 @@ export function RulesTable({ applicationRules, rulesState, applyShifts,  }: { ap
       need: applicationRules.numOfCant,
       current: rulesState.numOfCantRule,
     });
-    applicationRules.optionalShifts.forEach((optionalShift, index) => {
       rows.push({
-        rule: `Shifts to choose from: ${formatDaysObject(optionalShift.shiftsToChoose)}`,
-        need: optionalShift.minChoices,
-        current: rulesState.optionalShiftsRule[index]
+        rule: `Shifts to choose from: ${formatDaysObject(applicationRules.optionalShifts.shiftsToChoose)}`,
+        need: applicationRules.optionalShifts.minChoices,
+        current: rulesState.optionalShiftsRule
       });
-    });
-
     return rows;
   };
 
@@ -53,8 +50,7 @@ export function RulesTable({ applicationRules, rulesState, applyShifts,  }: { ap
 
   const isRulesMet = () => {
     let isOptionalRuleMet = true
-    for (let i = 0; i < rulesState.optionalShiftsRule.length; i++)
-      if (rulesState.optionalShiftsRule[i] < applicationRules.optionalShifts[i].minChoices) isOptionalRuleMet = false
+      if (rulesState.optionalShiftsRule < applicationRules.optionalShifts.minChoices) isOptionalRuleMet = false
 
     if (rulesState.mandatoryShiftsRule && rulesState.minDaysRule >= applicationRules.minDays && isOptionalRuleMet) return false
     else return true
@@ -77,7 +73,8 @@ export function RulesTable({ applicationRules, rulesState, applyShifts,  }: { ap
             <TableCell>{row.need}</TableCell>
             <TableCell>{(row.current === true || row.current >= row.need) ? 
               <CheckCircleIcon className='h-5 w-5' color='green' /> : (typeof row.current === 'boolean' ? 
-              <XCircleIcon color='red' className='h-5 w-5' /> : row.current )}</TableCell>
+              <XCircleIcon color='red' className='h-5 w-5' /> : row.current )}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
