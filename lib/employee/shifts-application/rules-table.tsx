@@ -10,7 +10,6 @@ interface RulesState {
 }
 export function RulesTable({ applicationRules, rulesState, applyShifts,  }: { applicationRules: ApplicationRules, 
   rulesState: RulesState, applyShifts: () => Promise<void>,}) {
-  console.log({applicationRules})
   const formatDaysObject = (days: Days): string => {
     const capitalizeFirstLetter = (string: string): string => {
       return string.charAt(0).toUpperCase() + string.slice(1);
