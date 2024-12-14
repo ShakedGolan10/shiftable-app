@@ -19,7 +19,7 @@ export default function HomePage() {
   
   const onLoginDemoUser = async (isEmployee: boolean) => {
     if (isEmployee) await login(demoEmployeeUserCred)
-      else await login({email: 'test@example.com', password: 'AAA111'})
+      else await login(demoEmployerUserCred)
     }
   useEffect(() => {
     if (user) router.push('/main')
