@@ -138,7 +138,6 @@ export function ShiftsApplyTable({ data, user }: ShiftsTableProps) {
     })
     
   }
-useEffect(()=> console.log({applicableShifts}),[applicableShifts])
 return applicableShifts &&
   <>
   <GeneralTitle title={`Please apply your shifts for ${forDate}`} />
