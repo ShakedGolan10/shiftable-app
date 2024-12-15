@@ -13,7 +13,7 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
   const [usersNotApplied, setUsersNotApplied] = useState<Employee[]>([])
   const router = useRouter()
   const forDate = getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time)
-  
+
   useEffect(() => {
     const getEmployees = async () => {
       const data = await getEmployeesByFilter({isApplied: false}, employerUser.id)
@@ -33,7 +33,7 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
         </p>
       </div>
       <div className='my-7 flex flex-col items-center gap-[2vh]'>
-        <h4 className='text-subHeader text-center'>Employees that didnt applied yet for {forDate} : </h4>
+        <p className='text-subHeader text-center'>Employees that didnt applied yet for {forDate} : </p>
           {(usersNotApplied.length) ? 
           <section>
             {usersNotApplied.map((user, idx)=> (
@@ -45,8 +45,9 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
       </div>
 
       <div className='flex flex-col gap-2 my-2'>
-        <Button onClick={()=> router.push(`main/admin/set-weekly-shifts/${forDate}`)} className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
-        <Button onClick={()=> router.push('main/admin/work-week')} className='rounded-md bg-teal-400 text-base hover:bg-teal-600'>Shift schedule</Button>
+              {/* For mock data reasons, the routes are edited */}
+        <Button onClick={()=> router.push(`main/admin/set-weekly-shifts/Sun%20Dec%2022%202024`)} className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
+        <Button onClick={()=> router.push(`main/admin/work-week/Sun%20Dec%2022%202024`)} className='rounded-md bg-teal-400 text-base hover:bg-teal-600'>Shift schedule</Button>
         <Button onClick={()=> router.push('main/admin/employees')} className='rounded-md bg-cyan-500 text-base hover:bg-cyan-700'>Employees</Button>
         <Button onClick={()=> router.push('main/admin/msgs')} className='rounded-md bg-indigo-500 text-base hover:bg-indigo-700'>Edit employees messages</Button>
       </div>

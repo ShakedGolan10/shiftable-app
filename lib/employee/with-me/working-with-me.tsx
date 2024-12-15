@@ -54,7 +54,7 @@ export default function WorkingWithMe({ data, user, dayName }: IWorkingWithMe) {
           </TableBody>
         </Table>
       ) : (
-        <h1 className="text-subHeader">You're not working today!</h1>
+        <p className="text-subHeader">You're not working today!</p>
       )}
     </>
   );

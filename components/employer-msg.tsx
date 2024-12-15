@@ -6,7 +6,7 @@ export default function EmployerMsg({ employee }: { employee: Employee }) {
 
   return (
     <>
-      <h3 className='text-center text-small underline'>Latest messeges from {employee.employer.name} </h3>
+      <p className='text-center text-base underline'>Latest messeges from {employee.employer.name} </p>
       <section className='w-[100%] m-auto pt-11'>
         <Carousel slides={employee.employer.employerMsg} />
       </section>

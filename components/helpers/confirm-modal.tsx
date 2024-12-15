@@ -14,14 +14,14 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({ open, onClose, message 
            <ModalContent>
                  <ModalHeader className="text-small">Attention Please!</ModalHeader>
                  <ModalBody>
-                 <h2 className='text-medium font-bold'>
+                 <p className='text-medium font-bold'>
                  {message}
-                  </h2>
+                  </p>
                  </ModalBody>
                  <ModalFooter>
-                    <h4 className='text-base'>
+                    <p className='text-base'>
                         Do you approve continue with this action? 
-                    </h4>
+                    </p>
                     <Button color='danger' onClick={() => onClose(false)}>
                     No
                     </Button>

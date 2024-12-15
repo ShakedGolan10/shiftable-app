@@ -30,8 +30,8 @@ export default function EmployeeCard({user, selectUser, employer} : IEmployeeCar
           <div className="flex gap-5">
             <Avatar isBordered radius="full" size="md" src="https://nextui.org/avatars/avatar-1.png" />
               <div className="flex flex-col gap-1 items-start justify-center">
-               <h4 className="text-small font-semibold leading-none text-default-600">{user.name}</h4>
-               <h5 className="text-small tracking-tight text-default-400">{user.email}</h5>
+               <p className="text-small font-semibold leading-none text-default-600">{user.name}</p>
+               <p className="text-small tracking-tight text-default-400">{user.email}</p>
              </div>
           </div>
             <Button

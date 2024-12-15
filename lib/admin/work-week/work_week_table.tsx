@@ -63,7 +63,7 @@ export default function WorkWeekTable({ data, user, forDate }: IWorkWeekTablePro
         </TableBody>
       </Table> 
     :
-    <h1 className='text-subHeader'>No shift schedule for {forDate}</h1>  
+    <p className='text-subHeader'>No shift schedule for {forDate}</p>  
     }
   </>
   )
