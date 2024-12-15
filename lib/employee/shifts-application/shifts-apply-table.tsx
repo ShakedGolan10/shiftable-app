@@ -155,7 +155,8 @@ return applicableShifts &&
               className={`light-mobile:bg-green light-tablet:bg-green light-desktop:bg-green 
                 dark-mobile:bg-slate-700 dark-tablet:bg-slate-700 dark-desktop:bg-slate-700  
               text-center p-[2.6%] text-base
-              ${shiftElement && shiftElement.shift ? ` cursor-pointer hover:bg-light-green hover:dark-mobile:bg-light-green hover:dark-tablet:bg-light-green hover:dark-desktop:bg-light-green` : ` cursor-not-allowed hover:bg-transparent`} 
+              ${shiftElement && shiftElement.shift ? ` cursor-pointer hover:bg-light-green ${isCant && ` hover:bg-red `}` : ` cursor-not-allowed hover:bg-transparent`} 
+              
               ${(shiftElement.isCant) ? ` bg-red`
               : (shiftElement.isSelected) ? ` bg-light-green` : ``}
               `}>

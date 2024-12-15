@@ -11,9 +11,7 @@ export default function MainNavBar() {
       <NavbarBrand>
         <a href="/main"><p className="font-bold text-base">Shiftable</p></a>
       </NavbarBrand>
-
-      <NavbarContent as="div" justify="end">
-        <Dropdown placement="bottom-end">
+        <Dropdown>
           <DropdownTrigger>
             <Avatar
               isBordered
@@ -36,7 +34,6 @@ export default function MainNavBar() {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-      </NavbarContent>
     </Navbar>
   );
 }
