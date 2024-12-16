@@ -28,7 +28,7 @@ export const clearCookie = async (key: string): Promise<void> => {
         cookies().delete(key)
     } catch (error) {
         console.log(error)
-        throw new Error('cookie-service: Could\'nt get cookie')
+        throw new Error('cookie-service: Could\'nt clear cookie')
     }
 }
 
