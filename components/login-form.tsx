@@ -10,7 +10,7 @@ export function LoginForm({ isOpen, onClose }) {
 
     const [credentials, handleInputChange] = useForm<Credentials>({ email: '', password: '' })
     const [loginError, setLoginError] = useState<string>('')
-    const { login, isLoadingLogin } = useAuth();
+    const { login } = useAuth();
     const onLogin = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault()
         try {
@@ -52,7 +52,6 @@ export function LoginForm({ isOpen, onClose }) {
                                 {loginError && <ErrorElement message={loginError} />}
                             <div>
                                 <Button color='success' isDisabled={(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials.email)) || credentials.password.length < 4) } 
-                                isLoading={isLoadingLogin} 
                                 type="submit" className="flex w-full justify-center rounded-md px-3 py-1.5 text-base font-semibold leading-6 shadow-sm">
                                   Log in
                                 </Button>

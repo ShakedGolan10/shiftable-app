@@ -5,10 +5,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import { CreateUserInstance, Employee, Employer } from '@/types/class.service';
 import LoadingElement from '@/components/helpers/loading-element';
 import { useAsyncAuth } from '@/hooks/useAsyncAuth';
+import { useSystemActions } from '@/store/actions/system.actions';
 
 interface useAuth<T> {
     isLoadingAuth: boolean
-    isLoadingLogin: boolean
     user: T 
     login: (credentials: Credentials) => Promise<void> 
     logout: () => Promise<void> 
@@ -22,15 +22,14 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
 
     const [user, setUser] = useState<Employee | Employer>(null)
     const [isLoadingAuth, setLoadingAuth] = useState(null)
-    const [isLoadingLogin, setLoadingLogin] = useState(null)
     const router = useRouter();
     const path = usePathname() 
     const [ executeAuthFunc ] = useAsyncAuth()
-    
+    const { toggleLoaderAction } = useSystemActions()
             
     const login = async (credentials: Credentials) : Promise<void> => {
         try {
-            setLoadingLogin(true)
+            toggleLoaderAction()
             let user = await executeAuthFunc({
                 asyncOperation: () => userService.login(credentials), 
                 errorMsg: 'Couldnt login, please try again',
@@ -43,7 +42,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         } catch (error) {
                     throw new Error(error)
         } finally {
-                    setLoadingLogin(false)
+                toggleLoaderAction()
                 }
     }    
 
@@ -88,11 +87,10 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         const value = useMemo(() => ({
             isLoadingAuth,
             user,
-            isLoadingLogin,
             login,
             logout,
             isUserSessionValid
-        }), [isLoadingAuth, user, isLoadingLogin]);
+        }), [isLoadingAuth, user]);
         
 
         useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage.
