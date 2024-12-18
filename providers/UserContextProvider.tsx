@@ -50,9 +50,9 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
         try {
             await executeAuthFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
         } catch (error) {
-            router.push('/')
+            window.location.assign('/')
         } finally {
-            router.push('/')
+            window.location.assign('/')
             setUser(null)
         }
     };
