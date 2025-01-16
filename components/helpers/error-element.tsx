@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaceFrownIcon } from '@heroicons/react/24/outline'; // Importing the icon from @heroicons/react
 import { Button } from '@nextui-org/react';
+import { redirect } from 'next/navigation';
 
 export default function ErrorElement({ message }: { message: string }) {
   return (
@@ -14,7 +15,7 @@ export default function ErrorElement({ message }: { message: string }) {
         We are sorry for the inconvenience. We’re handling this and will return to service shortly.
       </p>
       
-      <Button color="danger" onClick={() => window.location.assign('/main')}>
+      <Button color="danger" onClick={() => redirect('/main')}>
         Go Back to Main Page
       </Button>
     </div>

@@ -1,8 +1,7 @@
 "use client";
 
-import { Component, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { useAuth } from "@/providers/UserContextProvider";
 import { Employer } from "@/types/class.service";
 import GeneralTitle from "@/components/helpers/general-title";
 import { Button } from "@nextui-org/react";
@@ -13,12 +12,14 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { saveOneField } from "@/services/server-services/db.service";
 import StepComponent from "@/lib/onboarding/step-cmp";
 import { useSystemActions } from "@/store/actions/system.actions";
+import { useRouter } from "next/navigation";
+import WithDataWrapper from "@/components/helpers/cmp-wrapper";
 
-export default function Onboarding() {
+function Onboarding({user} : {user: Employer}) {
   const [ step, setStep ] = useState<string>('');
-  const { user } = useAuth<Employer>()
   const { toggleModalAction } = useSystemActions()
   const [ isSaved, setIsSaved ] = useState<boolean>(false)
+  const router = useRouter()
   
   useEffect(() => {
   if (user) {
@@ -39,7 +40,7 @@ export default function Onboarding() {
           await saveOneField<string>(`users/${user.id}`, 'onboardingStep', '')
           toggleModalAction('Youve finished the onboarding and now will redirected to the employees page!')
           setTimeout(()=>{
-            window.location.assign('/main/admin/employees')
+            router.push('/main/admin/employees')
           },2500)
           return setStep('')
         default: 
@@ -123,3 +124,11 @@ export default function Onboarding() {
 };
 
 
+ const OnboardingPage = WithDataWrapper({
+    dataPromises: [],
+    Component: (props) => <Onboarding {...props} />, 
+    errorMsg: 'Couldnt load Onboarding page',
+    loadingMsg: 'Loading Onboarding page...'
+  });
+
+  export default OnboardingPage

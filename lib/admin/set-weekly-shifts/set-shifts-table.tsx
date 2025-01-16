@@ -10,6 +10,7 @@ import { useAsync } from '@/hooks/useAsync';
 import GeneralTitle from '@/components/helpers/general-title';
 import { createTableRows, daysOfWeek, getLastSunday, getNextSunday } from '@/lib/server.utils';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
 
 const emptyDayOrientedObject = {
     sunday: {},
@@ -44,6 +45,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
   const [selectedShifts, setSelectedShifts] = useState<DayOrientedObject<{[key: string]: string}>>(undefined);
   const { isConfirmModalOpen, askConfirmation, handleModalClose, msg } = useConfirm()
   const [ executeAsyncFunc ] = useAsync()
+  const router = useRouter()
 
   useEffect(()=> {
     if (!rawDataShiftReqs || !employees) return 
@@ -220,7 +222,7 @@ export default function SetShiftsTable({ data, user, forDate }: IShiftsTableProp
    (!user.employees.length && <>
       <p className='text-subHeader'>{`We have noticed you dont have employees in your account!`}</p>
       <Button
-          onClick={() => window.location.assign('/main/admin/employees')}
+          onClick={() => router.push('/main/admin/employees')}
           color="secondary"
         >
           <span>Press this button to add Employees now</span>

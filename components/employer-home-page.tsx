@@ -1,32 +1,22 @@
 'use client'
-import { Employee, Employer } from '@/types/class.service'
-import React, { useEffect, useState } from 'react'
+import { Employer, Employee } from '@/types/class.service'
+import React from 'react'
 import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { getEmployeesByFilter } from '@/services/server-services/employer.service'
 import { getDateOfApply } from '@/lib/server.utils'
 import GeneralTitle from './helpers/general-title'
+import WithDataWrapper from './helpers/cmp-wrapper'
 
 
-export default function EmployerHomePage({ employerUser }: { employerUser: Employer }) {
-
-  const [usersNotApplied, setUsersNotApplied] = useState<Employee[]>([])
+function EmployerHomePage({ user, data }: { user: Employer, data: [Employee[]] }) {
+  const [employeesNotApplied] = data
   const router = useRouter()
-  const forDate = getDateOfApply(employerUser.applicationTime.day, employerUser.applicationTime.time)
-
-  useEffect(() => {
-    const getEmployees = async () => {
-      const data = await getEmployeesByFilter({isApplied: false}, employerUser.id)
-      setUsersNotApplied(data)
-    }
-    getEmployees()
-  }, [])
-
-
+  const forDate = getDateOfApply(user.applicationTime.day, user.applicationTime.time)
 
   return (
     <>
-    <GeneralTitle title={`Hi ${employerUser.name}, are you ready for another week?`} />
+    <GeneralTitle title={`Hi ${user.name}, are you ready for another week?`} />
     <section className="flex flex-col items-center pt-16 text-center">
       <div className='my-7'>
         <p className='text-subHeader my-3 font-semibold text-center'>Shifts application is available for {forDate}
@@ -34,9 +24,9 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
       </div>
       <div className='my-7 flex flex-col items-center gap-[2vh]'>
         <p className='text-subHeader text-center'>Employees that didnt applied yet for {forDate} : </p>
-          {(usersNotApplied.length) ? 
+          {(employeesNotApplied.length) ? 
           <section>
-            {usersNotApplied.map((user, idx)=> (
+            {employeesNotApplied.map((user, idx)=> (
               <span key={idx} className='text-base'>{user.name}</span> 
               ))}
           </section> : 
@@ -45,7 +35,6 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
       </div>
 
       <div className='flex flex-col gap-2 my-2'>
-              {/* For mock data reasons, the routes are edited */}
         <Button onClick={()=> router.push(`main/admin/set-weekly-shifts/Sun%20Dec%2022%202024`)} className='rounded-md text-base bg-emerald-400 hover:bg-emerald-600'>Arrange shift schedule</Button>
         <Button onClick={()=> router.push(`main/admin/work-week/Sun%20Dec%2022%202024`)} className='rounded-md bg-teal-400 text-base hover:bg-teal-600'>Shift schedule</Button>
         <Button onClick={()=> router.push('main/admin/employees')} className='rounded-md bg-cyan-500 text-base hover:bg-cyan-700'>Employees</Button>
@@ -56,3 +45,12 @@ export default function EmployerHomePage({ employerUser }: { employerUser: Emplo
     </>
   )
 }
+
+ const EmployerHomePageWrapper = WithDataWrapper<[Employee[]]>({
+    dataPromises: [(user: Employer) => getEmployeesByFilter({isApplied: false}, user.id)],
+    Component: (props) => <EmployerHomePage {...props} />, 
+    errorMsg: 'Couldnt load Employer page',
+    loadingMsg: 'Loading Employer page...'
+  });
+
+  export default EmployerHomePageWrapper

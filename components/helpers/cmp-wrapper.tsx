@@ -26,9 +26,6 @@ export default function WithDataWrapper<T extends unknown[]>({
 
     useEffect(() => { 
       if (user) {
-        if (user instanceof Employer && user.onboardingStep) {
-          window.location.assign('/main/onboarding') 
-        }
         if (dataPromises.length) {
           setData(null)
           setLoading(true);
@@ -42,7 +39,7 @@ export default function WithDataWrapper<T extends unknown[]>({
                 setLoading(false);
                 setError(err);
               }) 
-            } else setLoading(false)
+          } else setLoading(false)
       }
     }, [user]);
 

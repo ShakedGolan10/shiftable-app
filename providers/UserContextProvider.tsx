@@ -37,23 +37,23 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             if (!user) throw new Error('error')
                 user = CreateUserInstance(user)
                 setUser(user)
-                if (user instanceof Employer && user.onboardingStep) window.location.assign('/main/onboarding')
+                if (user instanceof Employer && user.onboardingStep) router.push('/main/onboarding')
                     else router.push('/main')
         } catch (error) {
                     throw new Error(error)
         } finally {
                 toggleLoaderAction()
-                }
+        }
     }    
 
     const logout = async () : Promise<void> => {
         try {
             await executeAuthFunc({asyncOperation: () => userService.logout(), errorMsg: 'Couldnt logout, please try again'})
         } catch (error) {
-            window.location.assign('/')
+            console.log('there was an error while trying to log out')
         } finally {
-            window.location.assign('/')
             setUser(null)
+            router.push('/')
         }
     };
 
@@ -62,15 +62,21 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
             setLoadingAuth(true)
             let loggedInUser = await userService.getLoggedInUser()
             setUser(loggedInUser)
-            if (loggedInUser instanceof Employer && loggedInUser.onboardingStep && !path.includes('onboarding')) window.location.assign('/main/onboarding')
-            else if (loggedInUser instanceof Employee && path.includes('/admin/') ||
-                loggedInUser instanceof Employer && path.includes('/employee/')
-            ) window.location.assign('/main') // Keep it that way: The method is quicker then the error that has been displayed by the employer func, unlik router.push ?? 
+            validatePath(loggedInUser)
         } catch (error) {
-            if (!path.endsWith('signup')) await logout()
+            setUser(null)
+            router.push('/')
         } finally {
                 setLoadingAuth(false)
         }
+    }
+
+    const validatePath = (userParam?: Employee | Employer) => {
+        const loggedInUser = (userParam) ? userParam : user
+        if (!loggedInUser) router.push('/')
+        else if (loggedInUser instanceof Employer && loggedInUser.onboardingStep && !path.includes('onboarding')) router.push('/main/onboarding')
+        else if (loggedInUser instanceof Employee && path.includes('/admin/') || loggedInUser instanceof Employer && path.includes('/employee/') || (loggedInUser && path === '/')) 
+                router.push('/main')
     }
 
     const isUserSessionValid = async () => {
@@ -84,18 +90,21 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
                 setLoadingAuth(false)
         }
     }
-        const value = useMemo(() => ({
+
+    const value = useMemo(() => ({
             isLoadingAuth,
             user,
             login,
             logout,
             isUserSessionValid
+    
         }), [isLoadingAuth, user]);
         
 
         useEffect(() => { // flow for making sure there is a loggedinuser and if not - redirect to the loginPage.
-              authUser()
-        }, [])
+            if (!user) authUser()
+                else validatePath()
+        }, [path])
 
         return (
         <UserContext.Provider value={{ ...value }}>

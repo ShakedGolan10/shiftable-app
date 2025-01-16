@@ -4,6 +4,7 @@ import Image from 'next/image'
 import '@/styles/modules/welcome-page.scss'
 import { Button } from '@nextui-org/react'
 import GeneralTitle from './helpers/general-title'
+import { redirect } from 'next/navigation'
 
 export default function WelcomeCmp({ onOpen, onLoginDemoUser }) {
 
