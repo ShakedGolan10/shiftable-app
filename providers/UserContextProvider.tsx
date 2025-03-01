@@ -59,6 +59,7 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
 
     const authUser = async () => {
         try {
+            if (path.includes('signup')) return 
             setLoadingAuth(true)
             let loggedInUser = await userService.getLoggedInUser()
             setUser(loggedInUser)
