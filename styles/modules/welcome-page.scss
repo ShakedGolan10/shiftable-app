@@ -64,38 +64,3 @@
     line-height: 0.875rem;
     transition: all 0.2s ease;
 }
-
-
-
-.welcome-page-summery {
-button {
-    // display: inline-block;
-        padding: 1.625rem 2.75rem 1.625rem 2.75rem;
-        border-radius: 32px;
-        font-weight: 600;
-        font-size: 0.875rem;
-        margin-right: 0.25rem;
-        margin-bottom: 1.25rem;
-        margin-left: 0.25rem;
-      
-    &.login-btn {
-        border: 1px solid #594cda;
-        background-color: #594cda;
-        &:hover {
-            background-color: transparent;
-            color: #594cda;
-        }
-    }
-    
-    
-    &.contact-us-btn {
-        border: 1px solid #eb427e;
-        background-color: #eb427e;
-        &:hover {
-            background: transparent;
-            color: #eb427e;
-        }
-    }
-    
-}
-}

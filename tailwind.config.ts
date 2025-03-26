@@ -13,8 +13,8 @@ module.exports = {
   theme: {
     extend: {
       fontSize: {
-        'base': ['1rem', { lineHeight: '1.5rem' }], 
-        'subHeader': ['1.4rem', {lineHeight: '1.6rem'}]
+        'base': ['1rem', { lineHeight: '1.5rem' }],
+        'subHeader': ['1.4rem', { lineHeight: '1.6rem' }]
       },
       gridTemplateColumns: {
         'grid-large': '100px 1fr 100px',
@@ -67,17 +67,24 @@ module.exports = {
       themes: {
         light: {
           layout: {},
-          colors: {},
+          colors: {
+            foreground: '#000000',
+            default: '#FF4848',
+          },
         },
         dark: {
           layout: {},
           colors: {
+            default: '#FF4848',
             foreground: '#FFFFFF',
           },
         },
         'light-desktop': {
           extend: 'light',
-          colors: {},          
+          colors: {
+            default: '#FF4848',
+            foreground: '#000000',
+          },
           layout: {
             fontSize: {
               large: '3.5rem',
@@ -91,7 +98,10 @@ module.exports = {
         },
         'light-tablet': {
           extend: 'light',
-          colors: {},
+          colors: {
+            default: '#FF4848',
+            foreground: '#000000',
+          },
           layout: {
             fontSize: {
               large: '2.75rem',
@@ -105,7 +115,10 @@ module.exports = {
         },
         'light-mobile': {
           extend: 'light',
-          colors: {},
+          colors: {
+            default: '#FF4848',
+            foreground: '#000000',
+          },
           layout: {
             fontSize: {
               large: '2.25rem',
@@ -119,7 +132,10 @@ module.exports = {
         },
         'dark-desktop': {
           extend: 'dark',
-          colors: {},
+          colors: {
+            default: '#FF4848',
+            foreground: '#FFFFFF',
+          },
           layout: {
             fontSize: {
               large: '3.5rem',
@@ -133,7 +149,10 @@ module.exports = {
         },
         'dark-tablet': {
           extend: 'dark',
-          colors: {},
+          colors: {
+            default: '#FF4848',
+            foreground: '#FFFFFF',
+          },
           layout: {
             fontSize: {
               large: '2.75rem',
@@ -147,7 +166,10 @@ module.exports = {
         },
         'dark-mobile': {
           extend: 'dark',
-          colors: {},
+          colors: {
+            default: '#FF4848',
+            foreground: '#FFFFFF',
+          },
           layout: {
             fontSize: {
               large: '2.25rem',
