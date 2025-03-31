@@ -15,8 +15,6 @@ export default function SetApplicationRules({ user, setIsSaved } : { user: Emplo
   const [ exeuteAsyncFunc ] = useAsync()
   const {isOpen, onOpen, onClose} = useDisclosure();
 
-  useEffect(() => console.log(applicationTime),[applicationTime])
-  
   const saveApplicationTime = async () => {
     await exeuteAsyncFunc({
       asyncOps: [() => saveOneField(`users/${user.id}`, 'applicationTime', applicationTime)],
