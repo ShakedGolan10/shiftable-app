@@ -7,7 +7,7 @@ import GeneralTitle from './helpers/general-title'
 export default function WelcomeCmp({ onOpen, onLoginDemoUser }) {
 
     return (
-        <main className={`py-28 text-center md:pt-36 lg:text-left xl:pb-32`}>
+        <main className={`py-28 mobile:px-4 text-center md:pt-36 lg:text-left xl:pb-32`}>
             <div className="container mx-auto lg:grid lg:grid-cols-2 lg:gap-x-8">
                 <div className="flex flex-col items-start tablet:items-center gap-4 mb-16 xl:mr-12">
                     <GeneralTitle title={`Shift management application`} />
